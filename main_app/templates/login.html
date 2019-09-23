@@ -1,16 +1,48 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
+
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'main_app/style.css' %}">
 </head>
-<body>
-    <form action="[addfunctionality]" method="post">
-        <label>Username</label>
-        <input type="text" name="username">
 
-        <label>Password</label>
-        <input type="password" name="password">
-    </form>
+
+<body>
+<header id="top-header">
+    <div class="container">
+        <h1>SocPay</h1>
+    </div>
+</header>
+
+<nav id="navigation-bar">
+    <div class="container">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Team</a></li>
+        </ul>
+    </div>
+</nav>
+
+<section id="login-section">
+    <div class="container">
+        <form action="TODO" method="post">
+            <div>
+                <label>Username</label>
+                <input type="text" name="username" placeholder="John Doe">
+            </div>
+            <div>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="password">
+            </div>
+            <input type="submit" name="submit" value="Login">
+        </form>
+    </div>
+</section>
+
 </body>
 </html>
