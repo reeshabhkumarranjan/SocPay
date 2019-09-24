@@ -1,9 +1,14 @@
+/*{% load static %}*/
+
 body {
-    background-color: aliceblue;
+    background-color: #5CDB97;
+
+    /*background-repeat: no-repeat;*/
     color: darkslategrey;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     line-height: 1.5em;
+    margin: 0;
 }
 
 .container {
@@ -12,13 +17,37 @@ body {
     overflow: hidden;
 }
 
+.modern-button {
+    background-color: #05386B;
+    color: white;
+    min-height: 50px;
+    min-width: 220px;
+    font-size: 24px;
+    border: 0px;
+    margin: 4px;
+}
+
+.modern-button:hover {
+    background-color: black;
+    transition: 0.3s;
+}
+
+.textfield {
+    background-color: darkgreen;
+}
+
+#login-section{
+    background: url("login-wallpaper.jpg");
+
+}
+
 #top-header {
     background-color: black;
     color: wheat;
 }
 
 #navigation-bar {
-    background-color: black;
+    background-color: #3796B3;
     color: wheat;
 }
 
@@ -31,20 +60,7 @@ body {
     display: inline;
 }
 
-.modern-button {
-    background-color: darkgreen;
-    color: white;
-    min-height: 50px;
-    min-width: 200px;
-    font-size: 24px;
-    border: 0px;
-}
 
-.modern-button:hover {
-    background-color: black;
-    transition: 0.3s;
-}
-
-.textfield {
-    
+#login-form {
+    padding: 24px;
 }

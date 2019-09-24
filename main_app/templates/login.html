@@ -27,22 +27,27 @@
         </ul>
     </div>
 </nav>
-
+<div style="min-height:100%">
 <section id="login-section" >
-    <div class="container">
-        <form action="TODO" method="post">
+    <div class="container" style="text-align:center">
+        <form action="TODO" method="post" id="login-form">
             <div>
-                <label>Username</label>
-                <input type="text" name="username" placeholder="John Doe" class="textfield">
+{#                <label>Username</label>#}
+                <input type="text" name="username" placeholder="Username" class="textfield">
             </div>
             <div>
-                <label>Password</label>
-                <input type="password" name="password" placeholder="password" class="textfield">
+{#                <label>Password</label>#}
+                <input type="password" name="password" placeholder="Password" class="textfield">
             </div>
-            <input type="submit" name="submit" value="Login" class="modern-button">
+            <input type="submit" name="login" value="Login" class="modern-button">
+            <div></div>
+            <input type="submit" name="register" value="Register" class="modern-button">
+            <div></div>
+            <input type="submit" name="forgot_password" value="Forgot Password?" class="modern-button">
         </form>
     </div>
 </section>
+</div>
 
 </body>
 </html>
