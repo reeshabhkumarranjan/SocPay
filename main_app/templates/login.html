@@ -7,12 +7,14 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="{% static 'main_app/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
 </head>
 
 
 <body>
 <header id="top-header">
     <div class="container">
+{#        <img src="{% static "main_app/sp-logo.png" %}" alt="Logo" style="float: left; height: 42px; width: 42px; vertical-align: middle">#}
         <h1>SocPay</h1>
     </div>
 </header>
@@ -27,10 +29,11 @@
         </ul>
     </div>
 </nav>
-<div style="min-height:100%">
-<section id="login-section" >
-    <div class="container" style="text-align:center">
-        <form action="TODO" method="post" id="login-form">
+
+<div class="container_form">
+<section id="login-section" style="min-height: 512px">
+    <div class="container" style="text-align:center; min-height: 100%">
+        <form action="TODO" method="post" id="login-form" style="margin-top:100px ">
             <div>
 {#                <label>Username</label>#}
                 <input type="text" name="username" placeholder="Username" class="textfield">
