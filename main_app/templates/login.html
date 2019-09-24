@@ -8,6 +8,7 @@
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="{% static 'main_app/style.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 
@@ -20,22 +21,20 @@
 </header>
 
 <nav id="navigation-bar">
-    <div class="container">
-        <ul>
+    <div class="container" style="vertical-align: middle">
+        <ul style="vertical-align:middle">
             <li><a href="#">Home</a></li>
             <li><a href="#">About</a></li>
             <li><a href="#">Contact</a></li>
             <li><a href="#">Team</a></li>
         </ul>
-
     </div>
-<hr size="3" style="margin-bottom:0px;color:#555555;">
-
 </nav>
+<hr size="1" style="margin:0px;color:#555555;">
 
 <div class="container_form">
-<section id="login-section" style="min-height: 512px">
-    <div class="container" style="text-align:center; min-height: 100%">
+<section id="login-section" style="min-height: 512px;text-align:center">
+    <div class="container" style="text-align:center; min-height:100%">
         <form action="TODO" method="post" id="login-form" style="margin-top:100px ">
             <div>
 {#                <label>Username</label>#}
@@ -51,6 +50,25 @@
             <div></div>
             <input type="submit" name="forgot_password" value="Forgot Password?" class="modern-button">
         </form>
+
+{#        <form action="TODO" method="post" style="margin-top:100px;width:100%;text-align:center">#}
+{#            <input type="text" class="form-control" aria-describedby="emailHelp" style="width:40%" placeholder="Username" name="username" >#}
+{##}
+{##}
+{#          <div class="form-group" style="text-align:center">#}
+{#            <label for="exampleInputEmail1">Username</label>#}
+{#            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>#}
+{#          </div>#}
+{#          <div class="form-group">#}
+{#            <label >Password</label>#}
+{#            <input type="password" class="form-control" name="password" placeholder="Password" placeholder="Password">#}
+{#          </div>#}
+{#          <div class="form-group form-check">#}
+{#            <input type="checkbox" class="form-check-input" id="exampleCheck1">#}
+{#            <label class="form-check-label" for="exampleCheck1">Check me out</label>#}
+{#          </div>#}
+{#          <button type="submit" class="btn btn-primary" name="login" >Login</button>#}
+{#        </form>#}
     </div>
 </section>
 </div>

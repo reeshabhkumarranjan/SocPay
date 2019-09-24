@@ -12,7 +12,6 @@ body {
     width: 100%;
     margin: 0;
     overflow: hidden;
-
 }
 
 .container {
@@ -32,7 +31,7 @@ body {
     color: white;
     min-height: 50px;
     min-width: 220px;
-    font-size: 24px;
+    font-size: 14px;
     border: 0px;
     margin: 4px;
 }
@@ -43,7 +42,13 @@ body {
 }
 
 .textfield {
-    background-color: darkgreen;
+    background-color: #FFFFFF;
+    height: 50px;
+    width: 220px;
+    font-size: 14px;
+    border: 1px #7F7F7F solid;
+    margin: 2px;
+    padding: 5px;
 }
 
 #login-section{
@@ -67,12 +72,14 @@ body {
 
 #navigation-bar {
     background-color: #FFFFFF;
-    color: wheat;
+    padding-top: 12px; /*hack to compensate for no vertical-alignment*/
+    /*color: wheat;*/
 }
 
 #navigation-bar ul {
-    padding: 5px;
+    padding: 0;
     list-style: none;
+    /*vertical-align: middle;*/
 }
 
 #navigation-bar li {
