@@ -1,36 +1,7 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% block title %} Login to SocPay {% endblock %}
 
-
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'main_app/style.css' %}">
-    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-
-
-<body>
-<header id="top-header">
-    <div class="container">
-{#        <img src="{% static "main_app/sp-logo.png" %}" alt="Logo" style="float: left; height: 42px; width: 42px; vertical-align: middle">#}
-        <h1>SocPay</h1>
-    </div>
-</header>
-
-<nav id="navigation-bar">
-    <div class="container" style="vertical-align: middle">
-        <ul style="vertical-align:middle">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Team</a></li>
-        </ul>
-    </div>
-</nav>
-<hr size="1" style="margin:0px;color:#555555;">
+{% block body %}
 
 <div class="container_form">
 {#    TODO need to fix this height (hardcoded) #}
@@ -74,11 +45,4 @@
 </section>
 </div>
 
-
-{# TODO: need to setup footer #}
-{#<footer id="bottom-footer" style="height: 100px;">#}
-{#    <p>Copyright &copy; 2019 SocPay</p>#}
-{#</footer>#}
-
-</body>
-</html>
+{% endblock %}
