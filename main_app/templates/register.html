@@ -1,3 +1,45 @@
 {% extends 'base.html' %}
 
 {% block title %} Register {% endblock %}
+
+{% block body %}
+
+<div class="container_form">
+{#    TODO need to fix this height (hardcoded) #}
+<section id="login-section" style="height: 512px;text-align:center">
+    <div class="container" style="text-align:center; height:100%">
+        <form action="{% url 'polls:register_form' %}" method="post" id="login-form" style="margin-top:50px;">
+            {% csrf_token %}
+            <div>
+{#                <label>Username</label>#}
+                <input type="text" name="name" placeholder="Name" class="textfield">
+            </div>
+             <div>
+{#                <label>Username</label>#}
+                <input type="email" name="email" placeholder="Email" class="textfield">
+            </div>
+             <div>
+{#                <label>Username</label>#}
+                <input type="text" name="username" placeholder="Username" class="textfield">
+            </div>
+
+            <div>
+{#                <label>Username</label>#}
+                <input type="date" name="dob" placeholder="Date of birth" class="textfield">
+            </div>
+
+            <div>
+{#                <label>Password</label>#}
+                <input type="password" name="password" placeholder="Password" class="textfield">
+            </div>
+            <div>
+{#                <label>Username</label>#}
+                <input type="password" name="confirm_password" placeholder="Confirm Password" class="textfield">
+            </div>
+            <input type="submit" name="register" value="Register" class="modern-button">
+        </form>
+    </div>
+</section>
+</div>
+
+{% endblock %}

@@ -7,7 +7,8 @@
 {#    TODO need to fix this height (hardcoded) #}
 <section id="login-section" style="height: 512px;text-align:center">
     <div class="container" style="text-align:center; height:100%">
-        <form action="TODO" method="post" id="login-form" style="margin-top:100px;">
+        <form action="{% url 'polls:login_form' %}" method="post" id="login-form" style="margin-top:100px;">
+            {% csrf_token %}
             <div>
 {#                <label>Username</label>#}
                 <input type="text" name="username" placeholder="Username" class="textfield">
@@ -18,29 +19,10 @@
             </div>
             <input type="submit" name="login" value="Login" class="modern-button">
             <div></div>
-            <input type="submit" name="register" value="Register" class="modern-button">
+            <input type="button" onclick="location.href='{% url 'polls:register' %}'" name="register" value="Register" class="modern-button">
             <div></div>
-            <input type="submit" name="forgot_password" value="Forgot Password?" class="modern-button">
+            <input type="button" name="forgot_password" value="Forgot Password?" class="modern-button">
         </form>
-
-{#        <form action="TODO" method="post" style="margin-top:100px;width:100%;text-align:center">#}
-{#            <input type="text" class="form-control" aria-describedby="emailHelp" style="width:40%" placeholder="Username" name="username" >#}
-{##}
-{##}
-{#          <div class="form-group" style="text-align:center">#}
-{#            <label for="exampleInputEmail1">Username</label>#}
-{#            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>#}
-{#          </div>#}
-{#          <div class="form-group">#}
-{#            <label >Password</label>#}
-{#            <input type="password" class="form-control" name="password" placeholder="Password" placeholder="Password">#}
-{#          </div>#}
-{#          <div class="form-group form-check">#}
-{#            <input type="checkbox" class="form-check-input" id="exampleCheck1">#}
-{#            <label class="form-check-label" for="exampleCheck1">Check me out</label>#}
-{#          </div>#}
-{#          <button type="submit" class="btn btn-primary" name="login" >Login</button>#}
-{#        </form>#}
     </div>
 </section>
 </div>
