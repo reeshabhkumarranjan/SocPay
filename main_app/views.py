@@ -7,10 +7,6 @@ from django.shortcuts import render
 class LoginForm(forms.Form):
     pass
 
-def login2(request):
-    """Trying to theme the inbuilt Django forms."""
-    return render(request, '')
-
 
 def login(request):
     """This is only to display login page."""
