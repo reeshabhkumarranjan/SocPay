@@ -28,7 +28,7 @@
             <li><a href="#">Contact</a></li>
             <li><a href="#">Team</a></li>
             <li><input type="text" name="search_query" class="search-bar" placeholder="Type in to search!"></li>
-            <li style="float: right"><button onclick="location.href='todo.com'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Login</button> <button onclick="location.href='todo.com'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Register</button> </li>
+            <li style="float: right"><button onclick="location.href='{% url 'main_app:login' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Login</button> <button onclick="location.href='{% url 'main_app:register' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Register</button> </li>
 {#            <li><button class = "modern-button" style="float: right; margin: 0; height: 40px; width: 100px">Register</button></li>#}
         </ul>
     </div>
