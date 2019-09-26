@@ -3,28 +3,4 @@
 
 {% block body %}
 
-<div class="container_form">
-{#    TODO need to fix this height (hardcoded) #}
-<section id="login-section" style="height: 512px;text-align:center">
-    <div class="container" style="text-align:center; height:100%">
-        <form action="{% url 'main_app:login_form' %}" method="post" id="login-form" style="margin-top:100px;">
-            {% csrf_token %}
-            <div>
-{#                <label>Username</label>#}
-                <input type="text" name="username" placeholder="Username" class="textfield">
-            </div>
-            <div>
-{#                <label>Password</label>#}
-                <input type="password" name="password" placeholder="Password" class="textfield">
-            </div>
-            <input type="submit" name="login" value="Login" class="modern-button">
-            <div></div>
-            <input type="button" onclick="location.href='{% url 'main_app:register' %}'" name="register" value="Register" class="modern-button">
-            <div></div>
-            <input type="button" name="forgot_password" value="Forgot Password?" class="modern-button">
-        </form>
-    </div>
-</section>
-</div>
-
 {% endblock %}
