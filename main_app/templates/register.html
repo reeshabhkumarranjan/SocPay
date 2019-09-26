@@ -8,7 +8,7 @@
 {#    TODO need to fix this height (hardcoded) #}
 <section id="login-section" style="height: 512px;text-align:center">
     <div class="container" style="text-align:center; height:100%">
-        <form action="{% url 'polls:register_form' %}" method="post" id="login-form" style="margin-top:50px;">
+        <form action="{% url 'main_app:register_form' %}" method="post" id="login-form" style="margin-top:50px;">
             {% csrf_token %}
             <div>
 {#                <label>Username</label>#}
