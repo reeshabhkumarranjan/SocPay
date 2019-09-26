@@ -1,7 +1,15 @@
+from django import forms
 from django.shortcuts import render
 
 
 # Create your views here.
+
+class LoginForm(forms.Form):
+    pass
+
+def login2(request):
+    """Trying to theme the inbuilt Django forms."""
+    return render(request, '')
 
 
 def login(request):
