@@ -135,7 +135,7 @@ body {
     width: 20%;
     /*float: right;*/
     position: fixed;
-    right: 0;
+    right: 50px;
     background: #2B71F1;
     height: auto;
     min-height: 50px;
