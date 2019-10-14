@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'main_app/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+
+<body>
+<header id="top-header">
+    <div class="container">
+{#        <img src="{% static "main_app/sp-logo.png" %}" alt="Logo" style="float: left; height: 42px; width: 42px; vertical-align: middle">#}
+        <a href="{% url 'main_app:index' %}">SocPay</a>
+    </div>
+</header>
+
+<nav id="navigation-bar">
+    <div class="container" style="vertical-align: middle">
+        <ul style="vertical-align:middle">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Team</a></li>
+            <li><input type="text" name="search_query" class="search-bar" placeholder="Type in to search!"></li>
+            <li style="float: right"><button onclick="location.href='{% url 'main_app:login' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Login</button> <button onclick="location.href='{% url 'main_app:register' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Register</button> </li>
+{#            <li><button class = "modern-button" style="float: right; margin: 0; height: 40px; width: 100px">Register</button></li>#}
+        </ul>
+    </div>
+</nav>
+<hr size="1" style="margin:0px;color:#555555;">
+
+{% block body %}{% endblock %}
+
+</body>
+
+<footer id="bottom-footer">
+    <p>Copyright &copy; 2019</p>
+</footer>
+</html>
