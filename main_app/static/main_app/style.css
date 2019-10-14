@@ -64,6 +64,7 @@ body {
     padding: 5px;
 }
 
+
 #login-section{
     background: url("login-bg.jpg");
     background-size: cover;
@@ -128,4 +129,23 @@ body {
 
 #bottom-footer p {
     text-align: center;
+}
+
+#timeline-side-panel {
+    width: 20%;
+    /*float: right;*/
+    position: fixed;
+    right: 0;
+    background: #2B71F1;
+    height: auto;
+    min-height: 50px;
+}
+
+#post-section {
+    width: 80%;
+    float: left;
+    left: 0;
+    background: crimson;
+    height: auto;
+    min-height: 50px;
 }
