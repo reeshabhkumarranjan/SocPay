@@ -14,4 +14,5 @@ def index(request):
     return render(request, 'index.html')
 
 def timeline(request):
-    return render(request, 'timeline.html')
+    context = {'forloop' : range(100)}
+    return render(request, 'timeline.html', context=context)

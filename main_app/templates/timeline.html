@@ -4,6 +4,10 @@
     Title
 {% endblock %}
 
+{% block buttons %}
+    <button class = "modern-button" style="margin: 0; height: 40px; width: 150px">Logout</button>
+{% endblock %}
+
 {% block body %}
 
     <div class="container" >
@@ -18,7 +22,9 @@
     <div style="height: 100%; width: 80%; margin: auto">
 
         <div id="post-section">
-
+            {% for post_number in forloop %}
+                <p><b>post_number</b></p>
+            {% endfor %}
         </div>
 
         <div id="timeline-side-panel">
