@@ -22,8 +22,24 @@
     <div style="height: 100%; width: 80%; margin: auto">
 
         <div id="post-section">
-            {% for post_number in forloop %}
-                <p><b>post_number</b></p>
+{#            {% for post_number in forloop %}#}
+{#                <p><b>post_number</b></p>#}
+{#            {% endfor %}#}
+
+            {% for post in all_posts %}
+                <hr>
+                <p>
+                <b>Author:</b> {{ post.author_name }}
+                    <br>
+                <b>Recipient: </b> {{ post.recipient_name }}
+                    <br>
+                <b>Posted on </b> {{ post.post_date.date }} <b>at</b> {{ post.post_date.time }}
+                <br>
+                <b>Post text:</b>
+                <br>
+                {{ post.post_text }}
+                </p>
+                <hr>
             {% endfor %}
         </div>
 
@@ -36,7 +52,5 @@
         </div>
 
     </div>
-
-
 
 {% endblock %}

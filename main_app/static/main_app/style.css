@@ -136,7 +136,7 @@ body {
     /*float: right;*/
     position: fixed;
     right: 50px;
-    background: #2B71F1;
+    /*background: #2B71F1;*/
     height: auto;
     min-height: 50px;
 }
@@ -145,7 +145,7 @@ body {
     width: 80%;
     float: left;
     left: 0;
-    background: crimson;
+    /*background: crimson;*/
     height: auto;
     min-height: 50px;
 }
