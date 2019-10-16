@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Title
+{% endblock %}
+
+{% block buttons %}
+    <button class = "modern-button" style="margin: 0; height: 40px; width: 150px">Logout</button>
+{% endblock %}
+
+{% block body %}
+
+    <div class="container" >
+    <form style="align-self: center" style="margin-left: auto; margin-right: auto">
+{#        <input type="text" name="post_text" class="textfield" style="height: 150px; width: 500px">#}
+        <textarea name="post_text" rows = "5" cols="60">Enter your post here</textarea>
+        <br>
+        <input type="submit" class="modern-button">
+    </form>
+    </div>
+
+    <div style="height: 100%; width: 80%; margin: auto">
+
+        <div id="post-section">
+{#            {% for post_number in forloop %}#}
+{#                <p><b>post_number</b></p>#}
+{#            {% endfor %}#}
+
+{#            {% for post in all_posts %}#}
+{#                <hr>#}
+{#                <p>#}
+{#                <b>Author:</b> {{ post.author_name }}#}
+{#                    <br>#}
+{#                <b>Recipient: </b> {{ post.recipient_name }}#}
+{#                    <br>#}
+{#                <b>Posted on </b> {{ post.post_date.date }} <b>at</b> {{ post.post_date.time }}#}
+{#                <br>#}
+{#                <b>Post text:</b>#}
+{#                <br>#}
+{#                {{ post.post_text }}#}
+{#                </p>#}
+{#                <hr>#}
+{#            {% endfor %}#}
+        </div>
+
+        <div id="timeline-side-panel">
+            <button class = "modern-button">Wallet</button>
+            <br>
+            <button class = "modern-button">Friends</button>
+            <br>
+            <button class = "modern-button">Groups</button>
+        </div>
+
+    </div>
+
+{% endblock %}
