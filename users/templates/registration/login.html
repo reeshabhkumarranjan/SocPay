@@ -6,6 +6,7 @@
     {% csrf_token %}
 {#    {{ form.as_p }}#}
 {#    <button type="submit">Login</button>#}
+
     {% for field in form %}
         {{ field.errors }}
         <br>
