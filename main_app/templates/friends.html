@@ -4,7 +4,11 @@
 {% block body %}
 
     <div class="container" style="width: 50%; float: left; height: auto">
-
+    {% for friend in all_friends %}
+        <p>
+            {{ friend.follower.username }}
+        </p>
+    {% endfor %}
     </div>
 
     <div class="container" style="width: 50%; float:right; height: auto">

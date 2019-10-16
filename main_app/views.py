@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from main_app.models import Post
+from users.models import Friend
 
 
 def register(request):
@@ -22,4 +23,7 @@ def timeline(request):
     return render(request, 'timeline.html', context=context)
 
 def friends(request):
-    return render(request, 'friends.html')
+    # all_friends = Friend.objects.all(creator__id=)
+    all_friends = Friend.objects.filter(creator=request.user) | Friend.objects.filter(follower=request.user) & Friend.objects.filter(confirmed=True)
+    context = {'all_friends' : all_friends}
+    return render(request, 'friends.html', context=context)
