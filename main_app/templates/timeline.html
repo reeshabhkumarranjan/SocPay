@@ -1,12 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'base_logged_in.html' %}
 
 {% block title %}
-    Title
+    SocPay | Welcome, {{ user.first_name }}!
 {% endblock %}
 
-{% block buttons %}
-    <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'logout' %}'">Logout</button>
-{% endblock %}
+
 
 {% block body %}
 
@@ -43,12 +41,12 @@
 {#            {% endfor %}#}
         </div>
 
-        <div id="timeline-side-panel">
-            <button class = "modern-button">Wallet</button>
+        <div id="timeline-side-panel" style="padding: 20px">
+            <button class = "modern-button" style="margin: 0 auto; display: block;">Wallet</button>
             <br>
-            <button class = "modern-button">Friends</button>
+            <button class = "modern-button" style="margin: 0 auto; display: block;">Friends</button>
             <br>
-            <button class = "modern-button">Groups</button>
+            <button class = "modern-button" style="margin: 0 auto; display: block;">Groups</button>
         </div>
 
     </div>

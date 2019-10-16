@@ -36,7 +36,6 @@ body {
     width: 220px;
     font-size: 14px;
     border: 0px;
-    margin: 4px;
 }
 
 .modern-button:hover {
@@ -139,16 +138,20 @@ body {
     /*float: right;*/
     position: fixed;
     right: 50px;
-    background: #2B71F1;
+    /*background: #2B71F1;*/
     height: auto;
     min-height: 50px;
+    border-width: thick;
+    border-color: #05386B;
+    border-style: solid;
 }
 
 #post-section {
     width: 80%;
     float: left;
     left: 0;
-    background: crimson;
+    /*background: crimson;*/
     height: auto;
     min-height: 50px;
+
 }
