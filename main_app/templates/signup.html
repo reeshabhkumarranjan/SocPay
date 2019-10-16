@@ -3,9 +3,17 @@
 {% block title %} Register on SocPay {% endblock %}
 
 {% block body %}
-<form method="post">
+<form method="post" style="margin: 0 auto; width: 200px">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
+{#    {{ form.as_p }}#}
+    {% for field in form %}
+        {{ field.errors }}
+        <br>
+        {{ field.label_tag }}
+        <br>
+        {{ field }}
+        <br>
+    {% endfor %}
+    <button type="submit" class="modern-button">Sign up</button>
 </form>
 {% endblock %}
