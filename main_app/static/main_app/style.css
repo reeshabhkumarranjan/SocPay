@@ -73,6 +73,9 @@ body {
     background-color: #000000;
     color: #FFFFFF;
     font-size: xx-large;
+    position: fixed;
+    width: 100%;
+    /*margin-bottom: 100px;*/
 }
 
 #top-header a {
