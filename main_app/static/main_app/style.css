@@ -73,8 +73,8 @@ body {
     background-color: #000000;
     color: #FFFFFF;
     font-size: xx-large;
-    position: fixed;
-    width: 100%;
+    /*position: fixed;*/
+    /*width: 100%;*/
     /*margin-bottom: 100px;*/
 }
 
@@ -132,4 +132,23 @@ body {
 
 #bottom-footer p {
     text-align: center;
+}
+
+#timeline-side-panel {
+    width: 20%;
+    /*float: right;*/
+    position: fixed;
+    right: 50px;
+    background: #2B71F1;
+    height: auto;
+    min-height: 50px;
+}
+
+#post-section {
+    width: 80%;
+    float: left;
+    left: 0;
+    background: crimson;
+    height: auto;
+    min-height: 50px;
 }
