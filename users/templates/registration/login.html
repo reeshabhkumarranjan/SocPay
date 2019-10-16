@@ -2,9 +2,18 @@
 {% block title %} Login to SocPay {% endblock %}
 
 {% block body %}
-<form method="post">
+<form method="post" style="margin: 0 auto; width: 200px">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
+{#    {{ form.as_p }}#}
+{#    <button type="submit">Login</button>#}
+    {% for field in form %}
+        {{ field.errors }}
+        <br>
+        {{ field.label_tag }}
+        <br>
+        {{ field }}
+        <br>
+    {% endfor %}
+    <button type="submit" class="modern-button">Sign In</button>
 </form>
 {% endblock %}
