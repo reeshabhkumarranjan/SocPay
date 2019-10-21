@@ -1,10 +1,50 @@
 {% extends 'base_logged_in.html' %}
 {% block title %} {{friend_username}} {% endblock %}
 
-{% block body%}
+{% block body %}
 
-    <h>
-    You are viewing {{friend_username}}'s page.
-    </h>
+    <div class="container" >
+    <form style="align-self: center" style="margin-left: auto; margin-right: auto" action="add_post" method="post">
+        {% csrf_token %}
+{#        <input type="text" name="post_text" class="textfield" style="height: 150px; width: 500px">#}
+        <textarea name="post_text" rows = "5" cols="60">Post on @{{ friend_username }}'s timeline!</textarea>
+        <br>
+        <input type="submit" class="modern-button">
+    </form>
+    </div>
+
+    <div style="height: 100%; width: 80%; margin: auto">
+
+        <div id="post-section">
+            {% for post_number in forloop %}
+                <p><b>post_number</b></p>
+            {% endfor %}
+
+{#            {% for post in all_posts %}#}
+{#                <hr>#}
+{#                <p style="background-color: antiquewhite">#}
+{#                <b>Author:</b> {{ post.author_name }}#}
+{#                    <br>#}
+{#                <b>Recipient: </b> {{ post.recipient_name }}#}
+{#                    <br>#}
+{#                <b>Posted on </b> {{ post.post_date.date }} <b>at</b> {{ post.post_date.time }}#}
+{#                <br>#}
+{#                <b>Post text:</b>#}
+{#                <br>#}
+{#                {{ post.post_text }}#}
+{#                </p>#}
+{#                <hr>#}
+{#            {% endfor %}#}
+        </div>
+
+        <div id="timeline-side-panel" style="padding: 20px">
+            <button class = "modern-button" style="margin: 0 auto; display: block;">Wallet</button>
+            <br>
+            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'main_app:friends' %}'">Friends</button>
+            <br>
+            <button class = "modern-button" style="margin: 0 auto; display: block;">Groups</button>
+        </div>
+
+    </div>
 
 {% endblock %}
