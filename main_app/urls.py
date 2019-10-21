@@ -9,5 +9,6 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('timeline', views.timeline, name='timeline'),
     path('friends', views.friends, name='friends'),
-    path('add_post', views.add_post, name='add_post')
+    path('add_post', views.add_post, name='add_post'),
+    path('friend_timeline/<slug:friend_username>', views.friend_timeline, name='friend_timeline')
 ]

@@ -36,3 +36,7 @@ def add_post(request):
 
     Post.objects.create(author_name=author_name, recipient_name=recipient_name, post_text=post_text)
     return redirect('main_app:timeline')
+
+def friend_timeline(request, friend_username):
+    context = {'friend_username' : friend_username}
+    return render(request, 'friend_timeline.html', context=context)
