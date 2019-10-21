@@ -24,7 +24,7 @@ def timeline(request):
 
 def friends(request):
     # all_friends = Friend.objects.all(creator__id=)
-    all_friends = Friend.objects.filter(creator=request.user) | Friend.objects.filter(follower=request.user) & Friend.objects.filter(confirmed=True)
+    all_friends = (Friend.objects.filter(creator=request.user) | Friend.objects.filter(follower=request.user)) & Friend.objects.filter(confirmed=True)
     context = {'all_friends' : all_friends}
     return render(request, 'friends.html', context=context)
 
