@@ -16,5 +16,5 @@ urlpatterns = [
     path('transfer_money', views.transfer_money, name='transfer_money'),
     path('transfer', views.transfer, name='transfer'),
     path('make_changes', views.make_changes, name='make_changes'),
-    path('show_trans', views.show_trans, name='show_trans'),
+    path('transactions', views.transactions, name='transactions'),
 ]

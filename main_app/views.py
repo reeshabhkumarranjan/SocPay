@@ -65,7 +65,7 @@ def wallet_home(request):
     d = {'name':user1.username, 'bal':user1.user_balance, 'trans':user1.user_no_of_transactions}
     return render(request, 'wallet.html', context=d)
     # return HttpResponse("<h1>HERE</h1>")
-def show_trans(request):
+def transactions(request):
     user1 = request.user
     d={'name':user1.user_transactions_list}
     return render(request, 'transactions.html', d)
