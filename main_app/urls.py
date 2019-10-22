@@ -11,5 +11,10 @@ urlpatterns = [
     path('friends', views.friends, name='friends'),
     path('add_post', views.add_post, name='add_post'),
     path('friend_timeline/<slug:friend_username>', views.friend_timeline, name='friend_timeline'),
-    path('add_post_friend/<slug:friend_username>', views.add_post_friend, name='add_post_friend')
+    path('add_post_friend/<slug:friend_username>', views.add_post_friend, name='add_post_friend'),
+    path('wallet_home', views.wallet_home, name='wallet_home'),
+    path('transfer_money', views.transfer_money, name='transfer_money'),
+    path('transfer', views.transfer, name='transfer'),
+    path('make_changes', views.make_changes, name='make_changes'),
+    path('show_trans', views.show_trans, name='show_trans'),
 ]

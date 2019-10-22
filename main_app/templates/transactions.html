@@ -1,0 +1,17 @@
+{% extends 'base_logged_in.html' %}
+
+{% block title %}My Transactions{% endblock %}
+
+{% block body %}
+
+    <h1> {{name}}</h1>
+
+<button onclick='location.href="{% url 'wallet_home' %}"'>
+    Go Back
+</button>
+
+<button onclick='location.href="{% url 'logout' %}"'>
+    Logout
+</button>
+
+{% endblock %}

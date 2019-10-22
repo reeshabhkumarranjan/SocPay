@@ -1,0 +1,13 @@
+{% extends 'base_logged_in.html' %}
+
+{% block title %}OTP{% endblock %}
+
+{% block body %}
+<form action='make_changes' method="GET">
+    <input name="otp">Enter OTP Sent to your mail</input><br>
+    <button type="submit">
+        Proceed
+    </button>
+</form>
+
+{% endblock %}

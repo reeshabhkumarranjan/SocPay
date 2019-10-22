@@ -43,8 +43,9 @@
         </div>
 
         <div id="timeline-side-panel" style="padding: 20px">
-            <button class = "modern-button" style="margin: 0 auto; display: block;">Wallet</button>
+            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='http://www.google.com'">Wallet</button>
             <br>
+{#            {% url 'main_app:wallet_home' %}#}
             <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'main_app:friends' %}'">Friends</button>
             <br>
             <button class = "modern-button" style="margin: 0 auto; display: block;">Groups</button>

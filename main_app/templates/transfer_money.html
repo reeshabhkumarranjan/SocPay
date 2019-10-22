@@ -1,0 +1,18 @@
+{% extends 'base_logged_in.html' %}
+
+{% block title %}Transfer Money{% endblock %}
+
+{% block body %}
+
+<form action='transfer' method="GET">
+    <input name="to">Send To</input><br>
+    <input name="amount">Enter Amount</input><br>
+    <button type="submit">
+        Send Money
+    </button>
+</form>
+<button onclick='location.href="{% url 'logout' %}"'>
+    Logout
+</button>
+
+{% endblock %}

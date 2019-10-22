@@ -3,11 +3,11 @@
 {% block body %}
     <h1> Welcome {{ name }}<br> Your account balance is {{ bal }}<br>Your number of transacations for this month : {{ trans }}  </h1>
 
-    <button onclick='location.href="{% url 'transfer_money' %}"'>
+    <button onclick='location.href="{% url 'main_app:transfer_money' %}"'>
         Transfer money
     </button>
 
-    <button onclick='location.href="{% url 'show_trans' %}"'>
+    <button onclick='location.href="{% url 'main_app:show_trans' %}"'>
         Show My Transactions
     </button>
 
