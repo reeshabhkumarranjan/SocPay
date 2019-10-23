@@ -8,7 +8,7 @@
 {#    <button type="submit">Login</button>#}
 
     {% for field in form %}
-        {{ field.errors }}
+        <b style="color: red">{{ field.errors }}</b>
         <br>
         {{ field.label_tag }}
         <br>

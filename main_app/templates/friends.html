@@ -17,7 +17,8 @@
         </form>
         <div class="container" style="overflow-y: auto; height: 400px" >
             {% for stranger in all_strangers %}
-
+                <p><button class="modern-button" style="width: auto; height: auto">+</button> {{ stranger.username }}</p>
+                <hr>
             {% endfor %}
         </div>
     </div>

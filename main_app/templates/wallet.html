@@ -1,18 +1,19 @@
 {% extends 'base_logged_in.html' %}
 {% block title %}  {{ user.first_name }}'s Wallet {% endblock %}
 {% block body %}
-    <h1> Welcome {{ name }}<br> Your account balance is {{ bal }}<br>Your number of transacations for this month : {{ trans }}  </h1>
+    <div class="container" style="padding-top: 100px">
+        <p style="text-align: center">Your account balance is <b>{{ bal }}</b><br>Your number of transacations for this month : <b>{{ trans }} </b> </p>
 
-    <button onclick='location.href="{% url 'main_app:transfer_money' %}"'>
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transfer_money' %}"'>
         Transfer money
     </button>
 
-    <button onclick='location.href="{% url 'main_app:transactions' %}"'>
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transactions' %}"'>
         Show My Transactions
     </button>
-
-    <button onclick='location.href="{% url 'logout' %}"'>
-        Logout
-    </button>
+    </div>
+{#    <button class="modern-button" onclick='location.href="{% url 'logout' %}"'>#}
+{#        Logout#}
+{#    </button>#}
 
 {% endblock %}
