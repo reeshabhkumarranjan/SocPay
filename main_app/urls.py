@@ -17,4 +17,5 @@ urlpatterns = [
     path('transfer', views.transfer, name='transfer'),
     path('make_changes', views.make_changes, name='make_changes'),
     path('transactions', views.transactions, name='transactions'),
+    path('group', views.group, name='group')
 ]

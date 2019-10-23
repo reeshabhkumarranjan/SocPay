@@ -154,3 +154,11 @@ def make_changes(request):
     user2.save()
 
     return HttpResponse("<h1>Money Transeferred Successfully<br><a href='http://google.com'>GO BACK</a>")
+
+def group(request):
+    base_html = 'base.html'
+    if request.user.is_authenticated:
+        base_html = 'base_logged_in.html'
+    context = {'base_html' : base_html, 'group_name' : 'Sample Group', 'is_admin' : False}
+
+    return render(request, 'group.html', context=context)
