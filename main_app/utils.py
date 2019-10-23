@@ -35,7 +35,10 @@ def get_sent_requests(user):
     return friend_arr
 
 
-def get_not_friends(friends, requests_sent, requests_received):
+def get_not_friends(user):
+    friends = get_friends(user)
+    requests_sent = get_sent_requests(user)
+    requests_received = get_received_requests(user)
     arr = CustomUser.objects.all()
     not_friends = []
     for i in arr:

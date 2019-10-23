@@ -6,7 +6,7 @@
     <div class="container" style="width: 50%; float: left; height: auto">
     {% for friend in all_friends %}
         <p style="background-color: antiquewhite; margin-left: 50px">
-            <a href='{% url 'main_app:friend_timeline' friend_username=friend.follower.username%}'>{{ friend.follower.username }}</a>
+            <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>
         </p>
     {% endfor %}
     </div>

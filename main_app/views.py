@@ -2,6 +2,8 @@ import pyotp as pyotp
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from datetime import datetime
+
+from main_app import utils
 from main_app.models import Post, Transaction
 from users.models import Friend, CustomUser
 
@@ -30,8 +32,8 @@ def friends(request):
     if request.method == 'POST':
         pass # TODO complete this
     # all_friends = Friend.objects.all(creator__id=)
-    all_friends = (Friend.objects.filter(creator=request.user) | Friend.objects.filter(follower=request.user)) & Friend.objects.filter(confirmed=True)
-    all_strangers = CustomUser.objects.all()
+    all_friends = utils.get_friends(request.user)
+    all_strangers = utils.get_not_friends(request.user)
     context = {'all_friends' : all_friends, 'all_strangers' : all_strangers}
     return render(request, 'friends.html', context=context)
 
