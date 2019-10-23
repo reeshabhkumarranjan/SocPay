@@ -13,6 +13,8 @@ def register(request):
 
 def login(request):
     """This just displays the register page."""
+    if request.user.is_authenticated():
+        return redirect('main_app:timeline')
     return render(request, 'registration/login.html')
 
 
@@ -60,7 +62,9 @@ def friend_timeline(request, friend_username):
 # wallet
 
 def transfer_money(request):
-    return render(request, 'transfer_money.html')
+    all_users = CustomUser.objects.all()
+    context = {'all_users' : all_users}
+    return render(request, 'transfer_money.html', context=context)
 
 def wallet_home(request):
     user1 = request.user

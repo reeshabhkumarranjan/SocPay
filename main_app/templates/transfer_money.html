@@ -4,15 +4,19 @@
 
 {% block body %}
 
-<form action='transfer' method="GET">
-    <input name="to">Send To</input><br>
-    <input name="amount">Enter Amount</input><br>
-    <button type="submit">
+<form action='transfer' method="GET" style="padding-top: 100px">
+{#    <input name="to" class="textfield">Send To</input><br>#}
+    <select class="textfield" name="to" style="margin: 0 auto; display: block">
+    <option value="null">Select username</option>
+        {% for user in all_users %}
+            <option value= "{{ user.username }}">{{ user.username }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <input name="amount" placeholder="Amount" class="textfield" style="margin: 0 auto; display: block"/><br>
+    <button type="submit" style="margin: 0 auto; display: block" class="modern-button">
         Send Money
     </button>
 </form>
-<button onclick='location.href="{% url 'logout' %}"'>
-    Logout
-</button>
 
 {% endblock %}
