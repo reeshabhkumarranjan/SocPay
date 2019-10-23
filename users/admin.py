@@ -15,5 +15,5 @@ class CustomUserAdmin(UserAdmin):
         ('Extra Fields', {'fields': ('user_type', 'user_balance')}),
     )
 
-admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Friend)
+# admin.site.register(CustomUser, CustomUserAdmin)
+# admin.site.register(Friend)

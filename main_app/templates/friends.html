@@ -8,9 +8,12 @@
     <h3>Your friends</h3>
     <hr>
     {% for friend in all_friends %}
-        <p>
-            <button class="modern-button" style="width: auto; height: auto;">-</button> <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>
-        </p>
+       <p><form style="display: inline" action="{% url 'users:remove_friend' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="{{ friend.id }}" name="friend">
+                <button class="modern-button" style="width: auto; height: auto">Remove Friend</button>
+            </form> <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
+                <hr>
         <hr>
 
     {% endfor %}
@@ -22,7 +25,11 @@
         </form>
         <div class="container" style="overflow-y: auto; height: 400px" >
             {% for stranger in all_strangers %}
-                <p><button class="modern-button" style="width: auto; height: auto">+</button> <a href='{% url 'main_app:friend_timeline' friend_username=stranger.username%}'>{{ stranger.username }}</a></p>
+                <p><form style="display: inline" action="{% url 'users:add_friend' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="{{ stranger.id }}" name="friend">
+                <button class="modern-button" style="width: auto; height: auto">Send Request</button>
+            </form> <a href='{% url 'main_app:friend_timeline' friend_username=stranger.username%}'>{{ stranger.username }}</a></p>
                 <hr>
             {% endfor %}
         </div>
