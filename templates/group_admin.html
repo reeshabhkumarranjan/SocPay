@@ -1,0 +1,10 @@
+{% extends 'base_logged_in.html' %}
+{% block body %}
+    {% for group in my_groups %}
+        <form action="{% url 'groups:group_view' %}" method="post">
+            <input type="hidden" name="group_id" value="{{ group.id }}" />
+            {% csrf_token %}
+            <button> {{ group.group_name }} </button>
+        </form>
+    {% endfor %}
+{% endblock %}

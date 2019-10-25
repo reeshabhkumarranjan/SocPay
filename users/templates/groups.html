@@ -1,0 +1,36 @@
+{% extends 'base_logged_in.html' %}
+{% block body %}
+    {% for group in member_groups %}
+        <p> group_name =  {{ group.group_name }}</p>
+        <p> admin = {{ group.admin }}</p>
+        <p> description = {{ group.description }}</p>
+        <p> fees = {{ group.fees }}</p>
+        <form action="{% url 'groups:remove' %}" method="post">
+            <input type="hidden" name="group_id" value="{{ group.id }}"/>
+            {% csrf_token %}
+            <button> CancelRequest </button>
+        </form>
+    {% endfor %}
+    {% for group in other_groups %}
+        <p> group_name =  {{ group.group_name }}</p>
+        <p> admin = {{ group.admin }}</p>
+        <p> description = {{ group.description }}</p>
+        <p> fees = {{ group.fees }}</p>
+        <form action="{% url 'groups:join_group' %}" method="post">
+            <input type="hidden" name="group_id" value="{{ group.id }}"/>
+            {% csrf_token %}
+            <button> Join </button>
+        </form>
+    {% endfor %}
+    {% for group in sent_requests %}
+        <p> group_name =  {{ group.group_name }}</p>
+        <p> admin = {{ group.admin }}</p>
+        <p> description = {{ group.description }}</p>
+        <p> fees = {{ group.fees }}</p>
+        <form action="{% url 'groups:cancel_request' %}" method="post">
+            <input type="hidden" name="group_id" value="{{ group.id }}"/>
+            {% csrf_token %}
+            <button> CancelRequest </button>
+        </form>
+    {% endfor %}
+{% endblock %}
