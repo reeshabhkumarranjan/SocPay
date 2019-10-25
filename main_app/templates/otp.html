@@ -3,7 +3,8 @@
 {% block title %}OTP{% endblock %}
 
 {% block body %}
-<form action='make_changes' method="GET">
+<form action='make_changes' method="POST">
+    {% csrf_token %}
     <input name="otp">Enter OTP Sent to your mail</input><br>
     <button type="submit">
         Proceed

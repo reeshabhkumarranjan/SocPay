@@ -4,7 +4,11 @@
 
 {% block body %}
 
-    <h1> {{name}}</h1>
+    <h1> Following are your pending transactions-: </h1>
+
+    {% for i in trans_list %}
+        <p> -->  FROM <b>{{i.transaction_user_1.username}}</b>   TO  <b>{{i.transaction_user_2.username}}</b>   AMOUNT <b>{{i.transaction_amount}}</b>rs  DATE AND TIME <b>{{i.transaction_date}}</b> - <b>{{i.transaction_time}}</b></p>
+    {% endfor %}
 
 <button onclick='location.href="{% url 'main_app:wallet_home' %}"'>
     Go Back

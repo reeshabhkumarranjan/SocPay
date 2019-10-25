@@ -1,0 +1,14 @@
+{% extends 'base_logged_in.html' %}
+
+{% block title %}Transfer Money{% endblock %}
+
+{% block body %}
+
+<form action='add_money_work' method="POST" style="padding-top: 100px">
+    {% csrf_token %}
+    <input type="number" name="amount" placeholder="Amount" class="textfield" style="margin: 0 auto; display: block"/><br>
+    <button type="submit" style="margin: 0 auto; display: block" class="modern-button">
+        Add Money
+    </button>
+</form>
+{% endblock %}

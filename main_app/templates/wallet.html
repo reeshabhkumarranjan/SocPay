@@ -4,13 +4,26 @@
     <div class="container" style="padding-top: 100px">
         <p style="text-align: center">Your account balance is <b>{{ bal }}</b><br>Your number of transacations for this month : <b>{{ trans }} </b> </p>
 
-    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transfer_money' %}"'>
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transfer' %}"'>
         Transfer money
     </button>
 
-    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transactions' %}"'>
-        Show My Transactions
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transactions_pending' %}"'>
+        Show My Pending Transactions
     </button>
+
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transactions_completed' %}"'>
+        Show My Completed Transactions
+    </button>
+
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transactions_to_be_accepted' %}"'>
+        Show Transactions To Be Accepted
+    </button>
+
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:add_money' %}"'>
+        Add Money to Wallet
+    </button>
+
     </div>
 {#    <button class="modern-button" onclick='location.href="{% url 'logout' %}"'>#}
 {#        Logout#}
