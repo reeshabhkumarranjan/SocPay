@@ -18,6 +18,6 @@ urlpatterns = [
     path('make_changes', views.make_changes, name='make_changes'),
     path('transactions', views.transactions, name='transactions'),
     path('group', views.group, name='group'),
-    path('friend_request', views.friend_request, name='friend_request'),
-    path('friend_request_list', views.friend_request_list, name='friend_request_list')
+    # path('friend_request', views.friend_request, name='friend_request'),
+    path('transactions_list', views.transactions_list, name='transactions_list')
 ]

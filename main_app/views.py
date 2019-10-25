@@ -167,16 +167,7 @@ def group(request):
 
     return render(request, 'group.html', context=context)
 
-def friend_request(request):
-    username = request.POST.get("sender", "null")
-    sender = CustomUser.objects.get(username=username)
-    sender_id = sender.id
-    sender_username = sender.username
-    context = {'sender_id' : sender_id, 'sender_username' : sender_username}
-    return render(request, 'friend_request.html', context=context)
-    # return render(request, 'friend_request.html')
-
-def friend_request_list(request):
-    requests = utils.get_received_requests(request.user)
-    context = {'requests' : requests}
-    return render(request, 'friend_request_list.html', context=context)
+def transactions_list(request):
+    transactions = utils.get_transactions(request.user)
+    context = {'transactions' : transactions}
+    return render(request, 'transactions_list.html', context=context)

@@ -1,3 +1,4 @@
+from main_app.models import Transaction
 from users.models import Friend, CustomUser
 
 
@@ -45,3 +46,7 @@ def get_not_friends(user):
         if i not in friends and i not in requests_received and i not in requests_sent:
             not_friends.append(i)
     return not_friends
+
+def get_transactions(user):
+    list = Transaction.objects.filter(transaction_user2=user)
+    return list
