@@ -34,7 +34,9 @@ def friends(request):
     # all_friends = Friend.objects.all(creator__id=)
     all_friends = utils.get_friends(request.user)
     all_strangers = utils.get_not_friends(request.user)
-    context = {'all_friends' : all_friends, 'all_strangers' : all_strangers}
+    all_requests_sent = utils.get_sent_requests(request.user)
+    all_requests_received = utils.get_received_requests(request.user)
+    context = {'all_friends' : all_friends, 'all_strangers' : all_strangers, 'all_requests_sent' : all_requests_sent, 'all_requests_received' : all_requests_received}
     return render(request, 'friends.html', context=context)
 
 def add_post(request):
@@ -164,3 +166,17 @@ def group(request):
     context = {'base_html' : base_html, 'group_name' : 'Sample Group', 'is_admin' : False}
 
     return render(request, 'group.html', context=context)
+
+def friend_request(request):
+    username = request.POST.get("sender", "null")
+    sender = CustomUser.objects.get(username=username)
+    sender_id = sender.id
+    sender_username = sender.username
+    context = {'sender_id' : sender_id, 'sender_username' : sender_username}
+    return render(request, 'friend_request.html', context=context)
+    # return render(request, 'friend_request.html')
+
+def friend_request_list(request):
+    requests = utils.get_received_requests(request.user)
+    context = {'requests' : requests}
+    return render(request, 'friend_request_list.html', context=context)

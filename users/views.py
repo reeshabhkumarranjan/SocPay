@@ -59,7 +59,7 @@ def decline(request):
     friend_id = request.POST.get('friend', 'default')
     # print(friend)
     Friend.objects.filter(creator_id=friend_id, follower_id=request.user.id, confirmed=False).delete()
-    return HttpResponseRedirect(reverse('friends', args=[request.user.username]))
+    return HttpResponseRedirect(reverse('main_app:friends'))
 
 
 def accept(request):
@@ -70,13 +70,13 @@ def accept(request):
     row.save()
     # print("hi")
     # print(Friend.objects.get(creator_id=friend_id,follower_id=request.user.id).confirmed)
-    return HttpResponseRedirect(reverse('friends', args=[request.user.username]))
+    return HttpResponseRedirect(reverse('main_app:friends'))
 
 
 def cancel(request):
     friend_id = request.POST.get('friend', 'default')
     Friend.objects.filter(creator_id=request.user.id, follower_id=friend_id).delete()
-    return HttpResponseRedirect(reverse('friends', args=[request.user.username]))
+    return HttpResponseRedirect(reverse('main_app:friends'))
 
 
 def remove_friend(request):

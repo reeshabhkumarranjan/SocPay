@@ -43,6 +43,34 @@ body {
     transition: 0.3s;
 }
 
+.modern-button-red {
+    background-color: #ff2d3b;
+    color: white;
+    height: 50px;
+    width: 220px;
+    font-size: 14px;
+    border: 0px;
+}
+
+.modern-button-red:hover {
+    background-color: black;
+    transition: 0.3s;
+}
+
+.modern-button-green {
+    background-color: #0f6b00;
+    color: white;
+    height: 50px;
+    width: 220px;
+    font-size: 14px;
+    border: 0px;
+}
+
+.modern-button-green:hover {
+    background-color: black;
+    transition: 0.3s;
+}
+
 .textfield {
     background-color: #FFFFFF;
     height: 50px;
