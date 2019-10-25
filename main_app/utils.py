@@ -1,4 +1,5 @@
 from users.models import Friend, CustomUser
+from groups.models import Groups, Group_Members
 
 
 def get_friends(user):
@@ -42,3 +43,5 @@ def get_not_friends(friends, requests_sent, requests_received):
         if i not in friends and i not in requests_received and i not in requests_sent:
             not_friends.append(i)
     return not_friends
+
+

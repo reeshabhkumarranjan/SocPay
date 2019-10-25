@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main_app.apps.MainAppConfig',
     'users',
-    # 'shop'
+    'groups',
+    'private_message',
+    'commercial_page',
 ]
 
 MIDDLEWARE = [

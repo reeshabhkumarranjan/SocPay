@@ -16,6 +16,7 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
+
 class Friendship(TemplateView):
     template_name = 'friends.html'
 
@@ -31,10 +32,11 @@ class Friendship(TemplateView):
         context['friends_list'] = get_friends(self.request.user)
         context['requests_sent'] = get_sent_requests(self.request.user)
         context['requests_received'] = get_received_requests(self.request.user)
-        context['not_friends'] = get_not_friends(context['friends_list'], context['requests_sent'], context['requests_received'])
-        #print(context['friends_list'])
+        context['not_friends'] = get_not_friends(context['friends_list'], context['requests_sent'],
+                                                 context['requests_received'])
+        # print(context['friends_list'])
         # for friend in context['friends_list']:
-            #print(friend)
+        # print(friend)
         # print()
         # for friend in context['requests_sent']:
         #     print(friend)
@@ -89,4 +91,5 @@ def remove_friend(request):
     # print(row)
     row.delete()
     return HttpResponseRedirect(reverse('friends', args=[request.user.username]))
+
 
