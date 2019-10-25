@@ -19,6 +19,7 @@ class Transaction(models.Model):
     transaction_amount = models.IntegerField(default=0);
     transaction_date = models.DateField()
     transaction_time = models.TimeField()
+    transaction_accepted = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'U1: '+str(self.transaction_user_1) + ' | '+'U2: '+str(self.transaction_user_2)+' | '+'Amount: '+str(self.transaction_amount)+' | '+'date: '+str(self.transaction_date)
+        return 'U1: '+str(self.transaction_user_1) + ' | '+'U2: '+str(self.transaction_user_2)+' | '+'Amount: '+str(self.transaction_amount)+' | '+'date: '+str(self.transaction_date) + ' | ' + 'accepted: ' + str(self.transaction_accepted)
