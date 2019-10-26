@@ -7,6 +7,7 @@ from main_app import utils
 from main_app.models import Post, Transaction
 from users.models import Friend, CustomUser
 from .forms import transaction_form
+from django.core.mail import send_mail
 
 
 def register(request):
@@ -151,7 +152,9 @@ def transfer(request):
             request.session['am'] = str(am)
             request.session['curr_otp'] = str(curr_otp)
 
-            print(curr_otp)
+            # print(curr_otp)
+            # print(curr_otp)
+            send_mail('SocPay | NoReply', 'Your OTP is : ' + str(curr_otp), 'accounts@socpay.in', [user1.email], fail_silently=False)
 
             return render(request, 'otp.html')
 
