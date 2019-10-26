@@ -1,0 +1,21 @@
+{% extends 'base_logged_in.html' %}
+{% block body %}
+    {% for member in members %}
+        <p> {{ member.username }}</p>
+    {% endfor %}
+     {% for member in member_requests %}
+        <p> {{ member.username }}</p>
+        <form action="{% url 'groups:accept' %}" method="post">
+            {% csrf_token %}
+            <button> Accept </button>
+            <input type="hidden" name="group_id" value="{{ group_id }}"/>
+            <input type="hidden" name="member_id" value="{{ member.id }}"/>
+        </form>
+        <form action="{% url 'groups:decline' %}" method="post">
+            {% csrf_token %}
+            <button> Decline </button>
+            <input type="hidden" name="group_id" value="{{ group_id }}"/>
+            <input type="hidden" name="member_id" value="{{ member.id }}"/>
+        </form>
+    {% endfor %}
+{% endblock %}

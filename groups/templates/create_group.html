@@ -1,0 +1,8 @@
+{% extends 'base_logged_in.html' %}
+{% block body %}
+    <form action="{% url 'groups:add_group' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
