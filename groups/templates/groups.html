@@ -1,0 +1,67 @@
+{% extends 'base_logged_in.html' %}
+{% block title %}Your groups){% endblock %}
+
+
+{% block body %}
+
+    <div style="padding: 50px">
+    <div class="container" style="width: 50%; float: left; height: 400px; overflow-y: auto;">
+    <h3>Your Groups</h3>
+    <hr>
+    {% for group in member_groups %}
+       <p><form style="display: inline" action="{% url 'groups:remove' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="{{ group.id }}" name="group_id">
+                <button class="modern-button" style="width: auto; height: auto">Leave Group</button>
+            </form> <a href='{% url 'groups:group_view' group_id=group.id%}'>{{ group.group_name }}</a>
+{#        <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>#}
+        </p>
+                <hr>
+        <hr>
+
+    {% endfor %}
+    </div>
+
+    <div class="container" style="width: 50%; float:right; height: auto">
+        <form action="google.com" method="post" class="center-form">
+            <input type="text" class="search-bar" placeholder="Search for people!">
+        </form>
+        <div class="container" style="overflow-y: auto; height: 400px" >
+            {% for group in other_groups %}
+                <p><form style="display: inline" action="{% url 'groups:join_group' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="{{ group.id }}" name="group_id">
+                <button class="modern-button" style="width: auto; height: auto">Join Group</button>
+            </form>
+{#                {{ group.group_name }}#}
+                <a href='{% url 'groups:group_view' group_id=group.id%}'>{{ group.group_name }}</a>
+                </p>
+                <hr>
+            {% endfor %}
+        {% for group in sent_requests %}
+           <p><form style="display: inline" action="{% url 'groups:cancel_request' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ group.id }}" name="group_id">
+                    <button class="modern-button-green" style="width: auto; height: auto">Cancel Request</button>
+                </form> {{ group.group_name }}
+{#            <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>#}
+            </p>
+                    <hr>
+            <hr>
+
+        {% endfor %}
+{#        {% for friend in all_requests_sent %}#}
+{#           <p><form style="display: inline" action="{% url 'users:cancel_request' %}" method="post">#}
+{#                    {% csrf_token %}#}
+{#                    <input type="hidden" value="{{ friend.id }}" name="friend">#}
+{#                    <button class="modern-button-red" style="width: auto; height: auto;">Cancel Request</button>#}
+{#                </form> <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>#}
+{#                    <hr>#}
+{#            <hr>#}
+{##}
+{#        {% endfor %}#}
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

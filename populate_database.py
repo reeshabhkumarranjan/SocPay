@@ -1,4 +1,5 @@
 from users.models import CustomUser, Friend
+from groups.models import Groups, Group_Posts, Group_Members
 from django.db.models import Q
 
 def populate():
@@ -38,3 +39,10 @@ def populate():
                 confirmed = False
             friend = Friend.objects.create(creator=senders[i], follower=receivers[j], confirmed=confirmed)
             friend.save()
+
+    print("Creating Groups")
+    group1 = Groups.objects.create(admin=reeshabh, group_name="Reeshabh's Group", fees=0, description="This is Reeshabh's Group")
+    member1 = Group_Members.objects.create(group=group1, member=fahad, confirmed=True)
+    member2 = Group_Members.objects.create(group=group1, member=krishna, confirmed=False)
+
+    print("Done!")
