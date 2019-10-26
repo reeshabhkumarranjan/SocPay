@@ -1,13 +1,14 @@
+from private_message.models import Private_Message
 from users.models import CustomUser, Friend
 from groups.models import Groups, Group_Posts, Group_Members
 from django.db.models import Q
 
 def populate():
-    print("Clearing database")
+    print("Clearing database...")
     CustomUser.objects.filter(~Q(username='admin')).delete()
     Friend.objects.all().delete()
 
-    print("Creating Users")
+    print("Creating Users...")
     fahad = CustomUser.objects.create(username="fahad", first_name="Fahad")
     reeshabh = CustomUser.objects.create(username="reeshabh", first_name="Reeshabh")
     krishna = CustomUser.objects.create(username="krishna", first_name="Krishna")
@@ -26,7 +27,7 @@ def populate():
     rohan.save()
     anon.save()
 
-    print("Creating Friendships")
+    print("Creating Friendships...")
     senders = [fahad, reeshabh, krishna, rohan]
     receivers = [fahad, reeshabh, krishna, rohan]
 
@@ -40,9 +41,19 @@ def populate():
             friend = Friend.objects.create(creator=senders[i], follower=receivers[j], confirmed=confirmed)
             friend.save()
 
-    print("Creating Groups")
+    print("Creating Groups...")
     group1 = Groups.objects.create(admin=reeshabh, group_name="Reeshabh's Group", fees=0, description="This is Reeshabh's Group")
     member1 = Group_Members.objects.create(group=group1, member=fahad, confirmed=True)
     member2 = Group_Members.objects.create(group=group1, member=krishna, confirmed=False)
+
+    print("Creating Messages...")
+    private_message1 = Private_Message(sender=reeshabh, receiver=fahad, message="Hi How are you??")
+    private_message1.save()
+    private_message2 = Private_Message(sender=fahad, receiver=reeshabh, message="Hi I am fine")
+    private_message2.save()
+    private_message3 = Private_Message(sender=reeshabh, receiver=fahad, message="Kem cho??")
+    private_message3.save()
+    private_message4 = Private_Message(sender=fahad, receiver=reeshabh, message="Majama")
+    private_message4.save()
 
     print("Done!")
