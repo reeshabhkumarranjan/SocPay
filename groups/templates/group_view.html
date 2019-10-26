@@ -1,21 +1,51 @@
 {% extends 'base_logged_in.html' %}
+{% block title %}Group Timeline{% endblock %}
 {% block body %}
-    {% for member in members %}
-        <p> {{ member.username }}</p>
-    {% endfor %}
-     {% for member in member_requests %}
-        <p> {{ member.username }}</p>
-        <form action="{% url 'groups:accept' %}" method="post">
-            {% csrf_token %}
-            <button> Accept </button>
-            <input type="hidden" name="group_id" value="{{ group_id }}"/>
-            <input type="hidden" name="member_id" value="{{ member.id }}"/>
-        </form>
-        <form action="{% url 'groups:decline' %}" method="post">
-            {% csrf_token %}
-            <button> Decline </button>
-            <input type="hidden" name="group_id" value="{{ group_id }}"/>
-            <input type="hidden" name="member_id" value="{{ member.id }}"/>
-        </form>
-    {% endfor %}
+
+    <div class="container" >
+    <form style="align-self: center" style="margin-left: auto; margin-right: auto" action={% url 'groups:add_group_post'%} method="post">
+        {% csrf_token %}
+{#        <input type="text" name="post_text" class="textfield" style="height: 150px; width: 500px">#}
+        <input type="hidden" name="group_id" value={{ group.id }}>
+        <input type="hidden" name="member_id" value="{{ user.id }}">
+        <textarea name="post_text" rows = "5" cols="60">Post on {{ group.group_name }}!</textarea>
+        <br>
+        <input type="submit" class="modern-button">
+    </form>
+    </div>
+
+    <div style="height: 100%; width: 80%; margin: auto">
+
+        <div id="post-section">
+{#            {% for post_number in forloop %}#}
+{#                <p><b>post_number</b></p>#}
+{#            {% endfor %}#}
+
+            {% for post in all_posts %}
+                <hr>
+                <p style="background-color: antiquewhite">
+                <b>Author:</b> {{ post.author.username }}
+                    <br>
+{#                <b>Recipient: </b> {{ post.recipient_name }}#}
+                    <br>
+                <b>Posted on </b> {{ post.date.date }} <b>at</b> {{ post.date.time }}
+                <br>
+                <b>Post text:</b>
+                <br>
+                {{ post.description }}
+                </p>
+                <hr>
+            {% endfor %}
+        </div>
+
+        <div id="timeline-side-panel" style="padding: 20px">
+            <button class = "modern-button" style="margin: 0 auto; display: block;">Wallet</button>
+            <br>
+            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'main_app:friends' %}'">Friends</button>
+            <br>
+            <button class = "modern-button" style="margin: 0 auto; display: block;">Groups</button>
+        </div>
+
+    </div>
+
 {% endblock %}

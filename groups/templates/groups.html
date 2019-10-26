@@ -33,8 +33,8 @@
                 <input type="hidden" value="{{ group.id }}" name="group_id">
                 <button class="modern-button" style="width: auto; height: auto">Join Group</button>
             </form>
-                {{ group.group_name }}
-{#                <a href='{% url 'main_app:friend_timeline' friend_username=stranger.username%}'>{{ stranger.username }}</a>#}
+{#                {{ group.group_name }}#}
+                <a href='{% url 'groups:group_view' group_id=group.id%}'>{{ group.group_name }}</a>
                 </p>
                 <hr>
             {% endfor %}
