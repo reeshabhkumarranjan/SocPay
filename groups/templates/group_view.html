@@ -38,12 +38,10 @@
             {% endfor %}
         </div>
 
-        <div id="timeline-side-panel" style="padding: 20px">
-            <button class = "modern-button" style="margin: 0 auto; display: block;">Wallet</button>
-            <br>
-            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'main_app:friends' %}'">Friends</button>
-            <br>
-            <button class = "modern-button" style="margin: 0 auto; display: block;">Groups</button>
+        <div id="timeline-side-panel" style="padding: 20px; height: 300px; overflow-y: auto">
+            {% for member in members %}
+                <p><a href='{% url 'main_app:friend_timeline' friend_username=member.username%}'>{{ member.username }}</a></p>
+            {% endfor %}
         </div>
 
     </div>
