@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users',
     'groups',
     'private_message',
+    'commercial_page',
     # 'shop'
 ]
 
