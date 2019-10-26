@@ -1,0 +1,11 @@
+{% extends 'base_logged_in.html' %}
+{% block body %}
+    {% for i in my_friends %}
+        <p> {{ i.username }} </p>
+         <form action="{% url 'private_message:chat' %}" method="post">
+            {% csrf_token %}
+            <button> CHAT </button>
+            <input type="hidden" name="user_id" value="{{ i.id }}"/>
+        </form>
+    {% endfor %}
+{% endblock %}

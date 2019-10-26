@@ -1,7 +1,6 @@
 from django.db import models
 from users.models import CustomUser
 
-
 class Groups(models.Model):
     group_name = models.CharField(default="", max_length=200)
     admin = models.ForeignKey(CustomUser, related_name="admin", on_delete=models.CASCADE)

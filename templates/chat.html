@@ -1,0 +1,13 @@
+{% extends 'base_logged_in.html' %}
+{% block body %}
+    {% for texts in messages %}
+
+{#        <p> {{ texts }}#}
+        <p> {{ texts.sender }} </p>
+        <p> {{ texts.receiver  }} </p>
+        <p> {{ texts.message }} </p>
+        <p> {{ texts.date }} </p>
+        <p> {{ texts.time }} </p>
+
+    {% endfor %}
+{% endblock %}
