@@ -9,14 +9,35 @@
             Your Friends
         </h4>
         {% for friend in my_friends %}
-            <p style="text-align: center">
-                <button class="modern-button">{{ friend.first_name }}</button>
-            </p>
+            <form style="text-align: center" method="post" action=".">
+                {% csrf_token %}
+                <input type="hidden" name="friend_username" value={{ friend.username }}>
+                <button class="modern-button" name="button_clicked" value="select_friend">{{ friend.first_name }}</button>
+            </form>
         {% endfor %}
     </div>
 
-    <div class="container" style="width: 75%; float:right; height: 480px;">
-
+    <div class="container" style="width: 75%; float:right; height: 480px; overflow-y: auto">
+        {% if display_message_box %}
+        <form method="post" action={% url 'private_message:send_message' %}>
+{#        <form method="post" action=".">#}
+            {% csrf_token %}
+            <input type="hidden" name="friend_username" value={{ friend_username }}>
+            <textarea name="message_text" rows="5" cols="30" placeholder="Enter your message here"></textarea>
+            <button type="submit" name="button_clicked" value="send_message">Send</button>
+        </form>
+        {% endif %}
+        {% for chat in chats %}
+            <p>
+            <b>
+                {% if chat.sender == user %}
+                    You say:
+                {% else %}
+                    {{ chat.sender.username }} says
+                {% endif %}
+            </b> {{  chat.message }}
+            </p>
+        {% endfor %}
     </div>
     </div>
 
