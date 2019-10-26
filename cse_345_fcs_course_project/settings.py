@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'main_app.apps.MainAppConfig',
     'users',
     'groups',
+    'private_message',
     # 'shop'
 ]
 
