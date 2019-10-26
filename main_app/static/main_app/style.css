@@ -106,6 +106,20 @@ form input[type=text], input[type=password] {
     padding: 5px;
 }
 
+form button {
+    background-color: #05386B;
+    color: white;
+    height: 50px;
+    width: 220px;
+    font-size: 14px;
+    border: 0px;
+}
+
+form button:hover {
+    background-color: black;
+    transition: 0.3s;
+}
+
 #login-section{
     background: url("login-bg.jpg");
     background-size: cover;
