@@ -1,0 +1,23 @@
+{% extends 'base_logged_in.html' %}
+{% block title %}Messaging{% endblock %}
+
+{% block body %}
+
+    <div style="padding: 10px">
+    <div class="container" style="width: 25%; float: left; height: 480px; overflow-y: auto;">
+        <h4 style="text-align: center">
+            Your Friends
+        </h4>
+        {% for friend in my_friends %}
+            <p style="text-align: center">
+                <button class="modern-button">{{ friend.first_name }}</button>
+            </p>
+        {% endfor %}
+    </div>
+
+    <div class="container" style="width: 75%; float:right; height: 480px;">
+
+    </div>
+    </div>
+
+{% endblock %}
