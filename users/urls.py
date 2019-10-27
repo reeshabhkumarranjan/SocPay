@@ -6,6 +6,7 @@ from . import views
 
 app_name = 'users'
 urlpatterns = [
+    path('check_signup_request/', views.check_signup_request, name='check_signup_request'),
     path('signup/', views.SignUp.as_view(), name='signup'),
     path('friends/', views.Friendship.as_view(), name='friends'),
     path('add/', views.add_friend, name='add_friend'),

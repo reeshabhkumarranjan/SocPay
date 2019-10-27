@@ -16,6 +16,11 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('friends:timeline'))
+        return super(SignUp, self).dispatch(request, *args, **kwargs)
+
 class Friendship(TemplateView):
     template_name = 'friends.html'
 
@@ -89,3 +94,10 @@ def remove_friend(request):
     # print(row)
     row[0].delete()
     return HttpResponseRedirect(reverse('friends:friends'))
+
+def check_signup_request(request):
+    """Checks if the user is already logged in"""
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('friends:timeline'))
+
+    return HttpResponseRedirect(reverse('users:signup'))
