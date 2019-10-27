@@ -89,4 +89,3 @@ def remove_friend(request):
     # print(row)
     row[0].delete()
     return HttpResponseRedirect(reverse('friends:friends'))
-
