@@ -1,6 +1,7 @@
 from private_message.models import Private_Message
 from users.models import CustomUser, Friend
 from groups.models import Groups, Group_Posts, Group_Members
+from commercial_page.models import CommercialPage
 from django.db.models import Q
 
 def populate():
@@ -55,5 +56,9 @@ def populate():
     private_message3.save()
     private_message4 = Private_Message(sender=fahad, receiver=reeshabh, message="Majama")
     private_message4.save()
+
+    print("Creating Pages...")
+    page1 = CommercialPage(page_name="Reeshabh's Page", admin=reeshabh, description="This is Reeshabh's page!")
+    page1.save()
 
     print("Done!")
