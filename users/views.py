@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -54,13 +55,16 @@ class Friendship(TemplateView):
 
 def add_friend(request):
     # print(request.user.id)
-
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     friend_id = request.POST.get('friend', 'default')
     Friend.objects.create(creator_id=request.user.id, follower_id=friend_id, confirmed=False)
     return HttpResponseRedirect(reverse('friends:friends'))
 
 
 def decline(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     friend_id = request.POST.get('friend', 'default')
     # print(friend)
     Friend.objects.filter(creator_id=friend_id, follower_id=request.user.id, confirmed=False).delete()
@@ -68,6 +72,8 @@ def decline(request):
 
 
 def accept(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     # print("hiiiiiiii")
     friend_id = request.POST.get('friend', 'default')
     row = Friend.objects.get(creator_id=friend_id, follower_id=request.user.id, confirmed=False)
@@ -79,12 +85,16 @@ def accept(request):
 
 
 def cancel(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     friend_id = request.POST.get('friend', 'default')
     Friend.objects.filter(creator_id=request.user.id, follower_id=friend_id).delete()
     return HttpResponseRedirect(reverse('friends:friends'))
 
 
 def remove_friend(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     friend_id = request.POST.get('friend', 'default')
     row = Friend.objects.filter(creator_id=request.user.id, follower_id=friend_id)
     # print("ro")
