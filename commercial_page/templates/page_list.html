@@ -1,0 +1,16 @@
+{% extends 'base_logged_in.html' %}
+{% block title %}Page List{% endblock %}
+{% block body %}
+    <div class="container">
+    {% for page in pages %}
+        <form method="post" action={% url 'commercial_page:page_timeline' page_id=page.id %}>
+            {% csrf_token %}
+            <input type="hidden" name="page_id" value={{ page.id }}>
+            <button type="submit">{{ page.page_name }}</button> {{ page.description }}
+        </form>
+{#        <p style="text-align: center">#}
+{#            {{ page.page_name }}#}
+{#        </p>#}
+    {% endfor %}
+    </div>
+{% endblock %}
