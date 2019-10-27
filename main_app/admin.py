@@ -3,7 +3,8 @@ from django.contrib import admin
 # Register your models here.
 from friends.models import Friend
 from users.models import CustomUser
-from .models import Transaction, Post
+from wallet.models import Transaction
+from .models import Post
 
 admin.site.register(Transaction)
 admin.site.register(Post)

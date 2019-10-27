@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'private_message',
     'commercial_page',
     'friends',
+    'wallet',
     # 'shop'
 ]
 

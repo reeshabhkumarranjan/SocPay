@@ -1,6 +1,6 @@
 from friends.models import Friend
-from main_app.models import Transaction
 from users.models import CustomUser
+from wallet.models import Transaction
 
 
 def get_friends(user):

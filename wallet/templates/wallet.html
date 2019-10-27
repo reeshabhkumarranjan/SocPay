@@ -4,23 +4,23 @@
     <div class="container" style="padding-top: 100px">
         <p style="text-align: center">Your account balance is <b>{{ bal }}</b><br>Your number of transacations for this month : <b>{{ trans }} </b> </p>
 
-    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transfer' %}"'>
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'wallet:transfer' %}"'>
         Transfer money
     </button>
 
-    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transactions_pending' %}"'>
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'wallet:transactions_pending' %}"'>
         Show My Pending Transactions
     </button>
 
-    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transactions_completed' %}"'>
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'wallet:transactions_completed' %}"'>
         Show My Completed Transactions
     </button>
 
-    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:transactions_to_be_accepted' %}"'>
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'wallet:transactions_to_be_accepted' %}"'>
         Show Transactions To Be Accepted
     </button>
 
-    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'main_app:add_money' %}"'>
+    <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'wallet:add_money' %}"'>
         Add Money to Wallet
     </button>
 
