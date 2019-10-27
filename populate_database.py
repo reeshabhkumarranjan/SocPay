@@ -1,14 +1,29 @@
+from django.contrib.auth.models import Group
+
 from friends.models import Friend
+from main_app.models import Post
 from private_message.models import Private_Message
 from users.models import CustomUser
 from groups.models import Groups, Group_Posts, Group_Members
-from commercial_page.models import CommercialPage
+from commercial_page.models import CommercialPage, CommercialPagePosts
 from django.db.models import Q
+
+from wallet.models import Transaction
+
 
 def populate():
     print("Clearing database...")
-    CustomUser.objects.filter(~Q(username='admin')).delete()
+    Group.objects.all().delete()
+    CommercialPagePosts.objects.all().delete()
+    CommercialPage.objects.all().delete()
     Friend.objects.all().delete()
+    Group_Members.objects.all().delete()
+    Groups.objects.all().delete()
+    Group_Posts.objects.all().delete()
+    Post.objects.all().delete()
+    Private_Message.objects.all().delete()
+    CustomUser.objects.filter(~Q(username='admin')).delete()
+    Transaction.objects.all().delete()
 
     print("Creating Users...")
     fahad = CustomUser.objects.create(username="fahad", first_name="Fahad")
