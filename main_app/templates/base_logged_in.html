@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
-
+{% block navigation %}
+    <li><a href='{% url 'friends:timeline' %}'>Timeline</a></li>
+    <li><a href='{% url 'wallet:wallet_home' %}'>Wallet</a></li>
+    <li><a href='{% url 'friends:friends' %}'>Friends</a></li>
+    <li><a href='{% url 'groups:group' %}'>Groups</a></li>
+    <li><a href='{% url 'groups:group_admin' %}'>Owned Groups</a></li>
+    <li><a href='{% url 'private_message:friends_message' %}'>Chat</a></li>
+    <li><a href='{% url 'commercial_page:page_list' %}'>My Commercial Pages</a></li>
+    <li><a href="#">All Commercial Pages</a></li>
+{% endblock %}
 {% block buttons %}
     <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'logout' %}'">Logout</button>
 {% endblock %}

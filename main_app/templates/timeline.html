@@ -8,7 +8,7 @@
 
 {% block body %}
 
-    <div class="container" >
+    <div class="container" style="overflow-y: auto">
     <form style="align-self: center" style="margin-left: auto; margin-right: auto" action="add_post" method="post">
         {% csrf_token %}
 {#        <input type="text" name="post_text" class="textfield" style="height: 150px; width: 500px">#}
@@ -44,15 +44,21 @@
         <br>
         </div>
 
-        <div id="timeline-side-panel" style="padding: 20px">
-            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'wallet:wallet_home' %}'">Wallet</button>
-            <br>
-            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'friends:friends' %}'">Friends</button>
-            <br>
-            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'groups:group' %}'">Groups</button>
-            <br>
-            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'groups:group_admin' %}'">Owned Groups</button>
-        </div>
+{#        <div id="timeline-side-panel" style="padding: 20px">#}
+{#            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'wallet:wallet_home' %}'">Wallet</button>#}
+{#            <br>#}
+{#            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'friends:friends' %}'">Friends</button>#}
+{#            <br>#}
+{#            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'groups:group' %}'">Groups</button>#}
+{#            <br>#}
+{#            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'groups:group_admin' %}'">Owned Groups</button>#}
+{#            <br>#}
+{#            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'private_message:friends_message' %}'">Chat with friends</button>#}
+{#            <br>#}
+{#            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='{% url 'commercial_page:page_list' %}'">My Commercial Pages</button>#}
+{#            <br>#}
+{#            <button class = "modern-button" style="margin: 0 auto; display: block;" onclick="location.href='https://google.com'">Show Commercial Pages</button>#}
+{#        </div>#}
 
     </div>
 

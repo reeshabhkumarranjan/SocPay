@@ -14,9 +14,12 @@
 
 <body style="background-image: url({% static "main_app/light_background.jpg" %}); background-size: cover; background-attachment: fixed">
 <header id="top-header">
-    <div class="container">
+    <div class="container" style="padding: 10px">
 {#        <img src="{% static "main_app/sp-logo.png" %}" alt="Logo" style="float: left; height: 42px; width: 42px; vertical-align: middle">#}
         <a href="{% url 'main_app:index' %}">SocPay</a>
+        <div style="float: right">
+            {% block buttons %}<button onclick="location.href='{% url 'login' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Login</button> <button onclick="location.href='{% url 'users:signup' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Register</button> {% endblock %}
+        </div>
     </div>
 {#    <nav id="navigation-bar">#}
 {#    <div class="container" style="vertical-align: middle">#}
@@ -34,15 +37,17 @@
 {#<hr size="1" style="margin:0px;color:#555555;">#}
 </header>
 
-<nav id="navigation-bar">
-    <div class="container" style="vertical-align: middle">
-        <ul style="vertical-align:middle">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Team</a></li>
+<nav id="navigation-bar" style="padding: 10px;">
+    <div class="container">
+        <ul>
+            {% block navigation %}
+{#            <li><a href="#">Home</a></li>#}
+{#            <li><a href="#">About</a></li>#}
+{#            <li><a href="#">Contact</a></li>#}
+{#            <li><a href="#">Team</a></li>#}
 {#            <li><input type="text" name="search_query" class="search-bar" placeholder="Type in to search!"></li>#}
-            <li style="float: right">{% block buttons %}<button onclick="location.href='{% url 'login' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Login</button> <button onclick="location.href='{% url 'users:signup' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Register</button> {% endblock %} </li>
+            {% endblock %}
+{#            <li style="float: right">{% block buttons %}<button onclick="location.href='{% url 'login' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Login</button> <button onclick="location.href='{% url 'users:signup' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Register</button> {% endblock %} </li>#}
 {#            <li><button class = "modern-button" style="float: right; margin: 0; height: 40px; width: 100px">Register</button></li>#}
         </ul>
     </div>
