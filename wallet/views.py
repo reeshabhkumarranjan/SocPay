@@ -1,4 +1,5 @@
 import pyotp
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -11,12 +12,16 @@ from datetime import datetime
 
 
 def wallet_home(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     user1 = request.user
     d = {'name': user1.username, 'bal': user1.user_balance, 'trans': user1.user_no_of_transactions}
     return render(request, 'wallet.html', context=d)
 
 
 def transactions_to_be_accepted(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     user1 = request.user
     # print('I AM HERE')
     trans_list = []
@@ -29,6 +34,8 @@ def transactions_to_be_accepted(request):
 
 
 def transactions_completed(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     user1 = request.user
     # print('I AM HERE')
     trans_list = []
@@ -42,6 +49,8 @@ def transactions_completed(request):
 
 
 def transactions_pending(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     user1 = request.user
     # print('I AM HERE')
     trans_list = []
@@ -54,6 +63,8 @@ def transactions_pending(request):
 
 
 def transfer(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     if request.method == 'POST':
 
         form = transaction_form(request.POST)
@@ -114,6 +125,8 @@ def transfer(request):
 
 
 def make_changes(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     # print(request.session['user1'], request.session['user2'], request.session['am'], request.session['curr_otp'])
 
     user1 = CustomUser.objects.get(username=request.session['user1'])
@@ -157,10 +170,14 @@ def make_changes(request):
 
 
 def add_money(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     return render(request, 'add_money.html')
 
 
 def add_money_work(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     amount = float(request.POST.get('amount'))
     amount = int(amount)
     user1 = request.user
@@ -171,6 +188,8 @@ def add_money_work(request):
 
 
 def transaction_accept(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     id = -1
     try:
         id = int(request.POST.get('transaction_id'))
@@ -193,6 +212,8 @@ def transaction_accept(request):
 
 
 def transaction_decline(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     id = -1
     try:
         id = int(request.POST.get('transaction_id'))
@@ -214,6 +235,8 @@ def transaction_decline(request):
 
 
 def transfer_money(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     all_users = CustomUser.objects.all()  # TODO fix database query
     context = {'all_users': all_users}
     return render(request, 'transfer_money.html', context=context)
