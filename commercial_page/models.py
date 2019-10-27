@@ -19,6 +19,10 @@ def getAllPages(user):
     pages = CommercialPage.objects.filter(admin=user)
     return pages
 
+def getAllPagesGlobal():
+    pages = CommercialPage.objects.all()
+    return pages
+
 
 def getAllPosts(page):
     posts = CommercialPagePosts.objects.filter(page=page)

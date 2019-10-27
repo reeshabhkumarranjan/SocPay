@@ -1,0 +1,10 @@
+{% extends 'base_logged_in.html' %}
+{% block title %}Add a new page{% endblock %}
+{% block body %}
+    <form action='{% url 'commercial_page:add_page' %}' method="post">
+        {% csrf_token %}
+        <input type="text" required name="page_name" placeholder="Enter page name">
+        <input type="text" required name="description" placeholder="Enter description">
+        <button type="submit" class="modern-button">Submit</button>
+    </form>
+{% endblock %}
