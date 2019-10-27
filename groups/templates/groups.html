@@ -14,7 +14,7 @@
                 <input type="hidden" value="{{ group.id }}" name="group_id">
                 <button class="modern-button" style="width: auto; height: auto">Leave Group</button>
             </form> <a href='{% url 'groups:group_view' group_id=group.id%}'>{{ group.group_name }}</a>
-{#        <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>#}
+{#        <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>#}
         </p>
                 <hr>
         <hr>
@@ -44,7 +44,7 @@
                     <input type="hidden" value="{{ group.id }}" name="group_id">
                     <button class="modern-button-green" style="width: auto; height: auto">Cancel Request</button>
                 </form> {{ group.group_name }}
-{#            <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>#}
+{#            <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>#}
             </p>
                     <hr>
             <hr>
@@ -55,7 +55,7 @@
 {#                    {% csrf_token %}#}
 {#                    <input type="hidden" value="{{ friend.id }}" name="friend">#}
 {#                    <button class="modern-button-red" style="width: auto; height: auto;">Cancel Request</button>#}
-{#                </form> <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>#}
+{#                </form> <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>#}
 {#                    <hr>#}
 {#            <hr>#}
 {##}

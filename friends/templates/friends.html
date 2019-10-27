@@ -12,7 +12,7 @@
                 {% csrf_token %}
                 <input type="hidden" value="{{ friend.id }}" name="friend">
                 <button class="modern-button" style="width: auto; height: auto">Remove Friend</button>
-            </form> <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
+            </form> <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
                 <hr>
         <hr>
 
@@ -29,7 +29,7 @@
                 {% csrf_token %}
                 <input type="hidden" value="{{ stranger.id }}" name="friend">
                 <button class="modern-button" style="width: auto; height: auto">Send Request</button>
-            </form> <a href='{% url 'main_app:friend_timeline' friend_username=stranger.username%}'>{{ stranger.username }}</a></p>
+            </form> <a href='{% url 'friends:friend_timeline' friend_username=stranger.username%}'>{{ stranger.username }}</a></p>
                 <hr>
             {% endfor %}
         {% for friend in all_requests_received %}
@@ -37,7 +37,7 @@
                     {% csrf_token %}
                     <input type="hidden" value="{{ friend.id }}" name="friend">
                     <button class="modern-button-green" style="width: auto; height: auto">Accept Request</button>
-                </form> <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
+                </form> <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
                     <hr>
             <hr>
 
@@ -47,7 +47,7 @@
                     {% csrf_token %}
                     <input type="hidden" value="{{ friend.id }}" name="friend">
                     <button class="modern-button-red" style="width: auto; height: auto;">Cancel Request</button>
-                </form> <a href='{% url 'main_app:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
+                </form> <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
                     <hr>
             <hr>
 

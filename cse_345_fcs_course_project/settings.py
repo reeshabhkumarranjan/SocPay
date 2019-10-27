@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'groups',
     'private_message',
     'commercial_page',
+    'friends',
     # 'shop'
 ]
 
@@ -127,7 +128,7 @@ USE_TZ = True
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.CustomUser'
-LOGIN_REDIRECT_URL = 'main_app:timeline'
+LOGIN_REDIRECT_URL = 'friends:timeline'
 LOGOUT_REDIRECT_URL = 'main_app:index'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'

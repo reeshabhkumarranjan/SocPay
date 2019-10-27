@@ -41,7 +41,7 @@
         <div id="timeline-side-panel" style="padding: 20px; height: 300px; overflow-y: auto; top: 150px">
             <h4 style="text-align: center; ">Group members</h4>
             {% for member in members %}
-                <p><a href='{% url 'main_app:friend_timeline' friend_username=member.username%}'>{{ member.username }}</a></p>
+                <p><a href='{% url 'friends:friend_timeline' friend_username=member.username%}'>{{ member.username }}</a></p>
             {% endfor %}
         </div>
 

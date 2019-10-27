@@ -6,9 +6,9 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.views.generic import TemplateView
 
+from friends.models import Friend
 from main_app.utils import get_friends, get_sent_requests, get_received_requests, get_not_friends
 from users.forms import CustomUserCreationForm
-from users.models import Friend
 
 
 class SignUp(generic.CreateView):
@@ -17,7 +17,7 @@ class SignUp(generic.CreateView):
     template_name = 'signup.html'
 
 class Friendship(TemplateView):
-    template_name = 'friends.html'
+    template_name = '../friends/templates/friends.html'
 
     # def get(self, request, *args, **kwargs):
     #     if request.method == "Post":
@@ -52,14 +52,14 @@ def add_friend(request):
 
     friend_id = request.POST.get('friend', 'default')
     Friend.objects.create(creator_id=request.user.id, follower_id=friend_id, confirmed=False)
-    return HttpResponseRedirect(reverse('main_app:friends'))
+    return HttpResponseRedirect(reverse('friends:friends'))
 
 
 def decline(request):
     friend_id = request.POST.get('friend', 'default')
     # print(friend)
     Friend.objects.filter(creator_id=friend_id, follower_id=request.user.id, confirmed=False).delete()
-    return HttpResponseRedirect(reverse('main_app:friends'))
+    return HttpResponseRedirect(reverse('friends:friends'))
 
 
 def accept(request):
@@ -70,13 +70,13 @@ def accept(request):
     row.save()
     # print("hi")
     # print(Friend.objects.get(creator_id=friend_id,follower_id=request.user.id).confirmed)
-    return HttpResponseRedirect(reverse('main_app:friends'))
+    return HttpResponseRedirect(reverse('friends:friends'))
 
 
 def cancel(request):
     friend_id = request.POST.get('friend', 'default')
     Friend.objects.filter(creator_id=request.user.id, follower_id=friend_id).delete()
-    return HttpResponseRedirect(reverse('main_app:friends'))
+    return HttpResponseRedirect(reverse('friends:friends'))
 
 
 def remove_friend(request):
@@ -88,5 +88,5 @@ def remove_friend(request):
         row = Friend.objects.filter(creator_id=friend_id, follower_id=request.user.id)
     # print(row)
     row[0].delete()
-    return HttpResponseRedirect(reverse('main_app:friends'))
+    return HttpResponseRedirect(reverse('friends:friends'))
 

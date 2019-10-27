@@ -1,5 +1,6 @@
+from friends.models import Friend
 from private_message.models import Private_Message
-from users.models import CustomUser, Friend
+from users.models import CustomUser
 from groups.models import Groups, Group_Posts, Group_Members
 from commercial_page.models import CommercialPage
 from django.db.models import Q
