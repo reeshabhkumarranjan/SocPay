@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -6,11 +7,15 @@ from main_app.models import Post
 
 
 def timeline(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     all_posts = Post.objects.filter(recipient_name=request.user.username).order_by('-post_date')
     context = {'forloop' : range(100), 'all_posts' : all_posts}
     return render(request, 'timeline.html', context=context)
 
 def friends(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     if request.method == 'POST':
         pass # TODO complete this
     # all_friends = Friend.objects.all(creator__id=)
@@ -23,6 +28,8 @@ def friends(request):
 
 def add_post(request):
     # TODO add checks
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     author_name = request.user.username
     recipient_name = request.user.username
     post_text = request.POST.get('post_text', "N/A")
@@ -32,6 +39,8 @@ def add_post(request):
 
 def add_post_friend(request, friend_username):
     # TODO add checks
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     author_name = request.user.username
     recipient_name = friend_username
     post_text = request.POST.get('post_text', "N/A")
@@ -41,6 +50,8 @@ def add_post_friend(request, friend_username):
     # return redirect('https://google.com')
 
 def friend_timeline(request, friend_username):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     all_posts = Post.objects.filter(recipient_name=friend_username).order_by('-post_date')
     context = {'friend_username' : friend_username, 'all_posts' : all_posts}
     return render(request, 'friend_timeline.html', context=context)
