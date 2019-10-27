@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -39,6 +40,8 @@ class MyGroups(TemplateView):
 
 
 def groupsView(request, group_id):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     # group_id = request.POST.get("group_id", "default")
     group = Groups.objects.get(id=group_id)
     obj = Groups.objects.get(pk=group_id)
@@ -51,6 +54,8 @@ def groupsView(request, group_id):
 
 
 def AddJoinRequest(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     new_member = Group_Members.objects.create(member=request.user, group_id=group_id, confirmed=False)
     new_member.save()
@@ -58,6 +63,8 @@ def AddJoinRequest(request):
 
 
 def addgroup(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     if request.method == "POST":
         form = GroupCreateForm(request.POST)
         if form.is_valid():
@@ -73,6 +80,8 @@ def addgroup(request):
 
 
 def cancelJoinRequest(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     # print(group_id, request.user)
     Group_Members.objects.filter(member=request.user, group_id=group_id).delete()
@@ -80,12 +89,16 @@ def cancelJoinRequest(request):
 
 
 def removeFromGroup(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     Group_Members.objects.filter(member=request.user, group_id=group_id).delete()
     return HttpResponseRedirect(reverse('groups:group'))
 
 
 def acceptJoinRequest(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     member_id = request.POST.get("member_id", "default")
     # print(group_id, member_id)
@@ -96,12 +109,16 @@ def acceptJoinRequest(request):
 
 
 def rejectJoinRequest(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     member_id = request.POST.get("member_id", "default")
     Group_Members.objects.get(member_id=member_id, group_id=group_id).delete()
     return HttpResponseRedirect(reverse('groups:group_admin'))
 
 def add_group_post(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "null")
     member_id = request.POST.get("member_id", "null")
     post_text = request.POST.get("post_text", "null")
