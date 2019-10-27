@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -8,6 +9,8 @@ from users.models import CustomUser
 # Create your views here.
 
 def friends_message(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     my_friends = get_friends(request.user)
     context = {'my_friends': my_friends}
     context['display_message_box'] = False
@@ -26,6 +29,8 @@ def friends_message(request):
     return render(request, 'private_message.html', context)
 
 def send_message(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     friend_username = request.POST.get('friend_username', 'null')
     friend_user = CustomUser.objects.get(username=friend_username)
     message_text = request.POST.get("message_text", "null")
@@ -39,6 +44,8 @@ def send_message(request):
     # return render(request, 'private_message.html', context)
 
 def chat(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     user1 = request.user
     user2_id = request.POST.get("user_id")
     user2 = CustomUser.objects.get(id=user2_id)
