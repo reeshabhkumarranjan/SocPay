@@ -43,4 +43,4 @@ def add_post_friend(request, friend_username):
 def friend_timeline(request, friend_username):
     all_posts = Post.objects.filter(recipient_name=friend_username).order_by('-post_date')
     context = {'friend_username' : friend_username, 'all_posts' : all_posts}
-    return render(request, '../friends/templates/friend_timeline.html', context=context)
+    return render(request, 'friend_timeline.html', context=context)

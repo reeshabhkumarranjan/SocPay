@@ -17,7 +17,7 @@ class SignUp(generic.CreateView):
     template_name = 'signup.html'
 
 class Friendship(TemplateView):
-    template_name = '../friends/templates/friends.html'
+    template_name = 'friends.html'
 
     # def get(self, request, *args, **kwargs):
     #     if request.method == "Post":
