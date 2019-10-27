@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -8,11 +9,15 @@ from commercial_page.models import getAllPages, CommercialPage, getAllPosts, Com
 
 
 def page_list(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     pages = getAllPages(request.user)
     context = {'pages' : pages}
     return render(request, 'page_list.html', context=context)
 
 def page_timeline(request, page_id):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     # page_id = request.POST.get("page_id", "null")
     page = CommercialPage.objects.get(id=page_id)
     context = {}
@@ -21,11 +26,15 @@ def page_timeline(request, page_id):
     return render(request, 'page_timeline.html', context=context)
 
 def page_list_global(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     pages = getAllPagesGlobal()
     context = {'pages':pages}
     return render(request, 'page_list_global.html', context=context)
 
 def add_post(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     page_id = request.POST.get("page_id", "null")
     page = CommercialPage.objects.get(id=page_id)
     post_text = request.POST.get("post_text", "null")
@@ -33,6 +42,8 @@ def add_post(request):
     return HttpResponseRedirect(reverse('commercial_page:page_timeline', kwargs={'page_id' : page_id}))
 
 def add_page(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     page_name = request.POST.get("page_name", "null")
     admin = request.user
     description = request.POST.get("description", "null")
@@ -40,4 +51,6 @@ def add_page(request):
     return HttpResponseRedirect(reverse('commercial_page:page_list'))
 
 def add_page_form(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     return render(request, 'add_page_form.html')
