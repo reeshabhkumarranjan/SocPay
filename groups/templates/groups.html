@@ -23,8 +23,13 @@
     </div>
 
     <div class="container" style="width: 50%; float:right; height: auto">
-        <form action="google.com" method="post" class="center-form">
-            <input type="text" class="search-bar" placeholder="Search for people!">
+        <form action="" method="post" class="center-form">
+            {% csrf_token %}
+            {% if search_hint == "null" or search_hint == "" %}
+            <input type="text" class="search-bar" placeholder="Search for people!" name="query">
+            {% else %}
+            <input type="text" class="search-bar" value="{{ search_hint }}" name="query">
+            {% endif %}
         </form>
         <div class="container" style="overflow-y: auto; height: 400px" >
             {% for group in other_groups %}

@@ -36,12 +36,23 @@ def showMyGroups(request):
     return render(request, 'admin_groups.html', context=context)
 
 def show_groups(request):
+    filter = False
+    query = None
+    if request.method == "POST":
+        filter = True
+        query = request.POST.get("query", "null")
     context = {}
     member_groups = giveMyGroups(request.user)
     other_groups = giveOtherGroups(request.user, member_groups)
     sent_requests = getMyPendingRequests(request.user)
+    search_hint = 'null'
+    if filter:
+        member_groups = utils.search_groups(member_groups, query)
+        other_groups = utils.search_groups(other_groups, query)
+        sent_requests = utils.search_groups(sent_requests, query)
+        search_hint = query
 
-
+    context['search_hint'] = search_hint
     context['member_groups'] = member_groups
     context['other_groups'] = other_groups
     context['sent_requests'] = sent_requests
