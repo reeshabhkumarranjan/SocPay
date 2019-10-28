@@ -9,10 +9,16 @@
             Your Friends
         </h4>
         {% for friend in my_friends %}
-            <form style="text-align: center" method="post" action=".">
+            <form style="text-align: center" method="post" action='{% url 'private_message:friends_message' %}'>
                 {% csrf_token %}
                 <input type="hidden" name="friend_username" value={{ friend.username }}>
+                {% if friend_username == None %}
                 <button class="modern-button" name="button_clicked" value="select_friend">{{ friend.first_name }}</button>
+                {% elif friend_username == friend.username %}
+                <button class="modern-button-green" name="button_clicked" value="select_friend">{{ friend.first_name }}</button>
+                {% else %}
+                <button class="modern-button" name="button_clicked" value="select_friend">{{ friend.first_name }}</button>
+                {% endif %}
             </form>
         {% endfor %}
     </div>

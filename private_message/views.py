@@ -28,6 +28,30 @@ def friends_message(request):
 
     return render(request, 'private_message.html', context)
 
+def friends_message_username(request, friend_username):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    my_friends = get_friends(request.user)
+    friend_user = CustomUser.objects.get(username=friend_username)
+    context = {'my_friends': my_friends}
+    context['display_message_box'] = True
+    context['friend_username'] = friend_username
+    context['chats'] = getAllMessages(user1=request.user, user2=friend_user)
+
+    if request.method=='POST':
+        friend_username = request.POST.get("friend_username", "null")
+        friend_user = CustomUser.objects.get(username=friend_username)
+
+        # if request.POST.get("button_clicked", "null") == "send_message":
+        #     message_text = request.POST.get("message_text", "null")
+        #     Private_Message.objects.create(sender=request.user, receiver=friend_user, message=message_text)
+
+        context['friend_username'] = friend_username
+        context['chats'] = getAllMessages(user1=request.user, user2=friend_user)
+        context['display_message_box'] = True
+
+    return render(request, 'private_message.html', context)
+
 def send_message(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
@@ -40,7 +64,7 @@ def send_message(request):
     context['chats'] = getAllMessages(user1=request.user, user2=friend_user)
     context['friend_username'] =friend_username
     context['display_message_box'] = True
-    return redirect('private_message:friends_message')
+    return HttpResponseRedirect(reverse('private_message:friends_message_username', kwargs={'friend_username' : friend_username}))
     # return render(request, 'private_message.html', context)
 
 def chat(request):
