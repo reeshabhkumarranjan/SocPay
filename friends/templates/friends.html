@@ -13,9 +13,8 @@
                 <input type="hidden" value="{{ friend.id }}" name="friend">
                 <button class="modern-button" style="width: auto; height: auto">Remove Friend</button>
             </form> <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
-                <hr>
+            <hr>
         <hr>
-
     {% endfor %}
     </div>
 

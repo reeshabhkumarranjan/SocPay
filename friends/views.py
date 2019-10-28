@@ -27,10 +27,10 @@ def friends(request):
     all_requests_received = utils.get_received_requests(request.user)
     search_hint = 'null'
     if filter:
-        all_friends = utils.search(all_friends, query)
-        all_strangers = utils.search(all_strangers, query)
-        all_requests_sent = utils.search(all_requests_sent, query)
-        all_requests_received = utils.search(all_requests_received, query)
+        all_friends = utils.search_users(all_friends, query)
+        all_strangers = utils.search_users(all_strangers, query)
+        all_requests_sent = utils.search_users(all_requests_sent, query)
+        all_requests_received = utils.search_users(all_requests_received, query)
         search_hint = query
     # all_friends = Friend.objects.all(creator__id=)
     context = {'all_friends' : all_friends, 'all_strangers' : all_strangers, 'all_requests_sent' : all_requests_sent, 'all_requests_received' : all_requests_received, 'search_hint' : search_hint}

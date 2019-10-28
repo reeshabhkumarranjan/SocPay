@@ -6,10 +6,47 @@ from django.views.generic import TemplateView
 
 from groups.models import Groups, giveMyGroups, getOwnedGroups, giveGroupMembers, giveOtherGroups, Group_Members, \
     getMyPendingRequests, getPendingRequests, Group_Posts, getGroupPosts
+from main_app import utils
 from users.models import CustomUser
 from .forms import GroupCreateForm
 from django.core.mail import send_mail
 
+def showMyGroups(request):
+    query = None
+    filter = False
+    search_hint = ''
+    if request.method == 'POST':
+        query = request.POST.get("query", "null")
+        filter = True
+    context = {}
+    # context['my_groups'] = list(getOwnedGroups(request.user))
+    my_groups = getOwnedGroups(request.user)
+    incoming_requests = []
+    for group in my_groups:
+        incoming_requests += (getPendingRequests(group))
+    # print(context['my_groups'])
+    search_hint = 'null'
+    if filter:
+        # incoming_requests = utils.search_groups(incoming_requests, query)
+        my_groups = utils.search_groups(my_groups, query)
+        search_hint = query
+    context['incoming_requests'] = incoming_requests
+    context['my_groups'] = my_groups
+    context['search_hint'] = search_hint
+    return render(request, 'admin_groups.html', context=context)
+
+def show_groups(request):
+    context = {}
+    member_groups = giveMyGroups(request.user)
+    other_groups = giveOtherGroups(request.user, member_groups)
+    sent_requests = getMyPendingRequests(request.user)
+
+
+    context['member_groups'] = member_groups
+    context['other_groups'] = other_groups
+    context['sent_requests'] = sent_requests
+
+    return render(request, 'groups.html', context=context)
 
 class ShowGroups(TemplateView):
     template_name = 'groups.html'

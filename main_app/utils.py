@@ -2,7 +2,7 @@ from friends.models import Friend
 from users.models import CustomUser
 from wallet.models import Transaction
 
-def search(_list, query):
+def search_users(_list, query):
     if query != None:
         if query == "":
             return _list
@@ -11,6 +11,18 @@ def search(_list, query):
             if _list[i].first_name.lower()[:len(query)] == str(query).lower() or _list[i].username.lower()[:len(query)] == str(query).lower():
                 friend_arr_query.append(_list[i])
         return friend_arr_query
+
+def search_groups(_list, query):
+    if query != None:
+        if query == "":
+            return _list
+        group_arr_query = []
+        for i in range(len(_list)):
+            if _list[i].group_name.lower()[:len(query)] == str(query).lower():
+                group_arr_query.append(_list[i])
+        return group_arr_query
+
+
 
 def get_friends(user):
     # print("nikal")
