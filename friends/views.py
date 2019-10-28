@@ -16,14 +16,24 @@ def timeline(request):
 def friends(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    query = None
+    filter = False
     if request.method == 'POST':
-        pass # TODO complete this
-    # all_friends = Friend.objects.all(creator__id=)
+        query = request.POST.get("query", "null")
+        filter = True
     all_friends = utils.get_friends(request.user)
     all_strangers = utils.get_not_friends(request.user)
     all_requests_sent = utils.get_sent_requests(request.user)
     all_requests_received = utils.get_received_requests(request.user)
-    context = {'all_friends' : all_friends, 'all_strangers' : all_strangers, 'all_requests_sent' : all_requests_sent, 'all_requests_received' : all_requests_received}
+    search_hint = 'null'
+    if filter:
+        all_friends = utils.search(all_friends, query)
+        all_strangers = utils.search(all_strangers, query)
+        all_requests_sent = utils.search(all_requests_sent, query)
+        all_requests_received = utils.search(all_requests_received, query)
+        search_hint = query
+    # all_friends = Friend.objects.all(creator__id=)
+    context = {'all_friends' : all_friends, 'all_strangers' : all_strangers, 'all_requests_sent' : all_requests_sent, 'all_requests_received' : all_requests_received, 'search_hint' : search_hint}
     return render(request, 'friends.html', context=context)
 
 def add_post(request):
