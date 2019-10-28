@@ -10,6 +10,18 @@
     <li><a href='{% url 'commercial_page:page_list_global' %}'>All Commercial Pages</a></li>
 {% endblock %}
 {% block buttons %}
+    <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Hi, {{ user.first_name }}!</h5>
     <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'logout' %}'">Logout</button>
     <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'logout' %}'">Settings</button>
+    {% if user.user_type ==  1%}
+        <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Casual</h5>
+    {% elif user.user_type == 2 %}
+        <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Silver</h5>
+    {% elif user.user_type == 3 %}
+        <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Gold</h5>
+    {% elif user.user_type == 4 %}
+        <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Platinum</h5>
+    {% elif user.user_type == 5 %}
+        <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Commercial</h5>
+    {% endif %}
 {% endblock %}
