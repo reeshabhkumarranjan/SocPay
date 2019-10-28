@@ -9,6 +9,7 @@ from users.models import CustomUser
 from wallet.forms import transaction_form
 from wallet.models import Transaction
 from datetime import datetime
+from .utils import getOTP
 
 
 def wallet_home(request):
@@ -92,13 +93,15 @@ def transfer(request):
                 return HttpResponse(
                     "<h1>Insufficient Balance to transfer entered amount<br><a href='http://google.com'>GO BACK</a>")
 
-            totp = pyotp.TOTP('base32secret3232')
-            curr_otp = totp.now()
+            # totp = pyotp.TOTP('base32secret3232')
+            curr_otp = getOTP()
 
             request.session['user1'] = user1.username
             request.session['user2'] = user2.username
             request.session['am'] = str(am)
             request.session['curr_otp'] = str(curr_otp)
+
+            request.session['date_time'] = str(datetime.datet)
 
             # print(curr_otp)
             # print(curr_otp)

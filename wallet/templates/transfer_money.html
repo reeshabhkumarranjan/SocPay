@@ -1,5 +1,5 @@
 {% extends 'base_logged_in.html' %}
-
+{% load static %}
 {% block title %}Transfer Money{% endblock %}
 
 {% block body %}
@@ -18,7 +18,8 @@
 {#        Send Money#}
 {#    </button>#}
 {#</form>#}
-    <form action="/transfer" method="POST">
+{#    <script src="{% static 'wallet/full_screen.js' %}"></script>#}
+    <form action="{% url 'wallet:transfer' %}" method="POST" id="transfer-form">
         {% csrf_token %}
         {{ form.as_table }}
         <button type="submit" value="Submit"> Transfer </button>
