@@ -61,7 +61,11 @@ def add_friend(request):
     friend_id = request.POST.get('friend', 'default')
     if not CustomUser.objects.filter(id=friend_id).exists():
         raise SuspiciousOperation("Please be in limits.")
-    Friend.objects.create(creator_id=request.user.id, follower_id=friend_id, confirmed=False)
+    obj1 = list(Friend.objects.filter(creator_id=request.user.id, follower_id = friend_id))
+    obj2 = list(Friend.objects.filter(follower_id=request.user.id, creator_id=friend_id))
+    if len(obj1) == 0 and len(obj2) == 0:
+        Friend.objects.create(creator_id=request.user.id, follower_id=friend_id, confirmed=False)
+
     return HttpResponseRedirect(reverse('friends:friends'))
 
 

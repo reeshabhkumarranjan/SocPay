@@ -68,7 +68,7 @@ def get_not_friends(user):
     arr = CustomUser.objects.all()
     not_friends = []
     for i in arr:
-        if i not in friends and i not in requests_received and i not in requests_sent:
+        if i not in friends and i not in requests_received and i not in requests_sent and i != user:
             not_friends.append(i)
     return not_friends
 
