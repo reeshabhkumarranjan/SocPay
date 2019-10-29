@@ -8,8 +8,8 @@ class Transaction(models.Model):
     transaction_user_1 = models.ForeignKey(CustomUser,related_name='sender', on_delete=models.CASCADE, default=None)
     transaction_user_2 = models.ForeignKey(CustomUser,related_name='receiver', on_delete=models.CASCADE, default=None)
     transaction_amount = models.IntegerField(default=0);
-    transaction_date = models.DateField(auto_now_add=True)
-    transaction_time = models.TimeField(auto_now_add=True)
+    transaction_date = models.DateField()
+    transaction_time = models.TimeField()
     transaction_accepted = models.BooleanField(default=False)
 
     def __str__(self):

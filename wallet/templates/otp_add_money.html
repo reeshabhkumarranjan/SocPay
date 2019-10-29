@@ -1,0 +1,14 @@
+{% extends 'base_logged_in.html' %}
+
+{% block title %}OTP{% endblock %}
+
+{% block body %}
+<form action='add_money_after_otp' method="POST">
+    {% csrf_token %}
+    <input name="otp" type="number">Enter OTP Sent to your mail</input><br>
+    <button type="submit">
+        Proceed
+    </button>
+</form>
+
+{% endblock %}

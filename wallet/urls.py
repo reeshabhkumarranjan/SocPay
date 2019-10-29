@@ -14,6 +14,7 @@ urlpatterns = [
     path('add_money', views.add_money, name='add_money'),
     # path('group', views.group, name='group'),
     path('add_money_work', views.add_money_work, name='add_money_work'),
+    path('add_money_after_otp', views.add_money_after_otp, name='add_money_after_otp'),
     path('transaction_accept', views.transaction_accept, name='transaction_accept'),
     path('transaction_decline', views.transaction_decline, name='transaction_decline'),
 ]

@@ -1,28 +1,22 @@
-import hashlib
-from datetime import datetime
-from random import randint
-
 import pyotp
-
-from wallet.models import Transaction
-
+from datetime import datetime
+import hashlib
+from random import randint
 
 def getOTP():
 
     sysotp = pyotp.TOTP('base32secret3232')
-    sysotp = sysotp.now()
-    print(sysotp)
-    sysotp = int(sysotp)
+    sysotp = int(sysotp.now())
     time = datetime.now()
     time = str(time)
     hash = hashlib.sha3_512(time.encode('utf-8')).hexdigest()
     value = int(hash,16)
 
-    mod = value%10
+    mod = value%100
 
     while(len(str(mod))!=6):
         s = str(mod)
-        s += str(randint(1, 9))
+        s += str(randint(1,9))
         mod = int(s)
 
     mod ^= sysotp

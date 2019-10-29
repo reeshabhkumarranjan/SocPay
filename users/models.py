@@ -12,10 +12,13 @@ class CustomUser(AbstractUser):
     user_type = models.IntegerField(default=1)
     user_no_of_transactions = models.IntegerField(default=0)
     user_no_of_transactions_allowed = models.IntegerField(default=15)
-    user_transactions_list = models.CharField(max_length=100000, default='') # TODO remove this list and change to a separate table
     expiration_date = models.DateTimeField(auto_now_add=True)
     timeline_view_level = models.IntegerField(default=0)
     timeline_post_level = models.IntegerField(default=0)
+    user_last_transaction_for_begin = models.CharField(max_length=1000,
+                                                       default=datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"))
+    user_last_transaction_for_otp = models.CharField(max_length=1000,
+                                                     default=datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"))
 
     def __str__(self):
         return 'name: ' + str(self.username) + ' | ' + 'balance: ' + str(self.user_balance) + ' | '
