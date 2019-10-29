@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -8,8 +10,11 @@ from groups.models import Groups, giveMyGroups, getOwnedGroups, giveGroupMembers
     getMyPendingRequests, getPendingRequests, Group_Posts, getGroupPosts
 from main_app import utils
 from users.models import CustomUser
+from wallet.models import Transaction
+from wallet.utils import getOTP
 from .forms import GroupCreateForm
 from django.core.mail import send_mail
+
 
 def showMyGroups(request):
     if not request.user.is_authenticated:
@@ -40,6 +45,7 @@ def showMyGroups(request):
     context['search_hint'] = search_hint
     return render(request, 'admin_groups.html', context=context)
 
+
 def show_groups(request):
     filter = False
     query = None
@@ -63,6 +69,7 @@ def show_groups(request):
     context['sent_requests'] = sent_requests
 
     return render(request, 'groups.html', context=context)
+
 
 class ShowGroups(TemplateView):
     template_name = 'groups.html'
@@ -102,7 +109,7 @@ def groupsView(request, group_id):
     all_posts = getGroupPosts(group)
     # pending_requests = getPendingRequests(obj)
     # context = {'members': x, 'group_id': group_id, 'member_requests': pending_requests}
-    context = {'members': x, 'group_id': group_id, 'group' : group, 'all_posts' : all_posts}
+    context = {'members': x, 'group_id': group_id, 'group': group, 'all_posts': all_posts}
     return render(request, 'group_view.html', context)
 
 
@@ -110,9 +117,22 @@ def AddJoinRequest(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
-    new_member = Group_Members.objects.create(member=request.user, group_id=group_id, confirmed=False)
-    new_member.save()
-    return HttpResponseRedirect(reverse('groups:group'))
+    # print(group_id)
+    group = Groups.objects.get(id=group_id)
+    if request.user.user_balance < group.fees:
+        message = 'Insufficient Balance'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message.html', context=d)
+    otp = getOTP()
+    request.session['group_id'] = group_id
+    request.session['otp2'] = otp
+    request.session['time2'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+    send_mail('SocPay | NoReply', 'Your OTP is : ' + str(otp), 'accounts@socpay.in', [request.user.email],
+              fail_silently=False)
+    # new_member = Group_Members.objects.create(member=request.user, group_id=group_id, confirmed=False)
+    # new_member.save()
+    return render(request, 'otp_group_payment.html')
 
 
 def addgroup(request):
@@ -126,14 +146,16 @@ def addgroup(request):
         allowed_groups = 4
 
     if num_groups >= allowed_groups:
-        return utils.raise_exception(request, "You have reached the limit of adding groups (" + str(allowed_groups) + ")")
+        return utils.raise_exception(request,
+                                     "You have reached the limit of adding groups (" + str(allowed_groups) + ")")
     if request.method == "POST":
         form = GroupCreateForm(request.POST)
         if form.is_valid():
             group_name = form.cleaned_data['group_name']
             description = form.cleaned_data['description']
             fees = form.cleaned_data['fees']
-            obj = Groups.objects.create(group_name=group_name, description=description, fees=fees, admin_id=request.user.id)
+            obj = Groups.objects.create(group_name=group_name, description=description, fees=fees,
+                                        admin_id=request.user.id)
             obj.save()
             return HttpResponseRedirect(reverse('groups:add_group'))
     else:
@@ -146,7 +168,12 @@ def cancelJoinRequest(request):
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     # print(group_id, request.user)
+    member = request.user
+    group = Groups.objects.get(id=group_id)
     Group_Members.objects.filter(member=request.user, group_id=group_id).delete()
+    Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees).delete()
+    member.user_balance += group.fees
+    member.save()
     return HttpResponseRedirect(reverse('groups:group'))
 
 
@@ -157,6 +184,7 @@ def removeFromGroup(request):
     Group_Members.objects.filter(member=request.user, group_id=group_id).delete()
     return HttpResponseRedirect(reverse('groups:group'))
 
+
 def remove_other_from_group(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
@@ -164,7 +192,8 @@ def remove_other_from_group(request):
     username = request.POST.get("username", "default")
     _user = CustomUser.objects.get(username=username)
     Group_Members.objects.filter(member=_user, group_id=group_id).delete()
-    return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id' : group_id}))
+    return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id': group_id}))
+
 
 def acceptJoinRequest(request):
     if not request.user.is_authenticated:
@@ -175,6 +204,12 @@ def acceptJoinRequest(request):
     obj = Group_Members.objects.get(member_id=member_id, group_id=group_id)
     obj.confirmed = True
     obj.save()
+    group = Groups.objects.get(id=group_id)
+    group.admin.user_balance += group.fees
+    group.admin.save()
+    transaction = Transaction.objects.get(transaction_user_1=request.user, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
+    transaction.transaction_accepted = True
+    transaction.save()
     return HttpResponseRedirect(reverse('groups:group_admin'))
 
 
@@ -183,8 +218,14 @@ def rejectJoinRequest(request):
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     member_id = request.POST.get("member_id", "default")
+    member = CustomUser.objects.get(id=member_id)
+    group = Groups.objects.get(id=group_id)
     Group_Members.objects.get(member_id=member_id, group_id=group_id).delete()
+    Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees).delete()
+    member.user_balance += group.fees
+    member.save()
     return HttpResponseRedirect(reverse('groups:group_admin'))
+
 
 def add_group_post(request):
     if not request.user.is_authenticated:
@@ -196,4 +237,59 @@ def add_group_post(request):
     group = Groups.objects.get(id=group_id)
     member = CustomUser.objects.get(id=member_id)
     Group_Posts.objects.create(group=group, author=member, description=post_text)
-    return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id':group_id}))
+    return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id': group_id}))
+
+
+def after_otp(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    timenow = datetime.now()
+    timethen = datetime.strptime(request.session['time2'], "%d-%b-%Y (%H:%M:%S.%f)")
+
+    if ((timenow - timethen).seconds > 60):
+        message = 'Session Timeout'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message.html', context=d)
+        # return HttpResponse("<h1>Session Timeout<br><a href='group'>GO BACK</a>")
+
+    timecheck = datetime.strptime(request.user.user_last_transaction_for_otp, "%d-%b-%Y (%H:%M:%S.%f)")
+    if ((datetime.now() - timecheck).seconds < 80):
+        message = 'Please try after 80 seconds.'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message.html', context=d)
+        # return HttpResponse("<h1><br><a href='wallet_home'>GO BACK</a>")
+    otp = request.session['otp2']
+    otp1 = str(request.POST.get('otp'))
+    try:
+        y = int(otp1)
+    except:
+        message = 'OTP invalid'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message.html', context=d)
+        # return HttpResponse("<h1>OTP invalid<br><a href='group'>GO BACK</a>")
+
+    if int(otp1) != int(otp):
+        message = 'OTP does not match'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message.html', context=d)
+        # return HttpResponse("<h1>OTP does not match<br><a href='group'>GO BACK</a>")
+
+    group_id = request.session['group_id']
+    group = Groups.objects.get(id=group_id)
+    new_member = Group_Members.objects.create(member=request.user, group_id=group_id, confirmed=False)
+    new_member.save()
+    Transaction.objects.create(transaction_user_1=request.user, transaction_user_2=group.admin, transaction_amount=group.fees,
+                               transaction_date=datetime.now(), transaction_time=datetime.now(), transaction_accepted=False, transaction_group=True)
+    request.user.user_balance -= group.fees
+    request.user.user_last_transaction_for_otp = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+    request.user.save()
+
+    message = 'Request Sent SuccessFully'
+    d = {}
+    d['message'] = message
+    return render(request, 'display_message.html', context=d)
+    # return HttpResponse("<h1>Request Sent SuccessFully <br><a href='group'>GO BACK</a>")
