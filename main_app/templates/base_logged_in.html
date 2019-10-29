@@ -5,7 +5,7 @@
     <li><a href='{% url 'friends:friends' %}'>Friends</a></li>
     <li><a href='{% url 'groups:group' %}'>Groups</a></li>
     {% if user.user_type > 1 %}<li><a href='{% url 'groups:group_admin' %}'>Owned Groups</a></li>{% endif %}
-    <li><a href='{% url 'private_message:friends_message' %}'>Chat</a></li>
+    {% if user.user_type > 1 %}<li><a href='{% url 'private_message:friends_message' %}'>Chat</a></li>{% endif %}
     {% if user.user_type == 5 %}<li><a href='{% url 'commercial_page:page_list' %}'>My Commercial Pages</a></li>{% endif %}
     <li><a href='{% url 'commercial_page:page_list_global' %}'>All Commercial Pages</a></li>
 {% endblock %}
