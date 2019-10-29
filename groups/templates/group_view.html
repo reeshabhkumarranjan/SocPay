@@ -41,7 +41,14 @@
         <div id="timeline-side-panel" style="padding: 20px; height: 300px; overflow-y: auto; top: 150px">
             <h4 style="text-align: center; ">Group members</h4>
             {% for member in members %}
-                <p><a href='{% url 'friends:friend_timeline' friend_username=member.username%}'>{{ member.username }}</a></p>
+                <p>
+                <form style="display:inline;" method="post" action="{% url 'groups:remove_other' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="group_id" value="{{ group.id }}">
+                    <input type="hidden" name="username" value="{{ member.username }}">
+                    <button class="modern-button-red" style="height: auto; width: auto">remove</button>
+                </form>
+                <a href='{% url 'friends:friend_timeline' friend_username=member.username%}'>{{ member.username }}</a></p>
             {% endfor %}
         </div>
 

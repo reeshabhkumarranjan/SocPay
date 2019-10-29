@@ -157,6 +157,14 @@ def removeFromGroup(request):
     Group_Members.objects.filter(member=request.user, group_id=group_id).delete()
     return HttpResponseRedirect(reverse('groups:group'))
 
+def remove_other_from_group(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    group_id = request.POST.get("group_id", "default")
+    username = request.POST.get("username", "default")
+    _user = CustomUser.objects.get(username=username)
+    Group_Members.objects.filter(member=_user, group_id=group_id).delete()
+    return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id' : group_id}))
 
 def acceptJoinRequest(request):
     if not request.user.is_authenticated:

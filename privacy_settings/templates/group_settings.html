@@ -4,14 +4,24 @@
     <div class="container">
         <h3>Group details</h3>
         <form method="post" action="{% url 'privacy_settings:update_group_details' %}">
-            <input type="hidden" name="group_id" value={{ group.id }}>
             {% csrf_token %}
+            <input type="hidden" name="group_id" value={{ group.id }}>
             <label>Group name</label> <br>
             <input type="text" name="group_name" value="{{ group.group_name }}" required> <br>
             <label>Group description</label> <br>
             <textarea name="group_description" required>{{ group.description }}</textarea> <br>
             <label>Group fees</label><br>
             <input type="number" name="group_fees" value="{{ group.fees }}" required><br>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+    <div class="container">
+        <h3>Member Deletion</h3>
+        <form method="post" action="{% url 'privacy_settings:update_member_deletion_access' %}">
+            {% csrf_token %}
+            <input type="hidden" name="group_id" value="{{ group.id }}">
+            <input type="radio" name="member_deletion_access" {% if group.member_deletion_access == 0 %} checked {% endif %} value="0"> Only you (admin) can remove members. <br>
+            <input type="radio" name="member_deletion_access" {% if group.member_deletion_access == 1 %} checked {% endif %} value="1"> Members can delete other members. <br>
             <button type="submit">Update</button>
         </form>
     </div>

@@ -13,5 +13,7 @@ urlpatterns = [
     path('remove/', views.removeFromGroup, name='remove'),
     path('accept/', views.acceptJoinRequest, name='accept'),
     path('decline/', views.rejectJoinRequest, name='decline'),
-    path('add_group_post/', views.add_group_post, name='add_group_post')
+    path('add_group_post/', views.add_group_post, name='add_group_post'),
+    path('remove_other/', views.remove_other_from_group, name='remove_other')
+    # path('update_member_deletion_access/')
 ]

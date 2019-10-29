@@ -14,7 +14,7 @@ from users.models import CustomUser
 def timeline(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
-    if request.user.expiration_date > datetime.now():
+    if request.user.expiration_date < datetime.now():
         request.user.user_type = 1
         request.user.expiration_date = datetime.now()
     request.user.save()

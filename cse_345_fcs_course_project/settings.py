@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'nf)c@m4z-*w$8(vl21vq*6zsvh9l%+tvf3zx#_xm3$6(i9l=%4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['socpay.com', '192.168.2.236', '127.0.0.1']
 
