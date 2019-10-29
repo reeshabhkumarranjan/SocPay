@@ -1,3 +1,5 @@
+from django.shortcuts import render
+
 from friends.models import Friend
 from users.models import CustomUser
 from wallet.models import Transaction
@@ -73,3 +75,6 @@ def get_not_friends(user):
 def get_transactions(user):
     list = Transaction.objects.filter(transaction_user2=user)
     return list
+
+def raise_exception(request, error_message):
+    return render(request, 'exception_message.html', context={'error_message':error_message})

@@ -27,5 +27,7 @@ urlpatterns = [
     path('private_message/', include('private_message.urls')),
     path('commercial_page/', include('commercial_page.urls')),
     path('friends/', include('friends.urls')),
-    path('wallet/', include('wallet.urls'))
+    path('wallet/', include('wallet.urls')),
+    path('privacy_settings/', include('privacy_settings.urls')),
+    path('exception/', include('exception.urls')),
 ]

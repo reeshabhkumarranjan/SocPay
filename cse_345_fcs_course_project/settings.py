@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'commercial_page',
     'friends',
     'wallet',
+    'privacy_settings',
+    'exception'
     # 'shop'
 ]
 

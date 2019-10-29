@@ -12,7 +12,7 @@
 {% block buttons %}
     <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Hi, {{ user.first_name }}!</h5>
     <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'logout' %}'">Logout</button>
-    <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'logout' %}'">Settings</button>
+    <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'privacy_settings:settings' %}'">Settings</button>
     {% if user.user_type ==  1%}
         <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Casual</h5>
     {% elif user.user_type == 2 %}
@@ -23,5 +23,8 @@
         <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Platinum</h5>
     {% elif user.user_type == 5 %}
         <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Commercial</h5>
+    {% endif %}
+    {% if user.user_type > 1 %}
+        <p style="margin: 0; height: 40px; width: 150px; display: inline; font-size: small">expires on {{user.expiration_date.date}}</p>
     {% endif %}
 {% endblock %}

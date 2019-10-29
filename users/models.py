@@ -2,6 +2,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from datetime import datetime
+from django.utils.timezone import now
 
 
 class CustomUser(AbstractUser):
@@ -12,6 +13,7 @@ class CustomUser(AbstractUser):
     user_no_of_transactions = models.IntegerField(default=0)
     user_no_of_transactions_allowed = models.IntegerField(default=15)
     user_transactions_list = models.CharField(max_length=100000, default='') # TODO remove this list and change to a separate table
+    expiration_date = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
         return 'name: ' + str(self.username) + ' | ' + 'balance: ' + str(self.user_balance) + ' | '

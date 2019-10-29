@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 
@@ -9,6 +11,10 @@ from main_app.models import Post
 def timeline(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    if request.user.expiration_date > datetime.now():
+        request.user.user_type = 1
+        request.user.expiration_date = datetime.now()
+    request.user.save()
     all_posts = Post.objects.filter(recipient_name=request.user.username).order_by('-post_date')
     context = {'forloop' : range(100), 'all_posts' : all_posts}
     return render(request, 'timeline.html', context=context)
