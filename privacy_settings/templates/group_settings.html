@@ -1,0 +1,21 @@
+{% extends 'base_logged_in.html' %}
+{% block title %}Group settings{% endblock %}
+{% block body %}
+    <div class="container">
+        <h3>Group details</h3>
+        <form method="post" action="{% url 'privacy_settings:update_group_details' %}">
+            <input type="hidden" name="group_id" value={{ group.id }}>
+            {% csrf_token %}
+            <label>Group name</label> <br>
+            <input type="text" name="group_name" value="{{ group.group_name }}" required> <br>
+            <label>Group description</label> <br>
+            <textarea name="group_description" required>{{ group.description }}</textarea> <br>
+            <label>Group fees</label><br>
+            <input type="number" name="group_fees" value="{{ group.fees }}" required><br>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+{#    <div class="container">#}
+{#        <h3></h3>#}
+{#    </div>#}
+{% endblock %}

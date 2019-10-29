@@ -1,5 +1,5 @@
 {% extends 'base_logged_in.html' %}
-{% block title %}Your groups){% endblock %}
+{% block title %}Your groups{% endblock %}
 {% block buttons %}
     <button onclick="location.href='{% url 'groups:add_group' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Create New Group</button>
     {{ block.super }}
@@ -20,7 +20,7 @@
 {#            </form> {{ group.group_name }}#}
 {#        <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a>#}
 {#       {{ group.group_name }}#}
-       <a href='{% url 'groups:group_view' group_id=group.id%}'>{{ group.group_name }}</a>
+           <a href='{% url 'groups:group_view' group_id=group.id%}'>{{ group.group_name }}</a> <a href="{% url 'privacy_settings:group_settings' group_id=group.id%}"><i class="material-icons" style="float: right">settings</i></a>
         </p>
         <hr>
     <hr>

@@ -7,6 +7,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse
 
+from groups.models import Groups
 from main_app import utils
 from users.models import CustomUser
 from wallet.utils import execute_transaction
@@ -51,3 +52,20 @@ def change_timeline_post_privacy(request):
     request.user.timeline_post_level = privacy_level
     request.user.save()
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
+
+def group_settings(request, group_id):
+    group = Groups.objects.get(id=group_id)
+    context = {'group' : group}
+    return render(request, 'group_settings.html', context=context)
+
+def update_group_details(request):
+    group_id = request.POST.get("group_id", "null")
+    group = Groups.objects.get(id=group_id)
+    group_name = request.POST.get("group_name", "null")
+    group_description = request.POST.get("group_description", "null")
+    group_fees = int(request.POST.get("group_fees", "null"))
+    group.group_name = group_name
+    group.description = group_description
+    group.fees = group_fees
+    group.save()
+    return HttpResponseRedirect(reverse('privacy_settings:group_settings', kwargs={'group_id' : group_id}))

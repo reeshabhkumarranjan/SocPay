@@ -7,4 +7,6 @@ urlpatterns = [
     path('upgrade/', views.change_user_type, name='upgrade'),
     path('update_timeline_view/', views.change_timeline_view_privacy, name='update_timeline_view'),
     path('update_timeline_post/', views.change_timeline_post_privacy, name='update_timeline_post'),
+    path('group_settings/<int:group_id>', views.group_settings, name='group_settings'),
+    path('update_group_details', views.update_group_details, name='update_group_details'),
 ]
