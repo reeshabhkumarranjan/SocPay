@@ -118,6 +118,15 @@ def AddJoinRequest(request):
 def addgroup(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    num_groups = len(getOwnedGroups(request.user))
+    allowed_groups = float("inf")
+    if request.user.user_type == 2:
+        allowed_groups = 2
+    elif request.user.user_type == 3:
+        allowed_groups = 4
+
+    if num_groups >= allowed_groups:
+        return utils.raise_exception(request, "You have reached the limit of adding groups (" + str(allowed_groups) + ")")
     if request.method == "POST":
         form = GroupCreateForm(request.POST)
         if form.is_valid():
