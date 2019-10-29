@@ -12,6 +12,11 @@ from .forms import GroupCreateForm
 from django.core.mail import send_mail
 
 def showMyGroups(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    if request.user.user_type == 1:
+        raise PermissionDenied
+
     query = None
     filter = False
     search_hint = ''
