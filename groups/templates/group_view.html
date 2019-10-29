@@ -42,12 +42,14 @@
             <h4 style="text-align: center; ">Group members</h4>
             {% for member in members %}
                 <p>
-                <form style="display:inline;" method="post" action="{% url 'groups:remove_other' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="group_id" value="{{ group.id }}">
-                    <input type="hidden" name="username" value="{{ member.username }}">
-                    <button class="modern-button-red" style="height: auto; width: auto">remove</button>
-                </form>
+                {% if group.member_deletion_access == 1 or group.member_deletion_access == 0 and is_admin %}
+                    <form style="display:inline;" method="post" action="{% url 'groups:remove_other' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="group_id" value="{{ group.id }}">
+                        <input type="hidden" name="username" value="{{ member.username }}">
+                        <button class="modern-button-red" style="height: auto; width: auto">remove</button>
+                    </form>
+                {% endif %}
                 <a href='{% url 'friends:friend_timeline' friend_username=member.username%}'>{{ member.username }}</a></p>
             {% endfor %}
         </div>

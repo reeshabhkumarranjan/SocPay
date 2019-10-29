@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 
 from groups.models import Groups, giveMyGroups, getOwnedGroups, giveGroupMembers, giveOtherGroups, Group_Members, \
-    getMyPendingRequests, getPendingRequests, Group_Posts, getGroupPosts
+    getMyPendingRequests, getPendingRequests, Group_Posts, getGroupPosts, isAdmin
 from main_app import utils
 from users.models import CustomUser
 from .forms import GroupCreateForm
@@ -102,7 +102,9 @@ def groupsView(request, group_id):
     all_posts = getGroupPosts(group)
     # pending_requests = getPendingRequests(obj)
     # context = {'members': x, 'group_id': group_id, 'member_requests': pending_requests}
-    context = {'members': x, 'group_id': group_id, 'group' : group, 'all_posts' : all_posts}
+    is_admin = isAdmin(request.user, group)
+    # print(is_admin)
+    context = {'members': x, 'group_id': group_id, 'group' : group, 'all_posts' : all_posts, 'is_admin' : is_admin}
     return render(request, 'group_view.html', context)
 
 
@@ -162,7 +164,10 @@ def remove_other_from_group(request):
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     username = request.POST.get("username", "default")
+    group = Groups.objects.get(id=group_id)
     _user = CustomUser.objects.get(username=username)
+    if not isAdmin(_user, group) and group.member_deletion_access == 0:
+        raise PermissionDenied
     Group_Members.objects.filter(member=_user, group_id=group_id).delete()
     return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id' : group_id}))
 

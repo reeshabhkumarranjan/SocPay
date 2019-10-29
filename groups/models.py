@@ -46,9 +46,7 @@ def giveGroupMembers(group):
 
 def isAdmin(user, group):
     obj = Groups.objects.filter(admin=user, id=group.id)
-    if obj is not None:
-        return True
-    return False
+    return len(obj) != 0
 
 
 def getAdmin(group):
