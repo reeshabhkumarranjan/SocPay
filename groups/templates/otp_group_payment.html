@@ -1,0 +1,24 @@
+{% extends 'base_logged_in.html' %}
+{% load static %}
+
+{% block title %}OTP{% endblock %}
+
+{% block head %}
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+		<link rel="stylesheet" href="{% static 'wallet/index.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<form action="{% url 'groups:after_otp' %}" method="POST">
+    {% csrf_token %}
+    <input class="input" name="otp"  required>Enter OTP Sent to your mail</input><br>
+    <div class="simple-keyboard"></div>
+   <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
+	<script src="{% static 'wallet/index.js' %}"></script>
+    <button type="submit">
+        Proceed
+    </button>
+</form>
+
+{% endblock %}

@@ -8,9 +8,10 @@ from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse
 
-from groups.models import Groups
+from groups.models import Groups, Group_Members
 from main_app import utils
 from users.models import CustomUser
+from wallet.models import Transaction
 from wallet.utils import execute_transaction, getOTP
 
 
@@ -67,6 +68,14 @@ def update_group_details(request):
     group_name = request.POST.get("group_name", "null")
     group_description = request.POST.get("group_description", "null")
     group_fees = int(request.POST.get("group_fees", "null"))
+
+    if group_fees != group.fees:
+        transaction_now = Transaction.objects.filter(transaction_user_2=request.user, transaction_group=True, transaction_accepted=False)
+        for transaction in transaction_now:
+            transaction.transaction_user_1.user_balance += transaction.transaction_amount
+            transaction.transaction_user_1.save()
+        transaction_now.delete()
+        Group_Members.objects.filter(confirmed=False, group_id=group_id).delete()
     group.group_name = group_name
     group.description = group_description
     group.fees = group_fees
