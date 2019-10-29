@@ -4,8 +4,11 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from friends.models import Friend
 from main_app import utils
 from main_app.models import Post
+from main_app.utils import are_friend
+from users.models import CustomUser
 
 
 def timeline(request):
@@ -68,6 +71,10 @@ def add_post_friend(request, friend_username):
 def friend_timeline(request, friend_username):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    friend = CustomUser.objects.get(username=friend_username)
+    if not are_friend(request.user, friend) and friend.timeline_view_level == 0:
+        return utils.raise_exception(request, "You are not allowed to view the timeline.")
     all_posts = Post.objects.filter(recipient_name=friend_username).order_by('-post_date')
-    context = {'friend_username' : friend_username, 'all_posts' : all_posts}
+    can_post = (friend.timeline_post_level == 1) or are_friend(request.user, friend)
+    context = {'friend_username' : friend_username, 'all_posts' : all_posts, 'can_post' : can_post}
     return render(request, 'friend_timeline.html', context=context)

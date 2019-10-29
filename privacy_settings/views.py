@@ -36,3 +36,17 @@ def change_user_type(request):
     request.user.expiration_date = datetime.now() + timedelta(days=(30 if user_type != 5 else 365))
     request.user.save()
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
+
+def change_timeline_view_privacy(request):
+    privacy_level = int(request.POST.get("timeline_privacy_level", "null"))
+    request.user.timeline_view_level = privacy_level
+    if privacy_level == 0:
+        request.user.timeline_post_level = 0
+    request.user.save()
+    return HttpResponseRedirect(reverse('privacy_settings:settings'))
+
+def change_timeline_post_privacy(request):
+    privacy_level = int(request.POST.get("timeline_privacy_level", "null"))
+    request.user.timeline_post_level = privacy_level
+    request.user.save()
+    return HttpResponseRedirect(reverse('privacy_settings:settings'))

@@ -26,7 +26,24 @@
         <p>You are a commercial user. You cannot upgrade more.</p>
         {% endif %}
     </div>
-    <div>
-
+    <div class="container">
+        <h3>Who can see my timeline?</h3>
+        <form method="post" action="{% url 'privacy_settings:update_timeline_view' %}">
+            {% csrf_token %}
+            <input type="radio" name="timeline_privacy_level" value="0" {% if user.timeline_view_level == 0 %} checked {% endif %}> Only my friends <br>
+            <input type="radio" name="timeline_privacy_level" value="1" {% if user.timeline_view_level == 1 %} checked {% endif %}> Anyone <br>
+            <button class="modern-button" type="submit">Update</button>
+        </form>
+    </div>
+    <div class="container">
+        <h3>Who can post on my timeline?</h3>
+        <form method="post" action="{% url 'privacy_settings:update_timeline_post' %}">
+            {% csrf_token %}
+            <input type="radio" name="timeline_privacy_level" value="0" {% if user.timeline_post_level == 0 %} checked {% endif %}> Only my friends <br>
+            {% if user.timeline_view_level == 1 %}
+            <input type="radio" name="timeline_privacy_level" value="1" {% if user.timeline_post_level == 1 %} checked {% endif %}> Anyone <br>
+            {% endif %}
+            <button class="modern-button" type="submit">Update</button>
+        </form>
     </div>
 {% endblock %}

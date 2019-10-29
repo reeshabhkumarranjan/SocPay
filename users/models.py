@@ -14,6 +14,8 @@ class CustomUser(AbstractUser):
     user_no_of_transactions_allowed = models.IntegerField(default=15)
     user_transactions_list = models.CharField(max_length=100000, default='') # TODO remove this list and change to a separate table
     expiration_date = models.DateTimeField(default=datetime.now)
+    timeline_view_level = models.IntegerField(default=0)
+    timeline_post_level = models.IntegerField(default=0)
 
     def __str__(self):
         return 'name: ' + str(self.username) + ' | ' + 'balance: ' + str(self.user_balance) + ' | '

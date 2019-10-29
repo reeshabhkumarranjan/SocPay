@@ -78,3 +78,7 @@ def get_transactions(user):
 
 def raise_exception(request, error_message):
     return render(request, 'exception_message.html', context={'error_message':error_message})
+
+def are_friend(user1, user2):
+    friends = get_friends(user1)
+    return user2 in friends
