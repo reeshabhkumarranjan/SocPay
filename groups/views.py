@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 
 from groups.models import Groups, giveMyGroups, getOwnedGroups, giveGroupMembers, giveOtherGroups, Group_Members, \
-    getMyPendingRequests, getPendingRequests, Group_Posts, getGroupPosts, isAdmin
+    getMyPendingRequests, getPendingRequests, Group_Posts, getGroupPosts, isAdmin, isMember
 from main_app import utils
 from users.models import CustomUser
 from .forms import GroupCreateForm
@@ -97,14 +97,19 @@ def groupsView(request, group_id):
         raise PermissionDenied
     # group_id = request.POST.get("group_id", "default")
     group = Groups.objects.get(id=group_id)
+    if group.post_view_access == 0 and (not isMember(request.user, group) and not isAdmin(request.user, group)):
+        raise PermissionDenied
     obj = Groups.objects.get(pk=group_id)
     x = giveGroupMembers(obj)
     all_posts = getGroupPosts(group)
     # pending_requests = getPendingRequests(obj)
     # context = {'members': x, 'group_id': group_id, 'member_requests': pending_requests}
     is_admin = isAdmin(request.user, group)
+    # is_member = isMember(request.user, group)
     # print(is_admin)
-    context = {'members': x, 'group_id': group_id, 'group' : group, 'all_posts' : all_posts, 'is_admin' : is_admin}
+    can_post = isMember(request.user, group) or isAdmin(request.user, group)
+    print(isMember(request.user, group))
+    context = {'members': x, 'group_id': group_id, 'group' : group, 'all_posts' : all_posts, 'is_admin' : is_admin, 'can_post' : can_post}
     return render(request, 'group_view.html', context)
 
 

@@ -49,6 +49,12 @@ def isAdmin(user, group):
     obj = Groups.objects.filter(admin=user, id=group.id)
     return len(obj) != 0
 
+def isMember(user, group):
+    obj = list(Group_Members.objects.filter(group=group, member=user, confirmed=True))
+    # print(obj)
+    # print(len(obj))
+    return len(obj) != 0
+
 
 def getAdmin(group):
     return group.admin

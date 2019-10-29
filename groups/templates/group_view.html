@@ -3,6 +3,7 @@
 {% block body %}
 
     <div class="container" >
+    {% if can_post %}
     <form style="align-self: center" style="margin-left: auto; margin-right: auto" action={% url 'groups:add_group_post'%} method="post">
         {% csrf_token %}
 {#        <input type="text" name="post_text" class="textfield" style="height: 150px; width: 500px">#}
@@ -12,6 +13,7 @@
         <br>
         <input type="submit" class="modern-button">
     </form>
+    {% endif %}
     </div>
 
     <div style="height: 100%; width: 80%; margin: auto">
