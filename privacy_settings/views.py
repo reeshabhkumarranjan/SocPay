@@ -77,3 +77,11 @@ def update_member_deletion_access(request):
     group.member_deletion_access = member_deletion_access
     group.save()
     return HttpResponseRedirect(reverse('privacy_settings:group_settings', kwargs={'group_id': group_id}))
+
+def update_post_view_access(request):
+    group_id = request.POST.get("group_id", "null")
+    group = Groups.objects.get(id = group_id)
+    post_view_access = int(request.POST.get("post_view_access", "null"))
+    group.post_view_access = post_view_access
+    group.save()
+    return HttpResponseRedirect(reverse('privacy_settings:group_settings', kwargs={'group_id': group_id}))

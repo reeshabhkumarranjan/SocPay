@@ -202,3 +202,6 @@ def add_group_post(request):
     member = CustomUser.objects.get(id=member_id)
     Group_Posts.objects.create(group=group, author=member, description=post_text)
     return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id':group_id}))
+
+# def update_post_view_access(request):
+#

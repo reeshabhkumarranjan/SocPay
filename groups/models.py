@@ -7,6 +7,7 @@ class Groups(models.Model):
     fees = models.IntegerField(default=0)
     description = models.CharField(default="", max_length=200)
     member_deletion_access = models.IntegerField(default=0)
+    post_view_access = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.group_name) + " " + str(self.admin) + " " + str(self.fees) + " " + str(self.description)

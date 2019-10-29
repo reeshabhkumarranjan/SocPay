@@ -25,6 +25,16 @@
             <button type="submit">Update</button>
         </form>
     </div>
+    <div class="container">
+        <h3>Group Privacy</h3>
+        <form method="post" action="{% url 'privacy_settings:update_post_view_access' %}">
+            {% csrf_token %}
+            <input type="hidden" name="group_id" value="{{ group.id }}">
+            <input type="radio" name="post_view_access" {% if group.post_view_access == 0 %} checked {% endif %} value="0"> Only the group members can see posts. <br>
+            <input type="radio" name="post_view_access" {% if group.post_view_access == 1 %} checked {% endif %} value="1"> Anyone can see the posts. <br>
+            <button type="submit">Update</button>
+        </form>
+    </div>
 {#    <div class="container">#}
 {#        <h3></h3>#}
 {#    </div>#}

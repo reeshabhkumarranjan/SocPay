@@ -10,4 +10,5 @@ urlpatterns = [
     path('group_settings/<int:group_id>', views.group_settings, name='group_settings'),
     path('update_group_details', views.update_group_details, name='update_group_details'),
     path('update_member_deletion_access/', views.update_member_deletion_access, name='update_member_deletion_access'),
+    path('update_post_view_access/', views.update_post_view_access, name='update_post_view_access'),
 ]
