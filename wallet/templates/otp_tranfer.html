@@ -5,7 +5,7 @@
 {% block body %}
 <form action='make_changes' method="POST">
     {% csrf_token %}
-    <input name="otp" type="number">Enter OTP Sent to your mail</input><br>
+    <input name="otp" type="number" required>Enter OTP Sent to your mail</input><br>
     <button type="submit">
         Proceed
     </button>

@@ -5,7 +5,7 @@
 {% block body %}
 <form action='add_money_after_otp' method="POST">
     {% csrf_token %}
-    <input name="otp" type="number">Enter OTP Sent to your mail</input><br>
+    <input name="otp" type="number" required>Enter OTP Sent to your mail</input><br>
     <button type="submit">
         Proceed
     </button>

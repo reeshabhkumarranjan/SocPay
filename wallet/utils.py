@@ -3,6 +3,9 @@ from datetime import datetime
 import hashlib
 from random import randint
 
+from wallet.models import Transaction
+
+
 def getOTP():
 
     sysotp = pyotp.TOTP('base32secret3232')

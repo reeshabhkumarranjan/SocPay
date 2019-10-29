@@ -32,6 +32,7 @@ def change_user_type(request):
         return utils.raise_exception(request, "Insufficient balance.")
     superuser = CustomUser.objects.get(is_superuser=True)
     execute_transaction(request.user, superuser, charge)
+    request.user.user_balance -= charge
     request.user.user_type = user_type
     request.user.expiration_date = datetime.now() + timedelta(days=(30 if user_type != 5 else 365))
     request.user.save()

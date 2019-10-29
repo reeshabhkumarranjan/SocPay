@@ -312,7 +312,7 @@ def add_money_after_otp(request):
     dt = datetime.now()
 
     Transaction.objects.create(transaction_user_1=user1, transaction_user_2=user2, transaction_amount=am,
-                               transaction_date=dt, transaction_time=dt, transaction_accepted=False)
+                               transaction_date=dt, transaction_time=dt, transaction_accepted=False, transaction_money_add=True)
     # tempS = "from : "+str(user1.username)+"  "+"to : "+str(user2.username)+"  "+"amount : "+str(am)+"  "+"date & time : "+str(dt)
     # user1.user_transactions_list+=tempS+'\n'
     # user2.user_transactions_list+=tempS+'\n'
