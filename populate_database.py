@@ -26,10 +26,10 @@ def populate():
     Transaction.objects.all().delete()
 
     print("Creating Users...")
-    fahad = CustomUser.objects.create(username="fahad", first_name="Fahad")
-    reeshabh = CustomUser.objects.create(username="reeshabh", first_name="Reeshabh")
-    krishna = CustomUser.objects.create(username="krishna", first_name="Krishna")
-    rohan = CustomUser.objects.create(username="rohan", first_name="Rohan")
+    fahad = CustomUser.objects.create(username="fahad", first_name="Fahad", email="fahad17049@iiitd.ac.in")
+    reeshabh = CustomUser.objects.create(username="reeshabh", first_name="Reeshabh", email="reeshabh17086@iiitd.ac.in")
+    krishna = CustomUser.objects.create(username="krishna", first_name="Krishna", email="krishna17060@iiitd.ac.in")
+    rohan = CustomUser.objects.create(username="rohan", first_name="Rohan", email="rohan17088@iiitd.ac.in")
     anon = CustomUser.objects.create(username="anonymous", first_name="Anonymous")
 
     fahad.set_password("p4nr44cfv4")

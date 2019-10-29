@@ -103,7 +103,7 @@ def transfer(request):
             timecheck = datetime.strptime(user1.user_last_transaction_for_begin, "%d-%b-%Y (%H:%M:%S.%f)")
 
             if ((datetime.now() - timecheck).seconds < 80):
-                return HttpResponse("<h1>Something Went Wrong Try Again After Sometime<br><a href='wallet_home'>GO BACK</a>")
+                return HttpResponse("<h1>Try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
 
 
             user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
@@ -162,7 +162,7 @@ def make_changes(request):
     timecheck = datetime.strptime(user1.user_last_transaction_for_otp, "%d-%b-%Y (%H:%M:%S.%f)")
 
     if ((datetime.now() - timecheck).seconds < 80):
-        return HttpResponse("<h1>Something Went Wrong Try Again After Sometime<br><a href='wallet_home'>GO BACK</a>")
+        return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
 
     # timecheck = datetime.strptime(user1.user_last_transaction,"%d-%b-%Y (%H:%M:%S.%f)")
 
@@ -239,7 +239,7 @@ def add_money_work(request):
     timecheck = datetime.strptime(user1.user_last_transaction_for_begin, "%d-%b-%Y (%H:%M:%S.%f)")
 
     if ((datetime.now() - timecheck).seconds < 80):
-        return HttpResponse("<h1>Something Went Wrong Try Again After Sometime<br><a href='wallet_home'>GO BACK</a>")
+        return HttpResponse("<h1>Please try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
 
     # user1 = request.user
     # user1.user_balance += amount
@@ -285,7 +285,7 @@ def add_money_after_otp(request):
     timecheck = datetime.strptime(user1.user_last_transaction_for_otp, "%d-%b-%Y (%H:%M:%S.%f)")
 
     if ((datetime.now() - timecheck).seconds < 80):
-        return HttpResponse("<h1>Something Went Wrong Try Again After Sometime<br><a href='wallet_home'>GO BACK</a>")
+        return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
 
     user2 = CustomUser.objects.get(username=request.session['user2_add'])
     am = int(request.session['am_add'])
