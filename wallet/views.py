@@ -180,7 +180,7 @@ def make_changes(request):
     try:
         y = int(otp1)
     except:
-        return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")
+        return HttpResponse("<h1>OTP invalid<br><a href='wallet_home'>GO BACK</a>")
 
     if (int(otp1) != int(curr_otp)):
         # print(otp1, curr_otp)
@@ -298,7 +298,7 @@ def add_money_after_otp(request):
     try:
         y = int(otp1)
     except:
-        return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")
+        return HttpResponse("<h1>OTP Invalid<br><a href='wallet_home'>GO BACK</a>")
 
     if (int(otp1) != int(curr_otp)):
         # print(otp1, curr_otp)
@@ -395,3 +395,7 @@ def transfer_money(request):
     all_users = CustomUser.objects.all()  # TODO fix database query
     context = {'all_users': all_users}
     return render(request, 'transfer_money.html', context=context)
+
+
+def faltu(request):
+    return render(request, 'faltu.html')
