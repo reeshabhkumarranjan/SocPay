@@ -11,4 +11,6 @@ urlpatterns = [
     path('update_group_details', views.update_group_details, name='update_group_details'),
     path('update_member_deletion_access/', views.update_member_deletion_access, name='update_member_deletion_access'),
     path('update_post_view_access/', views.update_post_view_access, name='update_post_view_access'),
+    path('send_otp', views.send_otp, name='send_otp'),
+    path('verify_otp', views.verify_otp, name='verify_otp'),
 ]

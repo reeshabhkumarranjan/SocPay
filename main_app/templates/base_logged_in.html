@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block navigation %}
+    {% if not user.verified %}
+    <div style="height: auto; width: 100%">
+        <p style="text-align: center; background-color: #ff2d3b; color: white">Please verify your account from settings.</p>
+    </div>
+    {% endif %}
     <li><a href='{% url 'friends:timeline' %}'>Timeline</a></li>
     <li><a href='{% url 'wallet:wallet_home' %}'>Wallet</a></li>
     <li><a href='{% url 'friends:friends' %}'>Friends</a></li>
@@ -10,7 +15,13 @@
     <li><a href='{% url 'commercial_page:page_list_global' %}'>All Commercial Pages</a></li>
 {% endblock %}
 {% block buttons %}
-    <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Hi, {{ user.first_name }}!</h5>
+    <h5 style="margin: 0; height: 40px; width: 150px; display: inline">Hi, {{ user.first_name }}!
+    {% if user.verified %}
+        <i class="material-icons">verified_user</i>
+    {% else %}
+        <i class="material-icons">error</i>
+    {% endif %}
+    </h5>
     <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'logout' %}'">Logout</button>
     <button class = "modern-button" style="margin: 0; height: 40px; width: 150px" onclick="location.href='{% url 'privacy_settings:settings' %}'">Settings</button>
     {% if user.user_type ==  1%}

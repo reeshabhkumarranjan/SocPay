@@ -17,7 +17,7 @@
             {% if user.user_type < 4 %}
             <input type="radio" name="user_type" value="4">Premium (Platinum) (Rs. 150/month)<br>
             {% endif %}
-            {% if user.user_type < 5 %}
+            {% if user.user_type < 5 and user.verified%}
             <input type="radio" name="user_type" value="5">Commercial (Rs. 5000/year)<br>
             {% endif %}
             <button type="submit">Upgrade</button>
@@ -46,4 +46,13 @@
             <button class="modern-button" type="submit">Update</button>
         </form>
     </div>
+    {% if not user.verified %}
+    <div class="container">
+        <h3>Verify your account</h3>
+        <form method="post" action="{% url 'privacy_settings:send_otp' %}">
+            {% csrf_token %}
+            <button type="submit">Verify</button>
+        </form>
+    </div>
+    {% endif %}
 {% endblock %}
