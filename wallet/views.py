@@ -130,7 +130,7 @@ def transfer(request):
 
             # return HttpResponseRedirect('/thanks/')
     else:
-        form = transaction_form()
+        form = transaction_form(request.user)
         # print(form)
 
     return render(request, 'transfer_money.html', {'form': form})
