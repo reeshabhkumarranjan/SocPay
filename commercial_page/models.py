@@ -27,3 +27,7 @@ def getAllPagesGlobal():
 def getAllPosts(page):
     posts = CommercialPagePosts.objects.filter(page=page)
     return posts
+
+def isPageAdmin(user, page):
+    obj = CommercialPage.objects.filter(admin=user, id=page.id)
+    return len(obj) != 0

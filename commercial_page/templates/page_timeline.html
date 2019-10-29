@@ -3,6 +3,7 @@
 {% block body %}
 
     <div class="container" >
+    {% if is_admin %}
     <form style="align-self: center" style="margin-left: auto; margin-right: auto" action={% url 'commercial_page:add_post'%} method="post">
         {% csrf_token %}
 {#        <input type="text" name="post_text" class="textfield" style="height: 150px; width: 500px">#}
@@ -12,6 +13,7 @@
         <br>
         <input type="submit" class="modern-button">
     </form>
+    {% endif %}
     </div>
 
     <div style="height: 100%; width: 80%; margin: auto">

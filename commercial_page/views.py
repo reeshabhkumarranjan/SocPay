@@ -5,11 +5,14 @@ from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse
 
-from commercial_page.models import getAllPages, CommercialPage, getAllPosts, CommercialPagePosts, getAllPagesGlobal
+from commercial_page.models import getAllPages, CommercialPage, getAllPosts, CommercialPagePosts, getAllPagesGlobal, \
+    isPageAdmin
 
 
 def page_list(request):
     if not request.user.is_authenticated:
+        raise PermissionDenied
+    if request.user.user_type != 5:
         raise PermissionDenied
     pages = getAllPages(request.user)
     context = {'pages' : pages}
@@ -23,6 +26,8 @@ def page_timeline(request, page_id):
     context = {}
     context['page'] = page
     context['posts'] = getAllPosts(page).order_by('-date')
+    is_admin = isPageAdmin(request.user, page)
+    context['is_admin'] = is_admin
     return render(request, 'page_timeline.html', context=context)
 
 def page_list_global(request):
@@ -35,14 +40,20 @@ def page_list_global(request):
 def add_post(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    if request.user.user_type != 5:
+        raise PermissionDenied
     page_id = request.POST.get("page_id", "null")
     page = CommercialPage.objects.get(id=page_id)
+    if not isPageAdmin(request.user, page):
+        raise PermissionDenied
     post_text = request.POST.get("post_text", "null")
     CommercialPagePosts.objects.create(page=page, post_text=post_text)
     return HttpResponseRedirect(reverse('commercial_page:page_timeline', kwargs={'page_id' : page_id}))
 
 def add_page(request):
     if not request.user.is_authenticated:
+        raise PermissionDenied
+    if request.user.user_type != 5:
         raise PermissionDenied
     page_name = request.POST.get("page_name", "null")
     admin = request.user
@@ -52,5 +63,7 @@ def add_page(request):
 
 def add_page_form(request):
     if not request.user.is_authenticated:
+        raise PermissionDenied
+    if request.user.user_type != 5:
         raise PermissionDenied
     return render(request, 'add_page_form.html')
