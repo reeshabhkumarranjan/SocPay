@@ -41,8 +41,13 @@ def get_friends(user):
         friend_arr.append(CustomUser.objects.get(pk=i[0]))
     for i in arr1:
         friend_arr.append(CustomUser.objects.get(pk=i[0]))
-
+    # friend_arr.remove(user)
+    id_list = [friend.id for friend in friend_arr]
+    friend_arr = CustomUser.objects.filter(pk__in=id_list)
     return friend_arr
+
+def get_chat_friends(user):
+    pass
 
 
 def get_received_requests(user):

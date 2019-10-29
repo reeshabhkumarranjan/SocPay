@@ -22,6 +22,6 @@ class CustomUser(AbstractUser):
     verified = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'name: ' + str(self.username) + ' | ' + 'balance: ' + str(self.user_balance) + ' | '
+        return str(self.username)
 
 
