@@ -8,7 +8,8 @@ from django.views import generic
 from django.views.generic import TemplateView
 
 from friends.models import Friend
-from main_app.utils import get_friends, get_sent_requests, get_received_requests, get_not_friends
+from main_app.utils import get_friends, get_sent_requests, get_received_requests, get_not_friends, are_friend
+from private_message.views import user_id_exists
 from users.forms import CustomUserCreationForm
 from users.models import CustomUser
 
@@ -63,7 +64,12 @@ def add_friend(request):
         raise PermissionDenied
     friend_id = request.POST.get('friend', 'default')
     if not CustomUser.objects.filter(id=friend_id).exists():
-        raise SuspiciousOperation("Please be in limits.")
+        raise PermissionDenied
+    if request.user.id == friend_id:
+        raise PermissionDenied
+    friend = CustomUser.objects.get(id = friend_id)
+    if are_friend(request.user, friend):
+        raise PermissionDenied
     obj1 = list(Friend.objects.filter(creator_id=request.user.id, follower_id = friend_id))
     obj2 = list(Friend.objects.filter(follower_id=request.user.id, creator_id=friend_id))
     if len(obj1) == 0 and len(obj2) == 0:
@@ -76,9 +82,11 @@ def decline(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
     friend_id = request.POST.get('friend', 'default')
+    if not user_id_exists(friend_id):
+        raise PermissionDenied
     # print(friend)
-    if not CustomUser.objects.filter(id=friend_id).exists():
-        raise SuspiciousOperation("Please be in limits.")
+    # if not CustomUser.objects.filter(id=friend_id).exists():
+    #     raise SuspiciousOperation("Please be in limits.")
     Friend.objects.filter(creator_id=friend_id, follower_id=request.user.id, confirmed=False).delete()
     return HttpResponseRedirect(reverse('friends:friends'))
 
@@ -88,8 +96,13 @@ def accept(request):
         raise PermissionDenied
     # print("hiiiiiiii")
     friend_id = request.POST.get('friend', 'default')
-    if not CustomUser.objects.filter(id=friend_id).exists():
-        raise SuspiciousOperation("Please be in limits.")
+    if not user_id_exists(friend_id):
+        raise PermissionDenied
+    # if not CustomUser.objects.filter(id=friend_id).exists():
+    #     raise SuspiciousOperation("Please be in limits.")
+    friend = CustomUser.objects.get(id=friend_id)
+    if are_friend(request.user, friend):
+        raise PermissionDenied
     row = Friend.objects.get(creator_id=friend_id, follower_id=request.user.id, confirmed=False)
     row.confirmed = True
     row.save()
@@ -102,8 +115,10 @@ def cancel(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
     friend_id = request.POST.get('friend', 'default')
-    if not CustomUser.objects.filter(id=friend_id).exists():
-        raise SuspiciousOperation("Please be in limits.")
+    if not user_id_exists(friend_id):
+        raise PermissionDenied
+    # if not CustomUser.objects.filter(id=friend_id).exists():
+    #     raise SuspiciousOperation("Please be in limits.")
     Friend.objects.filter(creator_id=request.user.id, follower_id=friend_id).delete()
     return HttpResponseRedirect(reverse('friends:friends'))
 
@@ -112,6 +127,8 @@ def remove_friend(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
     friend_id = request.POST.get('friend', 'default')
+    if not user_id_exists(friend_id):
+        raise PermissionDenied
     if not CustomUser.objects.filter(id=friend_id).exists():
         raise SuspiciousOperation("Please be in limits.")
     row = Friend.objects.filter(creator_id=request.user.id, follower_id=friend_id)
