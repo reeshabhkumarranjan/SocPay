@@ -1,11 +1,13 @@
 import pyotp
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
-from main_app.utils import get_friends
+from main_app import utils
+from main_app.utils import get_friends, are_friend
 from users.models import CustomUser
 # from wallet.forms import transaction_form
 from wallet.models import Transaction
@@ -69,99 +71,102 @@ def transfer(request):
         raise PermissionDenied
     if request.method == 'POST':
 
-        if True:
-            user2_username = request.POST.get("username", "null")
-            user2 = CustomUser.objects.get(username=user2_username)
-            amount = 0
-            try:
-                amount = int(request.POST.get("amount", "null"))
-            except:
-                message = 'Please enter valid input.'
-                d = {}
-                d['message'] = message
-                return render(request, 'display_message_1.html', context=d)
+        user2_username = request.POST.get("username", "null")
+        user2 = CustomUser.objects.get(username=user2_username)
+        amount = 0
+        try:
+            amount = int(request.POST.get("amount", "null"))
+        except:
+            message = 'Please enter valid input.'
+            d = {}
+            d['message'] = message
+            return render(request, 'display_message_1.html', context=d)
 
-            if(user2.username=='admin'):
-                message = 'You Cannot Send Money To Admin'
-                d = {}
-                d['message'] = message
-                return render(request, 'display_message_1.html', context=d)
-                # return HttpResponse('''<h1>You Cannot Send Money To Admin<br><a href="wallet_home">GO BACK</a>''')
+        if(user2.username=='admin'):
+            message = 'You Cannot Send Money To Admin'
+            d = {}
+            d['message'] = message
+            return render(request, 'display_message_1.html', context=d)
+            # return HttpResponse('''<h1>You Cannot Send Money To Admin<br><a href="wallet_home">GO BACK</a>''')
 
-            user1 = request.user
+        user1 = request.user
 
-            # print(request.user.user_last_transaction)
-            # print((datetime.now() - timecheck).seconds)
+        # print(request.user.user_last_transaction)
+        # print((datetime.now() - timecheck).seconds)
 
-            am = amount
+        am = amount
 
-            if (am <= 0):
-                message = 'Positive value required'
-                d = {}
-                d['message'] = message
-                return render(request, 'display_message_1.html', context=d)
-                # return HttpResponse('''<h1>Positive value required<br><a href="wallet_home">GO BACK</a>''')
+        if (am <= 0):
+            message = 'Positive value required'
+            d = {}
+            d['message'] = message
+            return render(request, 'display_message_1.html', context=d)
+            # return HttpResponse('''<h1>Positive value required<br><a href="wallet_home">GO BACK</a>''')
 
+        if user1.user_type != 5 and not are_friend(user1, user2):
+            return utils.raise_exception(request, "Become a commercial user to send money to strangers.")
 
-            if (user1.username == user2.username):
-                message = 'You cannot transfer money to yourself'
-                d = {}
-                d['message'] = message
-                return render(request, 'display_message_1.html', context=d)
-                # return HttpResponse(
-                    # "<h1>You cannot transfer money to yourself<br><a href='wallet_home'>GO BACK</a>")
+        if (user1.username == user2.username):
+            message = 'You cannot transfer money to yourself'
+            d = {}
+            d['message'] = message
+            return render(request, 'display_message_1.html', context=d)
+            # return HttpResponse(
+                # "<h1>You cannot transfer money to yourself<br><a href='wallet_home'>GO BACK</a>")
 
-            if user1.user_no_of_transactions + 1 > user1.user_no_of_transactions_allowed:  # MAX LIMIT ----> CHANGE
-                message = 'You have reached max. transaction limit'
-                d = {}
-                d['message'] = message
-                return render(request, 'display_message_1.html', context=d)
-                # return HttpResponse(
-                #     "<h1>You have reached max. transaction limit<br><a href='wallet_home'>GO BACK</a>")
+        if user1.user_no_of_transactions + 1 > user1.user_no_of_transactions_allowed:  # MAX LIMIT ----> CHANGE
+            message = 'You have reached max. transaction limit'
+            d = {}
+            d['message'] = message
+            return render(request, 'display_message_1.html', context=d)
+            # return HttpResponse(
+            #     "<h1>You have reached max. transaction limit<br><a href='wallet_home'>GO BACK</a>")
 
-            if (am > user1.user_balance):
-                message = 'Insufficient Balance to transfer entered amount'
-                d = {}
-                d['message'] = message
-                return render(request, 'display_message_1.html', context=d)
-                # return HttpResponse(
-                #     "<h1>Insufficient Balance to transfer entered amount<br><a href='wallet_home'>GO BACK</a>")
+        if (am > user1.user_balance):
+            message = 'Insufficient Balance to transfer entered amount'
+            d = {}
+            d['message'] = message
+            return render(request, 'display_message_1.html', context=d)
+            # return HttpResponse(
+            #     "<h1>Insufficient Balance to transfer entered amount<br><a href='wallet_home'>GO BACK</a>")
 
-            timecheck = datetime.strptime(user1.user_last_transaction_for_begin, "%d-%b-%Y (%H:%M:%S.%f)")
+        timecheck = datetime.strptime(user1.user_last_transaction_for_begin, "%d-%b-%Y (%H:%M:%S.%f)")
 
-            if ((datetime.now() - timecheck).seconds < 80):
-                message = 'Try after 80 seconds'
-                d = {}
-                d['message'] = message
-                return render(request, 'display_message_1.html', context=d)
-                # return HttpResponse("<h1>Try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
-
-
-            user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-
-            user1.save()
-
-            # totp = pyotp.TOTP('base32secret3232')
-            curr_otp = getOTP()
+        if ((datetime.now() - timecheck).seconds < 80):
+            message = 'Try after 80 seconds'
+            d = {}
+            d['message'] = message
+            return render(request, 'display_message_1.html', context=d)
+            # return HttpResponse("<h1>Try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
 
 
-            # request.session['date_time'] = str(datetime.datet)
+        user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
 
-            # print(curr_otp)
-            # print(curr_otp)
-            send_mail('SocPay | NoReply', 'Your OTP is : ' + str(curr_otp), 'accounts@socpay.in', [user1.email], fail_silently=False)
+        user1.save()
 
-            request.session['user1'] = user1.username
-            request.session['user2'] = user2.username
-            request.session['am'] = str(am)
-            request.session['curr_otp'] = str(curr_otp)
-            request.session['time'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+        # totp = pyotp.TOTP('base32secret3232')
+        curr_otp = getOTP()
 
-            return render(request, 'otp_tranfer.html')
+
+        # request.session['date_time'] = str(datetime.datet)
+
+        # print(curr_otp)
+        # print(curr_otp)
+        send_mail('SocPay | NoReply', 'Your OTP is : ' + str(curr_otp), 'accounts@socpay.in', [user1.email], fail_silently=False)
+
+        request.session['user1'] = user1.username
+        request.session['user2'] = user2.username
+        request.session['am'] = str(am)
+        request.session['curr_otp'] = str(curr_otp)
+        request.session['time'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+
+        return render(request, 'otp_tranfer.html')
 
             # return HttpResponseRedirect('/thanks/')
     else:
         all_friends = get_friends(request.user)
+        if request.user.user_type == 5:
+            all_friends = CustomUser.objects.filter(~Q(username="admin")) & CustomUser.objects.filter(~Q(username=request.user.username))
         context = {'all_friends':all_friends}
         return render(request, 'transfer_money.html', context=context)
         # form = transaction_form(request.user)

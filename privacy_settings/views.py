@@ -23,14 +23,19 @@ def change_user_type(request):
     if user_type < request.user.user_type or user_type > 5:
         raise SuspiciousOperation
     charge = 0
+    allowed_number_of_transaction = 15
     if user_type == 2:
         charge = 50
+        allowed_number_of_transaction = 30
     elif user_type == 3:
         charge = 100
+        allowed_number_of_transaction = 30
     elif user_type == 4:
         charge = 150
+        allowed_number_of_transaction = 30
     elif user_type == 5:
         charge = 5000
+        allowed_number_of_transaction = 2147483646
     if charge > request.user.user_balance:
         return utils.raise_exception(request, "Insufficient balance.")
     if user_type == 5 and not request.user.verified:
@@ -40,6 +45,7 @@ def change_user_type(request):
     request.user.user_balance -= charge
     request.user.user_type = user_type
     request.user.expiration_date = datetime.now() + timedelta(days=(30 if user_type != 5 else 365))
+    request.user.user_no_of_transactions_allowed = allowed_number_of_transaction
     request.user.save()
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
 
