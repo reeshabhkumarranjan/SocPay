@@ -21,6 +21,8 @@ def page_list(request):
 def page_timeline(request, page_id):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    # if request.user.user_type != 5:
+    #     raise PermissionDenied
     # page_id = request.POST.get("page_id", "null")
     page = CommercialPage.objects.get(id=page_id)
     context = {}
