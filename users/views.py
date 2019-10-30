@@ -23,6 +23,9 @@ class SignUp(generic.CreateView):
             return HttpResponseRedirect(reverse('friends:timeline'))
         return super(SignUp, self).dispatch(request, *args, **kwargs)
 
+    # def form_valid(self, form):
+
+
 class Friendship(TemplateView):
     template_name = 'friends.html'
 
@@ -124,5 +127,6 @@ def check_signup_request(request):
     """Checks if the user is already logged in"""
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('friends:timeline'))
+    print(request.POST.get("date_of_birth", "null"))
 
     return HttpResponseRedirect(reverse('users:signup'))

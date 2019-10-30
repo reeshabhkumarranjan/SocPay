@@ -1,4 +1,6 @@
 # users/forms.py
+# from datetime import datetime, timedelta
+import datetime
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import DateInput
@@ -16,6 +18,21 @@ class CustomUserCreationForm(UserCreationForm):
             'email' : forms.EmailInput(attrs={'class' : 'textfield'}),
             'date_of_birth' : DateInput(attrs={'type':'date'})
         }
+    def clean_date_of_birth(self):
+        date_of_birth = self.cleaned_data['date_of_birth']
+        print(date_of_birth, type(date_of_birth))
+        # date_of_birth_python = datetime.date(date_of_birth)
+        print(date_of_birth + datetime.timedelta(days=4745))
+        print(datetime.datetime.now().date())
+        if date_of_birth + datetime.timedelta(days=4745) > datetime.datetime.now().date():
+            raise forms.ValidationError("You must be atleast 13 years old to join SocPay!")
+        return date_of_birth
+        # date_of_birth = forms.DateField(label="date_of_birth")
+        #
+        # def clean_date_of_birth(self):
+        #     dob = self.fields['date_of_birth']
+        #     print(dob)
+        #     return dob
 
 
 class CustomUserChangeForm(UserChangeForm):
