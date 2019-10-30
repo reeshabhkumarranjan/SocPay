@@ -42,7 +42,12 @@
                     {% csrf_token %}
                     <input type="hidden" value="{{ friend.id }}" name="friend">
                     <button class="modern-button-green" style="width: auto; height: auto">Accept Request</button>
-                </form> <a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
+                </form>
+            <form style="display: inline" action="{% url 'users:decline' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ friend.id }}" name="friend">
+                    <button class="modern-button-red" style="width: auto; height: auto">Decline Request</button>
+                </form><a href='{% url 'friends:friend_timeline' friend_username=friend.username%}'>{{ friend.username }}</a></p>
                     <hr>
             <hr>
 
