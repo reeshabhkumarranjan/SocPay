@@ -12,8 +12,8 @@ from users.models import CustomUser
 def friends_message(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
-    if request.user.user_type == 1:
-        return utils.raise_exception(request, "Upgrade your account to chat with other users.")
+    # if request.user.user_type == 1:
+    #     return utils.raise_exception(request, "Upgrade your account to chat with other users.")
     my_friends = get_friends(request.user)
     context = {'my_friends': my_friends}
     context['display_message_box'] = False
@@ -34,8 +34,8 @@ def friends_message(request):
 def friends_message_username(request, friend_username):
     if not request.user.is_authenticated:
         raise PermissionDenied
-    if request.user.user_type == 1:
-        raise PermissionDenied
+    # if request.user.user_type == 1:
+    #     raise PermissionDenied
     my_friends = get_friends(request.user)
     friend_user = CustomUser.objects.get(username=friend_username)
     context = {'my_friends': my_friends}
@@ -60,6 +60,8 @@ def friends_message_username(request, friend_username):
 def send_message(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    if request.user.user_type == 1:
+        return utils.raise_exception(request, "Upgrade your account to send messages.")
     friend_username = request.POST.get('friend_username', 'null')
     friend_user = CustomUser.objects.get(username=friend_username)
     message_text = request.POST.get("message_text", "null")
