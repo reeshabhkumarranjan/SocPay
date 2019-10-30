@@ -12,6 +12,10 @@ from main_app import utils
 from main_app.models import Post
 from main_app.utils import are_friend
 from users.models import CustomUser
+from django.contrib.auth.signals import user_logged_in
+
+def initialise_user(sender, user, request, **kwargs):
+    request.user.user_ongoing_transaction = False
 
 def username_exists(username):
     user = None
@@ -24,6 +28,7 @@ def username_exists(username):
 def timeline(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    user_logged_in.connect(initialise_user)
     if request.user.expiration_date < datetime.now():
         request.user.user_type = 1
         request.user.expiration_date = datetime.now()

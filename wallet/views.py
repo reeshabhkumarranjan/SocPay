@@ -6,6 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
+from django.urls import reverse
+
 from main_app import utils
 from main_app.utils import get_friends, are_friend
 from users.models import CustomUser
@@ -13,6 +15,7 @@ from users.models import CustomUser
 from wallet.models import Transaction
 from datetime import datetime
 from .utils import getOTP
+import django
 
 
 def wallet_home(request):
@@ -72,6 +75,14 @@ def transfer(request):
         raise PermissionDenied
     if request.method == 'POST':
 
+        if (request.user.user_ongoing_transaction):
+            django.contrib.auth.logout(request)
+            return HttpResponseRedirect(reverse('logout'))
+
+        request.user.user_ongoing_transaction = True
+        # request.user.user_ongoing_transaction = False
+        request.user.save()
+
         user2_username = request.POST.get("username", "null")
         user2 = CustomUser.objects.get(username=user2_username)
         amount = 0
@@ -81,12 +92,16 @@ def transfer(request):
             message = 'Please enter valid input.'
             d = {}
             d['message'] = message
+            request.user.user_ongoing_transaction = False
+            request.user.save()
             return render(request, 'display_message_1.html', context=d)
 
         if(user2.username=='admin'):
             message = 'You Cannot Send Money To Admin'
             d = {}
             d['message'] = message
+            request.user.user_ongoing_transaction = False
+            request.user.save()
             return render(request, 'display_message_1.html', context=d)
             # return HttpResponse('''<h1>You Cannot Send Money To Admin<br><a href="wallet_home">GO BACK</a>''')
 
@@ -101,6 +116,8 @@ def transfer(request):
             message = 'Positive value required'
             d = {}
             d['message'] = message
+            request.user.user_ongoing_transaction = False
+            request.user.save()
             return render(request, 'display_message_1.html', context=d)
             # return HttpResponse('''<h1>Positive value required<br><a href="wallet_home">GO BACK</a>''')
 
@@ -111,6 +128,8 @@ def transfer(request):
             message = 'You cannot transfer money to yourself'
             d = {}
             d['message'] = message
+            request.user.user_ongoing_transaction = False
+            request.user.save()
             return render(request, 'display_message_1.html', context=d)
             # return HttpResponse(
                 # "<h1>You cannot transfer money to yourself<br><a href='wallet_home'>GO BACK</a>")
@@ -119,6 +138,8 @@ def transfer(request):
             message = 'You have reached max. transaction limit'
             d = {}
             d['message'] = message
+            request.user.user_ongoing_transaction = False
+            request.user.save()
             return render(request, 'display_message_1.html', context=d)
             # return HttpResponse(
             #     "<h1>You have reached max. transaction limit<br><a href='wallet_home'>GO BACK</a>")
@@ -127,6 +148,8 @@ def transfer(request):
             message = 'Insufficient Balance to transfer entered amount'
             d = {}
             d['message'] = message
+            request.user.user_ongoing_transaction = False
+            request.user.save()
             return render(request, 'display_message_1.html', context=d)
             # return HttpResponse(
             #     "<h1>Insufficient Balance to transfer entered amount<br><a href='wallet_home'>GO BACK</a>")
@@ -137,6 +160,8 @@ def transfer(request):
             message = 'Try after 80 seconds'
             d = {}
             d['message'] = message
+            request.user.user_ongoing_transaction = False
+            request.user.save()
             return render(request, 'display_message_1.html', context=d)
             # return HttpResponse("<h1>Try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
 
@@ -166,6 +191,9 @@ def transfer(request):
             # return HttpResponseRedirect('/thanks/')
     else:
         all_friends = get_friends(request.user)
+        if (request.user.user_ongoing_transaction):
+            django.contrib.auth.logout(request)
+            return HttpResponseRedirect(reverse('logout'))
         if request.user.user_type == 5:
             all_friends = CustomUser.objects.filter(~Q(username="admin")) & CustomUser.objects.filter(~Q(username=request.user.username))
         context = {'all_friends':all_friends}
@@ -259,7 +287,7 @@ def make_changes(request):
     # user2.user_transactions_list+=tempS+'\n'
 
     user1.user_last_transaction_for_otp = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
-
+    user1.user_ongoing_transaction = False
     user1.save()
     user2.save()
 
@@ -280,6 +308,7 @@ def add_money(request):
 def add_money_work(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+
 
     user1 = request.user
     amount = 0
