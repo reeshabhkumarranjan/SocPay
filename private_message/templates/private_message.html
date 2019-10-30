@@ -6,7 +6,7 @@
     <div style="padding: 10px">
     <div class="container" style="width: 25%; float: left; height: 480px; overflow-y: auto;">
         <h4 style="text-align: center">
-            Your Friends
+            Your Chat-list
         </h4>
         {% for friend in my_friends %}
             <form style="text-align: center" method="post" action='{% url 'private_message:friends_message' %}'>

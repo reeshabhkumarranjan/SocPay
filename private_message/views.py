@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from main_app import utils
-from main_app.utils import get_friends
+from main_app.utils import get_friends, get_chat_friends, get_chat_friends_for_commercial
 from private_message.models import getAllMessages, Private_Message
 from users.models import CustomUser
 # Create your views here.
@@ -14,7 +14,10 @@ def friends_message(request):
         raise PermissionDenied
     # if request.user.user_type == 1:
     #     return utils.raise_exception(request, "Upgrade your account to chat with other users.")
-    my_friends = get_friends(request.user)
+    # my_friends = get_friends(request.user)
+    my_friends = get_chat_friends(request.user)
+    if request.user.user_type == 5:
+        my_friends = get_chat_friends_for_commercial(request.user)
     context = {'my_friends': my_friends}
     context['display_message_box'] = False
     if request.method=='POST':
@@ -36,7 +39,10 @@ def friends_message_username(request, friend_username):
         raise PermissionDenied
     # if request.user.user_type == 1:
     #     raise PermissionDenied
-    my_friends = get_friends(request.user)
+    # my_friends = get_friends(request.user)
+    my_friends = get_chat_friends(request.user)
+    if request.user.user_type == 5:
+        my_friends = get_chat_friends_for_commercial(request.user)
     friend_user = CustomUser.objects.get(username=friend_username)
     context = {'my_friends': my_friends}
     context['display_message_box'] = True

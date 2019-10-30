@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 
 from friends.models import Friend
@@ -46,9 +47,19 @@ def get_friends(user):
     friend_arr = CustomUser.objects.filter(pk__in=id_list)
     return friend_arr
 
-def get_chat_friends(user):
-    pass
+def get_commercial_users():
+    commercial_users = CustomUser.objects.filter(user_type=5)
+    return commercial_users
 
+def get_chat_friends(user):
+    my_friends = get_friends(user)
+    commercial_users = get_commercial_users()
+    chat_friends = (my_friends | commercial_users) & CustomUser.objects.filter(~Q(id=user.id)) & CustomUser.objects.filter(~Q(username="admin"))
+    return chat_friends
+
+def get_chat_friends_for_commercial(user):
+    chat_friends = CustomUser.objects.filter(~Q(id=user.id)) & CustomUser.objects.filter(~Q(username="admin"))
+    return chat_friends
 
 def get_received_requests(user):
     arr = Friend.objects.filter(follower=user, confirmed=False).values_list("creator")
