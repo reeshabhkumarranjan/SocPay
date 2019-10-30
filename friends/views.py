@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -10,6 +10,13 @@ from main_app.models import Post
 from main_app.utils import are_friend
 from users.models import CustomUser
 
+def username_exists(username):
+    user = None
+    try:
+        user = CustomUser.objects.get(username=username)
+    except:
+        return False
+    return True
 
 def timeline(request):
     if not request.user.is_authenticated:
@@ -60,6 +67,16 @@ def add_post_friend(request, friend_username):
     # TODO add checks
     if not request.user.is_authenticated:
         raise PermissionDenied
+    # friend = None
+    # try:
+    #     friend = CustomUser.objects.get(username=friend_username)
+    # except:
+    #     raise PermissionDenied
+    if not username_exists(friend_username):
+        raise PermissionDenied
+    friend = CustomUser.objects.get(username=friend_username)
+    if not are_friend(request.user, friend):
+        raise PermissionDenied
     author_name = request.user.username
     recipient_name = friend_username
     post_text = request.POST.get('post_text', "N/A")
@@ -70,6 +87,8 @@ def add_post_friend(request, friend_username):
 
 def friend_timeline(request, friend_username):
     if not request.user.is_authenticated:
+        raise PermissionDenied
+    if not username_exists(friend_username):
         raise PermissionDenied
     friend = CustomUser.objects.get(username=friend_username)
     if not are_friend(request.user, friend) and friend.timeline_view_level == 0:
