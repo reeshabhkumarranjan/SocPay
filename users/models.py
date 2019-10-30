@@ -21,6 +21,7 @@ class CustomUser(AbstractUser):
                                                      default=datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"))
     verified = models.BooleanField(default=False)
     user_ongoing_transaction = models.BooleanField(default=False)
+    user_last_session = models.CharField(max_length=1000, default="")
 
     def __str__(self):
         return str(self.username)

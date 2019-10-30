@@ -14,10 +14,10 @@ from main_app.utils import are_friend
 from users.models import CustomUser
 from django.contrib.auth.signals import user_logged_in
 
-def initialise_user(sender, user, request, **kwargs):
-    request.user.user_ongoing_transaction = False
-    print("initialising user", str(request.user.user_ongoing_transaction))
-    request.user.save()
+# def initialise_user(sender, user, request, **kwargs):
+#     request.user.user_ongoing_transaction = False
+#     print("initialising user", str(request.user.user_ongoing_transaction))
+#     request.user.save()
 
 def username_exists(username):
     user = None
@@ -30,10 +30,13 @@ def username_exists(username):
 def timeline(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
-    user_logged_in.connect(initialise_user)
+    # user_logged_in.connect(initialise_user)
     if request.user.expiration_date < datetime.now():
         request.user.user_type = 1
         request.user.expiration_date = datetime.now()
+    if (str(request.session.session_key) != request.user.user_last_session):
+        request.user.user_ongoing_transaction = False
+        request.user.user_last_session = str(request.session.session_key)
     print(request.user.user_ongoing_transaction)
     request.user.save()
     all_posts = Post.objects.filter(recipient_name=request.user.username).order_by('-post_date')
