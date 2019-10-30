@@ -20,6 +20,7 @@ class CustomUser(AbstractUser):
     user_last_transaction_for_otp = models.CharField(max_length=1000,
                                                      default=datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)"))
     verified = models.BooleanField(default=False)
+    user_ongoing_transaction = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.username)
