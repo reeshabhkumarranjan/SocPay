@@ -152,6 +152,8 @@ def verify_otp(request):
     if((timenow - timethen).seconds > 60):
         message = 'OTP Timeout'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_privacy.html', context=d)
         # return HttpResponse("<h1>OTP Timeout<br><a href='wallet_home'>GO BACK</a>")
@@ -162,6 +164,8 @@ def verify_otp(request):
     if ((datetime.now() - timecheck).seconds < 80):
         message = 'Please try after 80 seconds.'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_privacy.html', context=d)
         # return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
@@ -171,6 +175,8 @@ def verify_otp(request):
     except:
         message = 'OTP Invalid'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_privacy.html', context=d)
         # return HttpResponse("<h1>OTP Invalid<br><a href='wallet_home'>GO BACK</a>")
@@ -179,6 +185,8 @@ def verify_otp(request):
         # print(otp1, curr_otp)
         message = 'OTP does not match'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_privacy.html', context=d)
         # return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")

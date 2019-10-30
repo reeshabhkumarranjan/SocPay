@@ -166,6 +166,8 @@ def AddJoinRequest(request):
         message = 'Insufficient Balance'
         d = {}
         d['message'] = message
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         return render(request, 'display_message.html', context=d)
     otp = getOTP()
     request.session['group_id'] = group_id
@@ -382,6 +384,8 @@ def after_otp(request):
 
     if ((timenow - timethen).seconds > 60):
         message = 'OTP Timeout'
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d = {}
         d['message'] = message
         return render(request, 'display_message.html', context=d)
@@ -391,6 +395,8 @@ def after_otp(request):
     if ((datetime.now() - timecheck).seconds < 80):
         message = 'Please try after 80 seconds.'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message.html', context=d)
         # return HttpResponse("<h1><br><a href='wallet_home'>GO BACK</a>")
@@ -401,6 +407,8 @@ def after_otp(request):
     except:
         message = 'OTP invalid'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message.html', context=d)
         # return HttpResponse("<h1>OTP invalid<br><a href='group'>GO BACK</a>")
@@ -408,6 +416,8 @@ def after_otp(request):
     if int(otp1) != int(otp):
         message = 'OTP does not match'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message.html', context=d)
         # return HttpResponse("<h1>OTP does not match<br><a href='group'>GO BACK</a>")
@@ -426,6 +436,8 @@ def after_otp(request):
 
     message = 'Request Sent SuccessFully'
     d = {}
+    request.user.user_ongoing_transaction = False
+    request.user.save()
     d['message'] = message
     return render(request, 'display_message.html', context=d)
     # return HttpResponse("<h1>Request Sent SuccessFully <br><a href='group'>GO BACK</a>")

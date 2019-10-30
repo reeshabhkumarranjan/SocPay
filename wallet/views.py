@@ -326,6 +326,8 @@ def add_money_work(request):
         amount = int(amount)
     except:
         message = 'Enter Valid Value'
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d = {}
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
@@ -333,6 +335,8 @@ def add_money_work(request):
 
     if (amount <= 0):
         message = 'Value >1 Required'
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d = {}
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
@@ -341,6 +345,8 @@ def add_money_work(request):
     if user1.user_no_of_transactions + 1 > user1.user_no_of_transactions_allowed:  # MAX LIMIT ----> CHANGE
         message = 'You have reached max. transaction limit'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
         # return HttpResponse(
@@ -351,6 +357,8 @@ def add_money_work(request):
     if ((datetime.now() - timecheck).seconds < 80):
         message = 'Please try after 80 seconds'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
         # return HttpResponse("<h1>Please try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
@@ -395,6 +403,8 @@ def add_money_after_otp(request):
     if((timenow - timethen).seconds > 60):
         message = 'OTP Timeout'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
         # return HttpResponse("<h1>OTP Timeout<br><a href='wallet_home'>GO BACK</a>")
@@ -406,6 +416,8 @@ def add_money_after_otp(request):
     if ((datetime.now() - timecheck).seconds < 80):
         message = 'Please try after 80 seconds.'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
         # return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
@@ -423,6 +435,8 @@ def add_money_after_otp(request):
     except:
         message = 'OTP Invalid'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
         # return HttpResponse("<h1>OTP Invalid<br><a href='wallet_home'>GO BACK</a>")
@@ -430,6 +444,8 @@ def add_money_after_otp(request):
     if (int(otp1) != int(curr_otp)):
         message = 'OTP does not match'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
         # print(otp1, curr_otp)
@@ -456,6 +472,8 @@ def add_money_after_otp(request):
 
     message = 'Money Will be Added Shortly'
     d = {}
+    request.user.user_ongoing_transaction = False
+    request.user.save()
     d['message'] = message
     return render(request, 'display_message_1.html', context=d)
     # return HttpResponse("<h1>Money Will be Added Shortly<br><a href='wallet_home'>GO BACK</a>")
@@ -471,6 +489,8 @@ def transaction_accept(request):
     except:
         message = '404 not found'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
         # return HttpResponse("<h1>404 not found<br><a href='wallet_home'>GO BACK</a>")
@@ -508,6 +528,8 @@ def transaction_decline(request):
     except:
         message = '404 not found'
         d = {}
+        request.user.user_ongoing_transaction = False
+        request.user.save()
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
         # return HttpResponse("<h1>404 not found<br><a href='wallet_home'>GO BACK</a>")
