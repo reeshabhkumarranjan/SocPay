@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import TemplateView
 
+from friends.views import username_exists
 from groups.models import Groups, giveMyGroups, getOwnedGroups, giveGroupMembers, giveOtherGroups, Group_Members, \
     getMyPendingRequests, getPendingRequests, Group_Posts, getGroupPosts, isAdmin, isMember
 from main_app import utils
@@ -22,6 +23,14 @@ def group_exists(group_id):
     group = None
     try:
         group = Groups.objects.get(id=group_id)
+    except:
+        return False
+    return True
+
+def member_exists(member_id):
+    member = None
+    try:
+        member = Group_Members.objects.get(id = member_id)
     except:
         return False
     return True
@@ -201,8 +210,14 @@ def cancelJoinRequest(request):
     # print(group_id, request.user)
     member = request.user
     group = Groups.objects.get(id=group_id)
-    Group_Members.objects.filter(member=request.user, group_id=group_id).delete()
-    Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees).delete()
+    joinrequests = Group_Members.objects.filter(member=request.user, group_id=group_id)
+    if len(joinrequests) == 0:
+        raise PermissionDenied
+    joinrequests.delete()
+    jointransactions = Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
+    if len(jointransactions) == 0:
+        raise PermissionDenied
+    jointransactions.delete()
     member.user_balance += group.fees
     member.save()
     return HttpResponseRedirect(reverse('groups:group'))
@@ -212,7 +227,12 @@ def removeFromGroup(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
-    Group_Members.objects.filter(member=request.user, group_id=group_id).delete()
+    if not group_exists(group_id):
+        raise PermissionDenied
+    members = Group_Members.objects.filter(member=request.user, group_id=group_id)
+    if len(members) == 0:
+        raise PermissionDenied
+    members.delete()
     return HttpResponseRedirect(reverse('groups:group'))
 
 def remove_other_from_group(request):
@@ -220,19 +240,38 @@ def remove_other_from_group(request):
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     username = request.POST.get("username", "default")
+
+    if not group_exists(group_id):
+        raise PermissionDenied
+
+    if not username_exists(username):
+        raise PermissionDenied
+
     group = Groups.objects.get(id=group_id)
     _user = CustomUser.objects.get(username=username)
     # print(isAdmin(_user, group))
     if not isAdmin(request.user, group) and group.member_deletion_access == 0:
         raise PermissionDenied
-    Group_Members.objects.filter(member=_user, group_id=group_id).delete()
+    members = Group_Members.objects.filter(member=_user, group_id=group_id)
+    if len(members) == 0:
+        raise PermissionDenied
+    members.delete()
     return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id' : group_id}))
 
 def acceptJoinRequest(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    if request.user.user_type == 1:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     member_id = request.POST.get("member_id", "default")
+
+    if not group_exists(group_id):
+        raise PermissionDenied
+
+    if not member_exists(member_id):
+        raise PermissionDenied
+    ## zap
     member = CustomUser.objects.get(id=member_id)
     # print(group_id, member_id)
     obj = Group_Members.objects.get(member_id=member_id, group_id=group_id)

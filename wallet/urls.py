@@ -4,6 +4,7 @@ from . import views
 
 app_name = 'wallet'
 urlpatterns = [
+    path('', views.wallet_home, name='wallet_home'),
     path('wallet_home', views.wallet_home, name='wallet_home'),
     # path('transfer_money', views.transfer_money, name='transfer_money'),
     path('transfer', views.transfer, name='transfer'),
