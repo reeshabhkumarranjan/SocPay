@@ -149,9 +149,11 @@ def addgroup(request):
     elif request.user.user_type == 3:
         allowed_groups = 4
 
-    if num_groups >= allowed_groups:
-        return utils.raise_exception(request, "You have reached the limit of adding groups (" + str(allowed_groups) + ")")
+    # if num_groups >= allowed_groups:
+    #     return utils.raise_exception(request, "You have reached the limit of adding groups (" + str(allowed_groups) + ")")
     if request.method == "POST":
+        if num_groups >= allowed_groups:
+            return utils.raise_exception(request, "You have reached the limit of adding groups (" + str(allowed_groups) + ")")
         form = GroupCreateForm(request.POST)
         if form.is_valid():
             group_name = form.cleaned_data['group_name']
