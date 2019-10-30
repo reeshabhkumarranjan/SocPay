@@ -33,7 +33,7 @@ def populate():
     anon = CustomUser.objects.create(username="anonymous", first_name="Anonymous")
 
     fahad.set_password("p4nr44cfv4")
-    reeshabh.set_password("pb94fjhm3t")
+    reeshabh.set_password("e4hwgs3xj9")
     krishna.set_password("v8qrz4g73q")
     rohan.set_password("gtajqz25mj")
     anon.set_password("tgnsy53std")

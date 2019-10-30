@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView
 
 from . import views
 
@@ -14,5 +14,6 @@ urlpatterns = [
     path('decline/', views.decline, name='decline'),
     path('accept/', views.accept, name='accept'),
     path('remove/', views.remove_friend, name='remove_friend'),
-    path('login/', LoginView.as_view(template_name='registration/login.html', redirect_authenticated_user=True), name='login')
+    path('login/', LoginView.as_view(template_name='registration/login.html', redirect_authenticated_user=True), name='login'),
+    # path('password_reset/', PasswordResetView.as_view(template_name='registration/password_reset_form.html'), name='password_reset')
 ]

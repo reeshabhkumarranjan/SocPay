@@ -2,6 +2,15 @@
 {% block title %}Title{% endblock %}
 {% block body %}
     <div class="container">
+        <h3>Account info</h3>
+        <form method="post" action="{% url 'privacy_settings:update_user_details' %}">
+            {% csrf_token %}
+            <input type="text" name="first_name" required value="{{ user.first_name }}"> <br>
+            <button type="submit">Update</button>
+        </form>
+        <button onclick="location.href='{% url 'password_change' %}'" class="modern-button">Change password</button>
+    </div>
+    <div class="container">
         <h3>User type</h3>
         <p>Upgrade to:</p>
         {% if user.user_type < 5 %}

@@ -13,4 +13,5 @@ urlpatterns = [
     path('update_post_view_access/', views.update_post_view_access, name='update_post_view_access'),
     path('send_otp', views.send_otp, name='send_otp'),
     path('verify_otp', views.verify_otp, name='verify_otp'),
+    path('update_user_details', views.update_user_details, name='update_user_details'),
 ]

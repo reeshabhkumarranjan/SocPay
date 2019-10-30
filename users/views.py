@@ -130,3 +130,6 @@ def check_signup_request(request):
     print(request.POST.get("date_of_birth", "null"))
 
     return HttpResponseRedirect(reverse('users:signup'))
+
+# def password_reset_custom(request):
+#     return password_reset

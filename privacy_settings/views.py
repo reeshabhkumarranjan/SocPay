@@ -143,3 +143,9 @@ def verify_otp(request):
     request.user.verified = True
     request.user.save()
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
+
+def update_user_details(request):
+    first_name = request.POST.get("first_name", "null")
+    request.user.first_name = first_name
+    request.user.save()
+    return HttpResponseRedirect(reverse('privacy_settings:settings'))
