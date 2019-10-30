@@ -351,6 +351,10 @@ def add_group_post(request):
 
     group = Groups.objects.get(id=group_id)
     member = CustomUser.objects.get(id=member_id)
+
+    if not isMember(member, group):
+        raise PermissionDenied
+
     Group_Posts.objects.create(group=group, author=member, description=post_text)
     return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id':group_id}))
 
