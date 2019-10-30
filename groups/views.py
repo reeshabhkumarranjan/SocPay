@@ -15,6 +15,17 @@ from wallet.utils import getOTP
 from .forms import GroupCreateForm
 from django.core.mail import send_mail
 
+def is_authenticated(user):
+    return user.is_authenticated
+
+def group_exists(group_id):
+    group = None
+    try:
+        group = Groups.objects.get(id=group_id)
+    except:
+        return False
+    return True
+
 def showMyGroups(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
@@ -45,6 +56,10 @@ def showMyGroups(request):
     return render(request, 'admin_groups.html', context=context)
 
 def show_groups(request):
+
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+
     filter = False
     query = None
     if request.method == "POST":
@@ -100,6 +115,8 @@ def groupsView(request, group_id):
     if not request.user.is_authenticated:
         raise PermissionDenied
     # group_id = request.POST.get("group_id", "default")
+    if not group_exists(group_id):
+        raise PermissionDenied
     group = Groups.objects.get(id=group_id)
     if group.post_view_access == 0 and (not isMember(request.user, group) and not isAdmin(request.user, group)):
         raise PermissionDenied
@@ -121,6 +138,10 @@ def AddJoinRequest(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
+
+    if not group_exists(group_id):
+        raise PermissionDenied
+
     # print(group_id)
     group = Groups.objects.get(id=group_id)
     if request.user.user_balance < group.fees:
@@ -142,6 +163,8 @@ def AddJoinRequest(request):
 def addgroup(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    if request.user.user_type == 1:
+        return utils.raise_exception(request, "Upgrade your account to make groups.")
     num_groups = len(getOwnedGroups(request.user))
     allowed_groups = 2147483646
     if request.user.user_type == 2:
@@ -171,6 +194,10 @@ def cancelJoinRequest(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
+
+    if not group_exists(group_id):
+        raise PermissionDenied
+
     # print(group_id, request.user)
     member = request.user
     group = Groups.objects.get(id=group_id)

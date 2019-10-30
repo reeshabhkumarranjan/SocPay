@@ -194,6 +194,9 @@ def transfer(request):
         if (request.user.user_ongoing_transaction):
             django.contrib.auth.logout(request)
             return HttpResponseRedirect(reverse('logout'))
+        else:
+            request.user.user_ongoing_transaction = True
+            request.user.save()
         if request.user.user_type == 5:
             all_friends = CustomUser.objects.filter(~Q(username="admin")) & CustomUser.objects.filter(~Q(username=request.user.username))
         context = {'all_friends':all_friends}
@@ -363,7 +366,7 @@ def add_money_work(request):
     # print(curr_otp)
     # print(curr_otp)
     send_mail('SocPay | NoReply', 'Your OTP is : ' + str(curr_otp), 'accounts@socpay.in', [user1.email],
-              fail_silently=True)
+              fail_silently=False)
 
     request.session['user1_add'] = user1.username
     request.session['user2_add'] = 'admin'
