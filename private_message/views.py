@@ -3,11 +3,20 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+from friends.views import username_exists
 from main_app import utils
 from main_app.utils import get_friends, get_chat_friends, get_chat_friends_for_commercial, are_friend
 from private_message.models import getAllMessages, Private_Message
 from users.models import CustomUser
 # Create your views here.
+
+def user_id_exists(user_id):
+    user = None
+    try:
+        user = CustomUser.objects.get(id=user_id)
+    except:
+        return False
+    return True
 
 def friends_message(request):
     if not request.user.is_authenticated:
@@ -22,6 +31,8 @@ def friends_message(request):
     context['display_message_box'] = False
     if request.method=='POST':
         friend_username = request.POST.get("friend_username", "null")
+        if not username_exists(friend_username):
+            raise PermissionDenied
         friend_user = CustomUser.objects.get(username=friend_username)
 
         # if request.POST.get("button_clicked", "null") == "send_message":
@@ -37,6 +48,8 @@ def friends_message(request):
 def friends_message_username(request, friend_username):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    if not username_exists(friend_username):
+        raise PermissionDenied
     # if request.user.user_type == 1:
     #     raise PermissionDenied
     # my_friends = get_friends(request.user)
@@ -51,6 +64,8 @@ def friends_message_username(request, friend_username):
 
     if request.method=='POST':
         friend_username = request.POST.get("friend_username", "null")
+        if not username_exists(friend_username):
+            raise PermissionDenied
         friend_user = CustomUser.objects.get(username=friend_username)
 
         # if request.POST.get("button_clicked", "null") == "send_message":
@@ -70,6 +85,8 @@ def send_message(request):
         return utils.raise_exception(request, "Upgrade your account to send messages.")
 
     friend_username = request.POST.get('friend_username', 'null')
+    if not username_exists(friend_username):
+        raise PermissionDenied
     friend_user = CustomUser.objects.get(username=friend_username)
     if request.user.user_type != 5 and not are_friend(request.user, friend_user):
         return utils.raise_exception(request, "You are not allowed to send messages to strangers.")
@@ -88,6 +105,8 @@ def chat(request):
         raise PermissionDenied
     user1 = request.user
     user2_id = request.POST.get("user_id")
+    if not user_id_exists(user2_id):
+        raise PermissionDenied
     user2 = CustomUser.objects.get(id=user2_id)
     messages = getAllMessages(user1, user2)
     context = {"messages": messages}
