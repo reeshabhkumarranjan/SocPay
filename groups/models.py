@@ -46,7 +46,10 @@ def giveGroupMembers(group):
 
 
 def isAdmin(user, group):
+    print(user)
+    print(group)
     obj = Groups.objects.filter(admin=user, id=group.id)
+    print(obj)
     return len(obj) != 0
 
 def isMember(user, group):

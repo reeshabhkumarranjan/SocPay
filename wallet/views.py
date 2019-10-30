@@ -5,8 +5,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
+from main_app.utils import get_friends
 from users.models import CustomUser
-from wallet.forms import transaction_form
+# from wallet.forms import transaction_form
 from wallet.models import Transaction
 from datetime import datetime
 from .utils import getOTP
@@ -68,14 +69,24 @@ def transfer(request):
         raise PermissionDenied
     if request.method == 'POST':
 
-        form = transaction_form(request.POST)
-
-        if form.is_valid():
-            user2 = form.cleaned_data['transaction_user_2']
-            amount = form.cleaned_data['transaction_amount']
+        if True:
+            user2_username = request.POST.get("username", "null")
+            user2 = CustomUser.objects.get(username=user2_username)
+            amount = 0
+            try:
+                amount = int(request.POST.get("amount", "null"))
+            except:
+                message = 'Please enter valid input.'
+                d = {}
+                d['message'] = message
+                return render(request, 'display_message_1.html', context=d)
 
             if(user2.username=='admin'):
-                return HttpResponse('''<h1>You Cannot Send Money To Admin<br><a href="wallet_home">GO BACK</a>''')
+                message = 'You Cannot Send Money To Admin'
+                d = {}
+                d['message'] = message
+                return render(request, 'display_message_1.html', context=d)
+                # return HttpResponse('''<h1>You Cannot Send Money To Admin<br><a href="wallet_home">GO BACK</a>''')
 
             user1 = request.user
 
@@ -85,25 +96,45 @@ def transfer(request):
             am = amount
 
             if (am <= 0):
-                return HttpResponse('''<h1>Positive value required<br><a href="wallet_home">GO BACK</a>''')
+                message = 'Positive value required'
+                d = {}
+                d['message'] = message
+                return render(request, 'display_message_1.html', context=d)
+                # return HttpResponse('''<h1>Positive value required<br><a href="wallet_home">GO BACK</a>''')
 
 
             if (user1.username == user2.username):
-                return HttpResponse(
-                    "<h1>You cannot transfer money to yourself<br><a href='wallet_home'>GO BACK</a>")
+                message = 'You cannot transfer money to yourself'
+                d = {}
+                d['message'] = message
+                return render(request, 'display_message_1.html', context=d)
+                # return HttpResponse(
+                    # "<h1>You cannot transfer money to yourself<br><a href='wallet_home'>GO BACK</a>")
 
             if user1.user_no_of_transactions + 1 > user1.user_no_of_transactions_allowed:  # MAX LIMIT ----> CHANGE
-                return HttpResponse(
-                    "<h1>You have reached max. transaction limit<br><a href='wallet_home'>GO BACK</a>")
+                message = 'You have reached max. transaction limit'
+                d = {}
+                d['message'] = message
+                return render(request, 'display_message_1.html', context=d)
+                # return HttpResponse(
+                #     "<h1>You have reached max. transaction limit<br><a href='wallet_home'>GO BACK</a>")
 
             if (am > user1.user_balance):
-                return HttpResponse(
-                    "<h1>Insufficient Balance to transfer entered amount<br><a href='wallet_home'>GO BACK</a>")
+                message = 'Insufficient Balance to transfer entered amount'
+                d = {}
+                d['message'] = message
+                return render(request, 'display_message_1.html', context=d)
+                # return HttpResponse(
+                #     "<h1>Insufficient Balance to transfer entered amount<br><a href='wallet_home'>GO BACK</a>")
 
             timecheck = datetime.strptime(user1.user_last_transaction_for_begin, "%d-%b-%Y (%H:%M:%S.%f)")
 
             if ((datetime.now() - timecheck).seconds < 80):
-                return HttpResponse("<h1>Try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
+                message = 'Try after 80 seconds'
+                d = {}
+                d['message'] = message
+                return render(request, 'display_message_1.html', context=d)
+                # return HttpResponse("<h1>Try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
 
 
             user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
@@ -130,10 +161,13 @@ def transfer(request):
 
             # return HttpResponseRedirect('/thanks/')
     else:
-        form = transaction_form(request.user)
+        all_friends = get_friends(request.user)
+        context = {'all_friends':all_friends}
+        return render(request, 'transfer_money.html', context=context)
+        # form = transaction_form(request.user)
+
         # print(form)
 
-    return render(request, 'transfer_money.html', {'form': form})
 
     # u2 = 0
     # am = 0
@@ -155,14 +189,22 @@ def make_changes(request):
     timethen = datetime.strptime(request.session['time'],"%d-%b-%Y (%H:%M:%S.%f)")
 
     if((timenow - timethen).seconds > 60):
-        return HttpResponse("<h1>Session Timeout<br><a href='wallet_home'>GO BACK</a>")
+        message = 'Session Timeout'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>Session Timeout<br><a href='wallet_home'>GO BACK</a>")
 
     user1 = CustomUser.objects.get(username=request.session['user1'])
 
     timecheck = datetime.strptime(user1.user_last_transaction_for_otp, "%d-%b-%Y (%H:%M:%S.%f)")
 
     if ((datetime.now() - timecheck).seconds < 80):
-        return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
+        message = 'Please try after 80 seconds.'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
 
     # timecheck = datetime.strptime(user1.user_last_transaction,"%d-%b-%Y (%H:%M:%S.%f)")
 
@@ -180,11 +222,19 @@ def make_changes(request):
     try:
         y = int(otp1)
     except:
-        return HttpResponse("<h1>OTP invalid<br><a href='wallet_home'>GO BACK</a>")
+        message = 'OTP invalid'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>OTP invalid<br><a href='wallet_home'>GO BACK</a>")
 
     if (int(otp1) != int(curr_otp)):
         # print(otp1, curr_otp)
-        return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")
+        message = 'OTP does not match'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")
 
     # user1 = 0
     # user2 = 0
@@ -207,7 +257,12 @@ def make_changes(request):
     user1.save()
     user2.save()
 
-    return HttpResponse("<h1>Money Requested Successfully<br><a href='wallet_home'>GO BACK</a>")
+    message = 'Money Requested Successfully'
+    d = {}
+    d['message'] = message
+    return render(request, 'display_message_1.html', context=d)
+
+    # return HttpResponse("<h1>Money Requested Successfully<br><a href='wallet_home'>GO BACK</a>")
 
 
 def add_money(request):
@@ -227,19 +282,35 @@ def add_money_work(request):
 
         amount = int(amount)
     except:
-        return HttpResponse('''<h1>Value >=1 Required<br><a href="wallet_home">GO BACK</a>''')
+        message = 'Enter Valid Value'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse('''<h1>Value >=1 Required<br><a href="wallet_home">GO BACK</a>''')
 
     if (amount <= 0):
-        return HttpResponse('''<h1>Value >1 Required<br><a href="wallet_home">GO BACK</a>''')
+        message = 'Value >1 Required'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse('''<h1>Value >1 Required<br><a href="wallet_home">GO BACK</a>''')
 
     if user1.user_no_of_transactions + 1 > user1.user_no_of_transactions_allowed:  # MAX LIMIT ----> CHANGE
-        return HttpResponse(
-            "<h1>You have reached max. transaction limit<br><a href='wallet_home'>GO BACK</a>")
+        message = 'You have reached max. transaction limit'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse(
+        #     "<h1>You have reached max. transaction limit<br><a href='wallet_home'>GO BACK</a>")
 
     timecheck = datetime.strptime(user1.user_last_transaction_for_begin, "%d-%b-%Y (%H:%M:%S.%f)")
 
     if ((datetime.now() - timecheck).seconds < 80):
-        return HttpResponse("<h1>Please try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
+        message = 'Please try after 80 seconds'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>Please try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
 
     # user1 = request.user
     # user1.user_balance += amount
@@ -278,14 +349,22 @@ def add_money_after_otp(request):
     timethen = datetime.strptime(request.session['time_add'],"%d-%b-%Y (%H:%M:%S.%f)")
 
     if((timenow - timethen).seconds > 60):
-        return HttpResponse("<h1>Session Timeout<br><a href='wallet_home'>GO BACK</a>")
+        message = 'Session Timeout'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>Session Timeout<br><a href='wallet_home'>GO BACK</a>")
 
     user1 = CustomUser.objects.get(username=request.session['user1_add'])
 
     timecheck = datetime.strptime(user1.user_last_transaction_for_otp, "%d-%b-%Y (%H:%M:%S.%f)")
 
     if ((datetime.now() - timecheck).seconds < 80):
-        return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
+        message = 'Please try after 80 seconds.'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
 
     user2 = CustomUser.objects.get(username=request.session['user2_add'])
     am = int(request.session['am_add'])
@@ -298,11 +377,19 @@ def add_money_after_otp(request):
     try:
         y = int(otp1)
     except:
-        return HttpResponse("<h1>OTP Invalid<br><a href='wallet_home'>GO BACK</a>")
+        message = 'OTP Invalid'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>OTP Invalid<br><a href='wallet_home'>GO BACK</a>")
 
     if (int(otp1) != int(curr_otp)):
+        message = 'OTP does not match'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
         # print(otp1, curr_otp)
-        return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")
+        # return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")
 
     # user1.user_balance += am;
     # user2.user_balance += am;
@@ -322,7 +409,11 @@ def add_money_after_otp(request):
     user1.save()
     user2.save()
 
-    return HttpResponse("<h1>Money Will be Added Shortly<br><a href='wallet_home'>GO BACK</a>")
+    message = 'Money Will be Added Shortly'
+    d = {}
+    d['message'] = message
+    return render(request, 'display_message_1.html', context=d)
+    # return HttpResponse("<h1>Money Will be Added Shortly<br><a href='wallet_home'>GO BACK</a>")
 
 
 
@@ -333,7 +424,11 @@ def transaction_accept(request):
     try:
         id = int(request.POST.get('transaction_id'))
     except:
-        return HttpResponse("<h1>404 not found<br><a href='wallet_home'>GO BACK</a>")
+        message = '404 not found'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>404 not found<br><a href='wallet_home'>GO BACK</a>")
 
     if(request.user.username == 'admin'):
         transaction_now = Transaction.objects.get(pk=id)
@@ -366,7 +461,11 @@ def transaction_decline(request):
     try:
         id = int(request.POST.get('transaction_id'))
     except:
-        return HttpResponse("<h1>404 not found<br><a href='wallet_home'>GO BACK</a>")
+        message = '404 not found'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_1.html', context=d)
+        # return HttpResponse("<h1>404 not found<br><a href='wallet_home'>GO BACK</a>")
 
     if (request.user.username == 'admin'):
         transaction_now = Transaction.objects.get(pk=id)

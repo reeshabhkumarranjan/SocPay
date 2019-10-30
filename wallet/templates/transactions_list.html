@@ -2,20 +2,22 @@
 {% block title %}Friend requests{% endblock %}
 {% block body %}
     {% for transaction in transactions %}
-        <p style="text-align: center">
-            {{ transaction.transaction_user_1 }} sent {{ transaction.transaction_amount }} to you, please respond to it.
-        </p>
-        <form method="post" action="{% url 'wallet:transaction_accept' %}" style="display: inline">
-        {% csrf_token %}
-            <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
-            <button class="modern-button" style="margin: 0 auto; display: block">Accept</button>
-        </form>
-        <form method="post" action="{% url 'wallet:transaction_decline' %}" style="display: inline">
-        {% csrf_token %}
-            <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
-            <button class="modern-button" style="margin: 0 auto; display: block">Reject</button>
-        </form>
-        <hr>
+        {% if not transaction.transaction_group  %}
+            <p style="text-align: center">
+                {{ transaction.transaction_user_1 }} sent {{ transaction.transaction_amount }} to you, please respond to it.
+            </p>
+            <form method="post" action="{% url 'wallet:transaction_accept' %}" style="display: inline">
+            {% csrf_token %}
+                <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
+                <button class="modern-button" style="margin: 0 auto; display: block">Accept</button>
+            </form>
+            <form method="post" action="{% url 'wallet:transaction_decline' %}" style="display: inline">
+            {% csrf_token %}
+                <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
+                <button class="modern-button" style="margin: 0 auto; display: block">Reject</button>
+            </form>
+            <hr>
+        {% endif %}
     {% endfor %}
     <button class="modern-button" style="margin: 0 auto; display: block" onclick='location.href="{% url 'wallet:wallet_home' %}"'>
         Go Back

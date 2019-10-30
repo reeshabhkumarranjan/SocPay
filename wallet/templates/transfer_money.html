@@ -21,7 +21,14 @@
 {#    <script src="{% static 'wallet/full_screen.js' %}"></script>#}
     <form action="{% url 'wallet:transfer' %}" method="POST" id="transfer-form">
         {% csrf_token %}
-        {{ form.as_table }}
+        <label>Receiver</label><br>
+        <select name="username">
+            {% for user1 in all_friends %}
+                <option value="{{ user1.username}}">"{{ user1.username }}"</option>
+            {% endfor %}
+        </select><br>
+        <label>Amount</label><br>
+        <input type="number" name="amount" required><br>
         <button type="submit" value="Submit"> Transfer </button>
     </form>
 

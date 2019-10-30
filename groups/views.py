@@ -193,7 +193,8 @@ def remove_other_from_group(request):
     username = request.POST.get("username", "default")
     group = Groups.objects.get(id=group_id)
     _user = CustomUser.objects.get(username=username)
-    if not isAdmin(_user, group) and group.member_deletion_access == 0:
+    # print(isAdmin(_user, group))
+    if not isAdmin(request.user, group) and group.member_deletion_access == 0:
         raise PermissionDenied
     Group_Members.objects.filter(member=_user, group_id=group_id).delete()
     return HttpResponseRedirect(reverse('groups:group_view', kwargs={'group_id' : group_id}))
@@ -203,6 +204,7 @@ def acceptJoinRequest(request):
         raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     member_id = request.POST.get("member_id", "default")
+    member = CustomUser.objects.get(id=member_id)
     # print(group_id, member_id)
     obj = Group_Members.objects.get(member_id=member_id, group_id=group_id)
     obj.confirmed = True
@@ -210,7 +212,7 @@ def acceptJoinRequest(request):
     group = Groups.objects.get(id=group_id)
     group.admin.user_balance += group.fees
     group.admin.save()
-    transaction = Transaction.objects.get(transaction_user_1=request.user, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
+    transaction = Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
     transaction.transaction_accepted = True
     transaction.save()
     return HttpResponseRedirect(reverse('groups:group_admin'))

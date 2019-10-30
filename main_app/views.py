@@ -6,7 +6,7 @@ from datetime import datetime
 from main_app import utils
 from main_app.models import Post
 from users.models import CustomUser
-from wallet.forms import transaction_form
+# from wallet.forms import transaction_form
 from django.core.mail import send_mail
 
 
