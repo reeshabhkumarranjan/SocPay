@@ -20,7 +20,7 @@
 {#        <img src="{% static "main_app/sp-logo.png" %}" alt="Logo" style="float: left; height: 42px; width: 42px; vertical-align: middle">#}
         <a href="{% url 'main_app:index' %}">SocPay</a>
         <div style="float: right">
-            {% block buttons %}<button onclick="location.href='{% url 'login' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Login</button> <button onclick="location.href='{% url 'users:signup' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Register</button> {% endblock %}
+            {% block buttons %}<button onclick="location.href='{% url 'login' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Login</button> <button onclick="location.href='{% url 'users:signup' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Register</button> <button onclick="location.href='{% url 'password_reset' %}'" class = "modern-button" style="margin: 0; height: 40px; width: 150px">Reset Password</button> {% endblock %}
         </div>
     </div>
 {#    <nav id="navigation-bar">#}
