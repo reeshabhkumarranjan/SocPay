@@ -363,7 +363,7 @@ def add_money_work(request):
     # print(curr_otp)
     # print(curr_otp)
     send_mail('SocPay | NoReply', 'Your OTP is : ' + str(curr_otp), 'accounts@socpay.in', [user1.email],
-              fail_silently=False)
+              fail_silently=True)
 
     request.session['user1_add'] = user1.username
     request.session['user2_add'] = 'admin'

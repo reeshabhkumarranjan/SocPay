@@ -16,6 +16,8 @@ from django.contrib.auth.signals import user_logged_in
 
 def initialise_user(sender, user, request, **kwargs):
     request.user.user_ongoing_transaction = False
+    print("initialising user", str(request.user.user_ongoing_transaction))
+    request.user.save()
 
 def username_exists(username):
     user = None
@@ -32,6 +34,7 @@ def timeline(request):
     if request.user.expiration_date < datetime.now():
         request.user.user_type = 1
         request.user.expiration_date = datetime.now()
+    print(request.user.user_ongoing_transaction)
     request.user.save()
     all_posts = Post.objects.filter(recipient_name=request.user.username).order_by('-post_date')
     context = {'forloop' : range(100), 'all_posts' : all_posts}
