@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import django
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -151,6 +152,14 @@ def AddJoinRequest(request):
     if not group_exists(group_id):
         raise PermissionDenied
 
+    if (request.user.user_ongoing_transaction):
+        django.contrib.auth.logout(request)
+        return HttpResponseRedirect(reverse('logout'))
+
+    request.user.user_ongoing_transaction = True
+    # request.user.user_ongoing_transaction = False
+    request.user.save()
+
     # print(group_id)
     group = Groups.objects.get(id=group_id)
     if request.user.user_balance < group.fees:
@@ -164,6 +173,10 @@ def AddJoinRequest(request):
     request.session['time2'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
     send_mail('SocPay | NoReply', 'Your OTP is : ' + str(otp), 'accounts@socpay.in', [request.user.email],
               fail_silently=False)
+    user1 = request.user
+    user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+
+    user1.save()
     # new_member = Group_Members.objects.create(member=request.user, group_id=group_id, confirmed=False)
     # new_member.save()
     return render(request, 'otp_group_payment.html')
@@ -407,6 +420,8 @@ def after_otp(request):
                                transaction_date=datetime.now(), transaction_time=datetime.now(), transaction_accepted=False, transaction_group=True)
     request.user.user_balance -= group.fees
     request.user.user_last_transaction_for_otp = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+    request.user.user_ongoing_transaction = False
+    # request.user.save()
     request.user.save()
 
     message = 'Request Sent SuccessFully'

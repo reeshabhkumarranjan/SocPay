@@ -166,9 +166,9 @@ def transfer(request):
             # return HttpResponse("<h1>Try after 80 seconds<br><a href='wallet_home'>GO BACK</a>")
 
 
-        user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+        # user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
 
-        user1.save()
+        # user1.save()
 
         # totp = pyotp.TOTP('base32secret3232')
         curr_otp = getOTP()
@@ -179,7 +179,8 @@ def transfer(request):
         # print(curr_otp)
         # print(curr_otp)
         send_mail('SocPay | NoReply', 'Your OTP is : ' + str(curr_otp), 'accounts@socpay.in', [user1.email], fail_silently=False)
-
+        user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+        user1.save()
         request.session['user1'] = user1.username
         request.session['user2'] = user2.username
         request.session['am'] = str(am)
@@ -309,6 +310,13 @@ def add_money_work(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
 
+    if (request.user.user_ongoing_transaction):
+        django.contrib.auth.logout(request)
+        return HttpResponseRedirect(reverse('logout'))
+
+    request.user.user_ongoing_transaction = True
+    # request.user.user_ongoing_transaction = False
+    request.user.save()
 
     user1 = request.user
     amount = 0
@@ -351,9 +359,7 @@ def add_money_work(request):
     # user1.user_balance += amount
     # user1.save()
 
-    user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
 
-    user1.save()
 
     # totp = pyotp.TOTP('base32secret3232')
     curr_otp = getOTP()
@@ -364,6 +370,9 @@ def add_money_work(request):
     # print(curr_otp)
     send_mail('SocPay | NoReply', 'Your OTP is : ' + str(curr_otp), 'accounts@socpay.in', [user1.email],
               fail_silently=False)
+    user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+
+    user1.save()
 
     request.session['user1_add'] = user1.username
     request.session['user2_add'] = 'admin'
@@ -440,6 +449,7 @@ def add_money_after_otp(request):
     # user2.user_transactions_list+=tempS+'\n'
 
     user1.user_last_transaction_for_otp = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+    user1.user_ongoing_transaction = False
 
     user1.save()
     user2.save()

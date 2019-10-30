@@ -1,0 +1,14 @@
+{% extends 'base_logged_in.html' %}
+
+{% block title %}Display Error{% endblock %}
+
+{% block body %}
+
+    <h1> {{ message }} </h1>
+
+<button onclick='location.href="{% url 'privacy_settings:settings' %}"'>
+    Go Back
+</button>
+
+
+{% endblock %}

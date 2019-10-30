@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 
+import django
 from django.core.exceptions import SuspiciousOperation, PermissionDenied
 from django.core.mail import send_mail
+from django.db import DatabaseError
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render
 
@@ -16,12 +18,22 @@ from wallet.utils import execute_transaction, getOTP
 
 
 def user_settings(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     return render(request, "user_settings.html")
 
 def change_user_type(request):
-    user_type = int(request.POST.get("user_type", "null"))
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    user_type = 0
+    try:
+        user_type = int(request.POST.get("user_type", "null"))
+    except:
+        raise PermissionDenied
+    if user_type not in [1, 2, 3, 4, 5]:
+        raise PermissionDenied
     if user_type < request.user.user_type or user_type > 5:
-        raise SuspiciousOperation
+        raise PermissionDenied
     charge = 0
     allowed_number_of_transaction = 15
     if user_type == 2:
@@ -40,7 +52,12 @@ def change_user_type(request):
         return utils.raise_exception(request, "Insufficient balance.")
     if user_type == 5 and not request.user.verified:
         return utils.raise_exception(request, "You need to be verified to upgrade to a commercial user.")
-    superuser = CustomUser.objects.get(is_superuser=True)
+    superuser = None
+    try:
+        superuser = CustomUser.objects.get(username="admin")
+    except:
+        raise DatabaseError
+    # raise DatabaseError
     execute_transaction(request.user, superuser, charge)
     request.user.user_balance -= charge
     request.user.user_type = user_type
@@ -105,10 +122,21 @@ def update_post_view_access(request): # actually it restricts from showing the w
     return HttpResponseRedirect(reverse('privacy_settings:group_settings', kwargs={'group_id': group_id}))
 
 def send_otp(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    if (request.user.user_ongoing_transaction):
+        django.contrib.auth.logout(request)
+        return HttpResponseRedirect(reverse('logout'))
 
+    request.user.user_ongoing_transaction = True
+    # request.user.user_ongoing_transaction = False
+    request.user.save()
     otp = getOTP()
     send_mail('SocPay | NoReply', 'Your OTP is : ' + str(otp), 'accounts@socpay.in', [request.user.email],
               fail_silently=False)
+    user1 = request.user
+    user1.user_last_transaction_for_begin = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
+    user1.save()
     request.session["otp_verify"] = otp
     request.session['time_add_3'] = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
     return render(request, 'otp_verify.html')
@@ -122,25 +150,42 @@ def verify_otp(request):
     timethen = datetime.strptime(request.session['time_add_3'],"%d-%b-%Y (%H:%M:%S.%f)")
 
     if((timenow - timethen).seconds > 60):
-        return HttpResponse("<h1>OTP Timeout<br><a href='wallet_home'>GO BACK</a>")
+        message = 'OTP Timeout'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_privacy.html', context=d)
+        # return HttpResponse("<h1>OTP Timeout<br><a href='wallet_home'>GO BACK</a>")
     entered_otp = request.POST.get("entered_otp", "null")
 
     timecheck = datetime.strptime(request.user.user_last_transaction_for_otp, "%d-%b-%Y (%H:%M:%S.%f)")
 
     if ((datetime.now() - timecheck).seconds < 80):
-        return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
+        message = 'Please try after 80 seconds.'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_privacy.html', context=d)
+        # return HttpResponse("<h1>Please try after 80 seconds.<br><a href='wallet_home'>GO BACK</a>")
 
     try:
         y = int(entered_otp)
     except:
-        return HttpResponse("<h1>OTP Invalid<br><a href='wallet_home'>GO BACK</a>")
+        message = 'OTP Invalid'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_privacy.html', context=d)
+        # return HttpResponse("<h1>OTP Invalid<br><a href='wallet_home'>GO BACK</a>")
 
     if (int(entered_otp) != int(request.session["otp_verify"])):
         # print(otp1, curr_otp)
-        return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")
+        message = 'OTP does not match'
+        d = {}
+        d['message'] = message
+        return render(request, 'display_message_privacy.html', context=d)
+        # return HttpResponse("<h1>OTP does not match<br><a href='wallet_home'>GO BACK</a>")
 
     request.user.user_last_transaction_for_otp = datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)")
     request.user.verified = True
+    request.user.user_ongoing_transaction = False
     request.user.save()
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
 
