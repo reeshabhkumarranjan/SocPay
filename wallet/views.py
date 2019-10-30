@@ -49,11 +49,12 @@ def transactions_completed(request):
     d = {}
     d['trans_list'] = trans_list
 
-    return render(request, 'transactions.html', context=d)
+    return render(request, 'transactions_completed.html', context=d)
 
 
 def transactions_pending(request):
     if not request.user.is_authenticated:
+        raise PermissionDenied
         raise PermissionDenied
     user1 = request.user
     # print('I AM HERE')
@@ -63,7 +64,7 @@ def transactions_pending(request):
     d = {}
     d['trans_list'] = trans_list
 
-    return render(request, 'transactions.html', context=d)
+    return render(request, 'transactions_pending.html', context=d)
 
 
 def transfer(request):
@@ -500,6 +501,3 @@ def transfer_money(request):
     context = {'all_users': all_users}
     return render(request, 'transfer_money.html', context=context)
 
-
-def faltu(request):
-    return render(request, 'faltu.html')
