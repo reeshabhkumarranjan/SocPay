@@ -8,7 +8,7 @@ from django.utils.timezone import now
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(default=datetime.now)
     website = models.URLField(default='')
-    user_balance = models.IntegerField(default=40)
+    user_balance = models.IntegerField(default=10000)
     user_type = models.IntegerField(default=1)
     user_no_of_transactions = models.IntegerField(default=0)
     user_no_of_transactions_allowed = models.IntegerField(default=15)
