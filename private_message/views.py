@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from main_app import utils
-from main_app.utils import get_friends, get_chat_friends, get_chat_friends_for_commercial
+from main_app.utils import get_friends, get_chat_friends, get_chat_friends_for_commercial, are_friend
 from private_message.models import getAllMessages, Private_Message
 from users.models import CustomUser
 # Create your views here.
@@ -68,8 +68,11 @@ def send_message(request):
         raise PermissionDenied
     if request.user.user_type == 1:
         return utils.raise_exception(request, "Upgrade your account to send messages.")
+
     friend_username = request.POST.get('friend_username', 'null')
     friend_user = CustomUser.objects.get(username=friend_username)
+    if request.user.user_type != 5 and not are_friend(request.user, friend_user):
+        return utils.raise_exception(request, "You are not allowed to send messages to strangers.")
     message_text = request.POST.get("message_text", "null")
     my_friends = get_friends(request.user)
     Private_Message.objects.create(sender=request.user, receiver=friend_user, message=message_text)
