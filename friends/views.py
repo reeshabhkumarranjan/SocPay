@@ -1,9 +1,12 @@
 from datetime import datetime
 
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse
+
 from friends.models import Friend
 from main_app import utils
 from main_app.models import Post
@@ -90,6 +93,8 @@ def friend_timeline(request, friend_username):
         raise PermissionDenied
     if not username_exists(friend_username):
         raise PermissionDenied
+    if request.user.username == friend_username:
+        return HttpResponseRedirect(reverse('friends:timeline'))
     friend = CustomUser.objects.get(username=friend_username)
     if not are_friend(request.user, friend) and friend.timeline_view_level == 0:
         return utils.raise_exception(request, "You are not allowed to view the timeline.")
