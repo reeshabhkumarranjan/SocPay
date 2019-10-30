@@ -143,7 +143,7 @@ def addgroup(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
     num_groups = len(getOwnedGroups(request.user))
-    allowed_groups = float("inf")
+    allowed_groups = 2147483646
     if request.user.user_type == 2:
         allowed_groups = 2
     elif request.user.user_type == 3:
