@@ -223,11 +223,11 @@ def make_changes(request):
     timethen = datetime.strptime(request.session['time'],"%d-%b-%Y (%H:%M:%S.%f)")
 
     if((timenow - timethen).seconds > 60):
-        message = 'Session Timeout'
+        message = 'OTP Timeout'
         d = {}
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
-        # return HttpResponse("<h1>Session Timeout<br><a href='wallet_home'>GO BACK</a>")
+        # return HttpResponse("<h1>OTP Timeout<br><a href='wallet_home'>GO BACK</a>")
 
     user1 = CustomUser.objects.get(username=request.session['user1'])
 
@@ -384,11 +384,11 @@ def add_money_after_otp(request):
     timethen = datetime.strptime(request.session['time_add'],"%d-%b-%Y (%H:%M:%S.%f)")
 
     if((timenow - timethen).seconds > 60):
-        message = 'Session Timeout'
+        message = 'OTP Timeout'
         d = {}
         d['message'] = message
         return render(request, 'display_message_1.html', context=d)
-        # return HttpResponse("<h1>Session Timeout<br><a href='wallet_home'>GO BACK</a>")
+        # return HttpResponse("<h1>OTP Timeout<br><a href='wallet_home'>GO BACK</a>")
 
     user1 = CustomUser.objects.get(username=request.session['user1_add'])
 

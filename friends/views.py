@@ -37,7 +37,7 @@ def timeline(request):
     if (str(request.session.session_key) != request.user.user_last_session):
         request.user.user_ongoing_transaction = False
         request.user.user_last_session = str(request.session.session_key)
-    print(request.user.user_ongoing_transaction)
+    # print(request.user.user_ongoing_transaction)
     request.user.save()
     all_posts = Post.objects.filter(recipient_name=request.user.username).order_by('-post_date')
     context = {'forloop' : range(100), 'all_posts' : all_posts}

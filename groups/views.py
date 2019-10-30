@@ -30,7 +30,7 @@ def group_exists(group_id):
 def member_exists(member_id):
     member = None
     try:
-        member = Group_Members.objects.get(id = member_id)
+        member = Group_Members.objects.get(member_id = member_id)
     except:
         return False
     return True
@@ -214,9 +214,13 @@ def cancelJoinRequest(request):
     if len(joinrequests) == 0:
         raise PermissionDenied
     joinrequests.delete()
-    jointransactions = Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
-    if len(jointransactions) == 0:
+    jointransactions = None
+    try:
+        jointransactions = Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
+    except:
         raise PermissionDenied
+    # if len(jointransactions) == 0:
+    #     raise PermissionDenied
     jointransactions.delete()
     member.user_balance += group.fees
     member.save()
@@ -272,15 +276,29 @@ def acceptJoinRequest(request):
     if not member_exists(member_id):
         raise PermissionDenied
     ## zap
+
+    group = Groups.objects.get(id=group_id)
+
+    if not isAdmin(request.user, group):
+        raise PermissionDenied
+
     member = CustomUser.objects.get(id=member_id)
     # print(group_id, member_id)
-    obj = Group_Members.objects.get(member_id=member_id, group_id=group_id)
+    obj = None
+    try:
+        obj = Group_Members.objects.get(member_id=member_id, group_id=group_id)
+    except:
+        raise PermissionDenied
     obj.confirmed = True
     obj.save()
     group = Groups.objects.get(id=group_id)
     group.admin.user_balance += group.fees
     group.admin.save()
-    transaction = Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
+    transaction = None
+    try:
+        transaction = Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
+    except:
+        raise PermissionDenied
     transaction.transaction_accepted = True
     transaction.save()
     return HttpResponseRedirect(reverse('groups:group_admin'))
@@ -289,12 +307,31 @@ def acceptJoinRequest(request):
 def rejectJoinRequest(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+    if request.user.user_type == 1:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "default")
     member_id = request.POST.get("member_id", "default")
+
+    if not group_exists(group_id):
+        raise PermissionDenied
+
+    if not member_exists(member_id):
+        raise PermissionDenied
+
     member = CustomUser.objects.get(id=member_id)
     group = Groups.objects.get(id=group_id)
-    Group_Members.objects.get(member_id=member_id, group_id=group_id).delete()
-    Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees).delete()
+
+    if not isAdmin(request.user, group):
+        raise PermissionDenied
+
+    try:
+        Group_Members.objects.get(member_id=member_id, group_id=group_id).delete()
+    except:
+        raise PermissionDenied
+    try:
+        Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees).delete()
+    except:
+        raise PermissionDenied
     member.user_balance += group.fees
     member.save()
     return HttpResponseRedirect(reverse('groups:group_admin'))
@@ -302,9 +339,15 @@ def rejectJoinRequest(request):
 def add_group_post(request):
     if not request.user.is_authenticated:
         raise PermissionDenied
+
     group_id = request.POST.get("group_id", "null")
     member_id = request.POST.get("member_id", "null")
     post_text = request.POST.get("post_text", "null")
+
+    if not group_exists(group_id):
+        raise PermissionDenied
+    if not member_exists(member_id):
+        raise PermissionDenied
 
     group = Groups.objects.get(id=group_id)
     member = CustomUser.objects.get(id=member_id)
@@ -321,11 +364,11 @@ def after_otp(request):
     timethen = datetime.strptime(request.session['time2'], "%d-%b-%Y (%H:%M:%S.%f)")
 
     if ((timenow - timethen).seconds > 60):
-        message = 'Session Timeout'
+        message = 'OTP Timeout'
         d = {}
         d['message'] = message
         return render(request, 'display_message.html', context=d)
-        # return HttpResponse("<h1>Session Timeout<br><a href='group'>GO BACK</a>")
+        # return HttpResponse("<h1>OTP Timeout<br><a href='group'>GO BACK</a>")
 
     timecheck = datetime.strptime(request.user.user_last_transaction_for_otp, "%d-%b-%Y (%H:%M:%S.%f)")
     if ((datetime.now() - timecheck).seconds < 80):

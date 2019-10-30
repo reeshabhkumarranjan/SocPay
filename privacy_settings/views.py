@@ -122,7 +122,7 @@ def verify_otp(request):
     timethen = datetime.strptime(request.session['time_add_3'],"%d-%b-%Y (%H:%M:%S.%f)")
 
     if((timenow - timethen).seconds > 60):
-        return HttpResponse("<h1>Session Timeout<br><a href='wallet_home'>GO BACK</a>")
+        return HttpResponse("<h1>OTP Timeout<br><a href='wallet_home'>GO BACK</a>")
     entered_otp = request.POST.get("entered_otp", "null")
 
     timecheck = datetime.strptime(request.user.user_last_transaction_for_otp, "%d-%b-%Y (%H:%M:%S.%f)")
