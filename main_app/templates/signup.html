@@ -7,9 +7,9 @@
     {% csrf_token %}
 {#    {{ form.as_p }}#}
     {% for field in form %}
-        <b style="color: red">{{ field.errors }}</b>
         <br>
         {{ field.label_tag }}
+        <b style="color: red">{{ field.errors }}</b>
         <br>
         {{ field }}
         <br>
