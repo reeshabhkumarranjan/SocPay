@@ -10,7 +10,8 @@ from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse
 
-from groups.models import Groups, Group_Members
+from groups.models import Groups, Group_Members, isAdmin
+from groups.views import group_exists
 from main_app import utils
 from users.models import CustomUser
 from wallet.models import Transaction
@@ -67,7 +68,15 @@ def change_user_type(request):
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
 
 def change_timeline_view_privacy(request):
-    privacy_level = int(request.POST.get("timeline_privacy_level", "null"))
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    privacy_level = 0
+    try:
+        privacy_level = int(request.POST.get("timeline_privacy_level", "null"))
+    except:
+        raise PermissionDenied
+    if privacy_level not in [0, 1]:
+        raise PermissionDenied
     request.user.timeline_view_level = privacy_level
     if privacy_level == 0:
         request.user.timeline_post_level = 0
@@ -75,19 +84,39 @@ def change_timeline_view_privacy(request):
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
 
 def change_timeline_post_privacy(request):
-    privacy_level = int(request.POST.get("timeline_privacy_level", "null"))
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    privacy_level = 0
+    try:
+        privacy_level = int(request.POST.get("timeline_privacy_level", "null"))
+    except:
+        raise PermissionDenied
+    if privacy_level not in [0, 1]:
+        raise PermissionDenied
     request.user.timeline_post_level = privacy_level
     request.user.save()
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
 
 def group_settings(request, group_id):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
+    if not group_exists(group_id):
+        raise PermissionDenied
     group = Groups.objects.get(id=group_id)
+    if not isAdmin(request.user, group):
+        raise PermissionDenied
     context = {'group' : group}
     return render(request, 'group_settings.html', context=context)
 
 def update_group_details(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "null")
+    if not group_exists(group_id):
+        raise PermissionDenied
     group = Groups.objects.get(id=group_id)
+    if not isAdmin(request.user, group):
+        raise PermissionDenied
     group_name = request.POST.get("group_name", "null")
     group_description = request.POST.get("group_description", "null")
     group_fees = int(request.POST.get("group_fees", "null"))
@@ -106,17 +135,41 @@ def update_group_details(request):
     return HttpResponseRedirect(reverse('privacy_settings:group_settings', kwargs={'group_id' : group_id}))
 
 def update_member_deletion_access(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "null")
+    if not group_exists(group_id):
+        raise PermissionDenied
     group = Groups.objects.get(id = group_id)
-    member_deletion_access = int(request.POST.get("member_deletion_access", "null"))
+    if not isAdmin(request.user, group):
+        raise PermissionDenied
+    member_deletion_access = 0
+    try:
+        member_deletion_access = int(request.POST.get("member_deletion_access", "null"))
+    except:
+        raise PermissionDenied
+    if member_deletion_access not in [0, 1]:
+        raise PermissionDenied
     group.member_deletion_access = member_deletion_access
     group.save()
     return HttpResponseRedirect(reverse('privacy_settings:group_settings', kwargs={'group_id': group_id}))
 
 def update_post_view_access(request): # actually it restricts from showing the whole group
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     group_id = request.POST.get("group_id", "null")
+    if not group_exists(group_id):
+        raise PermissionDenied
     group = Groups.objects.get(id = group_id)
-    post_view_access = int(request.POST.get("post_view_access", "null"))
+    if not isAdmin(request.user, group):
+        raise PermissionDenied
+    post_view_access = 0
+    try:
+        post_view_access = int(request.POST.get("post_view_access", "null"))
+    except:
+        raise PermissionDenied
+    if post_view_access not in [0, 1]:
+        raise PermissionDenied
     group.post_view_access = post_view_access
     group.save()
     return HttpResponseRedirect(reverse('privacy_settings:group_settings', kwargs={'group_id': group_id}))
@@ -198,6 +251,8 @@ def verify_otp(request):
     return HttpResponseRedirect(reverse('privacy_settings:settings'))
 
 def update_user_details(request):
+    if not request.user.is_authenticated:
+        raise PermissionDenied
     first_name = request.POST.get("first_name", "null")
     request.user.first_name = first_name
     request.user.save()
