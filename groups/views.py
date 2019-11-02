@@ -31,7 +31,7 @@ def group_exists(group_id):
 def member_exists(member_id):
     member = None
     try:
-        member = Group_Members.objects.get(member_id = member_id)
+        member = CustomUser.objects.get(id = member_id)
     except:
         return False
     return True
@@ -371,7 +371,7 @@ def add_group_post(request):
     group = Groups.objects.get(id=group_id)
     member = CustomUser.objects.get(id=member_id)
 
-    if not isMember(member, group):
+    if not (isMember(member, group) or isAdmin(member, group)):
         raise PermissionDenied
 
     Group_Posts.objects.create(group=group, author=member, description=post_text)
