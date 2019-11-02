@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'nf)c@m4z-*w$8(vl21vq*6zsvh9l%+tvf3zx#_xm3$6(i9l=%4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['socpay.com', '192.168.2.236', '127.0.0.1']
+ALLOWED_HOSTS = ['socpay.com', '192.168.2.236']
 
 GOOGLE_RECAPTCHA_SECRET_KEY = '6LeXv8AUAAAAAOR83KkfpW4DwJ3iTbSa1aaEv6F_'
 # Application definition
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'wallet',
     'privacy_settings',
     'exception',
-    'captcha'
+    'captcha',
     # 'shop'
 ]
 
@@ -144,8 +144,8 @@ LOGIN_REDIRECT_URL = 'friends:timeline'
 LOGOUT_REDIRECT_URL = 'main_app:index'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'krishna1999'
-EMAIL_HOST_PASSWORD = '@Krishna18'
+EMAIL_HOST_USER = 'reeshabhkumarranjan'
+EMAIL_HOST_PASSWORD = 'n4846ywza3'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')

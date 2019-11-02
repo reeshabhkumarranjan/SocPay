@@ -8,6 +8,7 @@ from django.views import generic
 from django.views.generic import TemplateView
 
 from friends.models import Friend
+from main_app import utils
 from main_app.utils import get_friends, get_sent_requests, get_received_requests, get_not_friends, are_friend
 from private_message.views import user_id_exists
 from users.forms import CustomUserCreationForm
@@ -22,6 +23,7 @@ class SignUp(generic.CreateView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse('friends:timeline'))
+        utils.check_captcha(request)
         return super(SignUp, self).dispatch(request, *args, **kwargs)
 
     # def form_valid(self, form):
