@@ -3,6 +3,8 @@
     <form action="{% url 'groups:add_group' %}" method="post">
         {% csrf_token %}
         {{ form }}
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+        <div class="g-recaptcha" id="gc" data-sitekey="6LeXv8AUAAAAACICsQq0gxWNNe-BSAq4S0RWLuut"></div>
         <input type="submit" value="Submit">
     </form>
 {% endblock %}

@@ -1,12 +1,15 @@
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+import requests
 
 # Create your views here.
 from django.urls import reverse
 
 from commercial_page.models import getAllPages, CommercialPage, getAllPosts, CommercialPagePosts, getAllPagesGlobal, \
     isPageAdmin
+from cse_345_fcs_course_project import settings
+from main_app import utils
 
 
 def page_list(request):
@@ -48,6 +51,7 @@ def add_post(request):
     page = CommercialPage.objects.get(id=page_id)
     if not isPageAdmin(request.user, page):
         raise PermissionDenied
+    utils.check_captcha(request)
     post_text = request.POST.get("post_text", "null")
     CommercialPagePosts.objects.create(page=page, post_text=post_text)
     return HttpResponseRedirect(reverse('commercial_page:page_timeline', kwargs={'page_id' : page_id}))
@@ -57,6 +61,16 @@ def add_page(request):
         raise PermissionDenied
     if request.user.user_type != 5:
         raise PermissionDenied
+    # if request.method == 'POST':
+    #     recaptcha_response = request.POST.get('g-recaptcha-response')
+    #     data = {
+    #         'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+    #         'response': recaptcha_response
+    #     }
+    #     result = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data).json()
+    #     if not result['success']:
+    #         raise PermissionDenied
+    utils.check_captcha(request)
     page_name = request.POST.get("page_name", "null")
     admin = request.user
     description = request.POST.get("description", "null")

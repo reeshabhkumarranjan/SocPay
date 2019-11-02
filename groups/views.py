@@ -196,6 +196,8 @@ def addgroup(request):
     elif request.user.user_type == 3:
         allowed_groups = 4
 
+    utils.check_captcha(request)
+
     # if num_groups >= allowed_groups:
     #     return utils.raise_exception(request, "You have reached the limit of adding groups (" + str(allowed_groups) + ")")
     if request.method == "POST":
@@ -358,6 +360,8 @@ def add_group_post(request):
     group_id = request.POST.get("group_id", "null")
     member_id = request.POST.get("member_id", "null")
     post_text = request.POST.get("post_text", "null")
+
+    utils.check_captcha(request)
 
     if not group_exists(group_id):
         raise PermissionDenied

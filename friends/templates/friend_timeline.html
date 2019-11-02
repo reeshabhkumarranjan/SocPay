@@ -10,6 +10,8 @@
 {#        <input type="text" name="post_text" class="textfield" style="height: 150px; width: 500px">#}
         <textarea name="post_text" rows = "5" cols="60">Post on @{{ friend_username }}'s timeline!</textarea>
         <br>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+        <div class="g-recaptcha" id="gc" data-sitekey="6LeXv8AUAAAAACICsQq0gxWNNe-BSAq4S0RWLuut"></div>
         <input type="submit" class="modern-button">
     </form>
     {% endif %}

@@ -30,6 +30,8 @@
             {% csrf_token %}
             <input type="hidden" name="friend_username" value={{ friend_username }}>
             <textarea name="message_text" rows="5" cols="30" placeholder="Enter your message here"></textarea>
+            <script src='https://www.google.com/recaptcha/api.js'></script>
+            <div class="g-recaptcha" id="gc" data-sitekey="6LeXv8AUAAAAACICsQq0gxWNNe-BSAq4S0RWLuut"></div>
             <button type="submit" name="button_clicked" value="send_message">Send</button>
         </form>
         {% endif %}

@@ -74,6 +74,8 @@ def add_post(request):
     recipient_name = request.user.username
     post_text = request.POST.get('post_text', "N/A")
 
+    utils.check_captcha(request)
+
     Post.objects.create(author_name=author_name, recipient_name=recipient_name, post_text=post_text)
     return redirect('friends:timeline')
 
@@ -86,6 +88,7 @@ def add_post_friend(request, friend_username):
     #     friend = CustomUser.objects.get(username=friend_username)
     # except:
     #     raise PermissionDenied
+    utils.check_captcha(request)
     if not username_exists(friend_username):
         raise PermissionDenied
     friend = CustomUser.objects.get(username=friend_username)

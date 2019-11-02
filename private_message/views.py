@@ -83,7 +83,7 @@ def send_message(request):
         raise PermissionDenied
     if request.user.user_type == 1:
         return utils.raise_exception(request, "Upgrade your account to send messages.")
-
+    utils.check_captcha(request)
     friend_username = request.POST.get('friend_username', 'null')
     if not username_exists(friend_username):
         raise PermissionDenied

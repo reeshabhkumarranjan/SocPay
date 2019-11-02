@@ -1,6 +1,9 @@
+import requests
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.shortcuts import render
 
+from cse_345_fcs_course_project import settings
 from friends.models import Friend
 from users.models import CustomUser
 from wallet.models import Transaction
@@ -98,3 +101,15 @@ def raise_exception(request, error_message):
 def are_friend(user1, user2):
     friends = get_friends(user1)
     return user2 in friends
+
+def check_captcha(request):
+    if request.method == 'POST':
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        data = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        result = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data).json()
+        if not result['success']:
+            # return raise_exception(requests, "You failed the captcha test!")
+            raise PermissionDenied

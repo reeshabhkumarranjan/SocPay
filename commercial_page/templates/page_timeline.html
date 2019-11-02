@@ -11,6 +11,8 @@
 {#        <input type="hidden" name="member_id" value="{{ user.id }}">#}
         <textarea name="post_text" rows = "5" cols="60">Post on {{ page.page_name }}!</textarea>
         <br>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+        <div class="g-recaptcha" id="gc" data-sitekey="6LeXv8AUAAAAACICsQq0gxWNNe-BSAq4S0RWLuut"></div>
         <input type="submit" class="modern-button">
     </form>
     {% endif %}
