@@ -208,6 +208,8 @@ def addgroup(request):
             group_name = form.cleaned_data['group_name']
             description = form.cleaned_data['description']
             fees = form.cleaned_data['fees']
+            if fees < 0:
+                raise PermissionDenied
             obj = Groups.objects.create(group_name=group_name, description=description, fees=fees, admin_id=request.user.id)
             obj.save()
             return HttpResponseRedirect(reverse('groups:add_group'))
@@ -306,16 +308,16 @@ def acceptJoinRequest(request):
         obj = Group_Members.objects.get(member_id=member_id, group_id=group_id)
     except:
         raise PermissionDenied
-    obj.confirmed = True
-    obj.save()
-    group = Groups.objects.get(id=group_id)
-    group.admin.user_balance += group.fees
-    group.admin.save()
     transaction = None
     try:
         transaction = Transaction.objects.get(transaction_user_1=member, transaction_user_2=group.admin, transaction_group=True, transaction_accepted=False, transaction_amount=group.fees)
     except:
         raise PermissionDenied
+    obj.confirmed = True
+    obj.save()
+    group = Groups.objects.get(id=group_id)
+    group.admin.user_balance += group.fees
+    group.admin.save()
     transaction.transaction_accepted = True
     transaction.save()
     return HttpResponseRedirect(reverse('groups:group_admin'))

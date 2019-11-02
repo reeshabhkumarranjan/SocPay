@@ -119,7 +119,13 @@ def update_group_details(request):
         raise PermissionDenied
     group_name = request.POST.get("group_name", "null")
     group_description = request.POST.get("group_description", "null")
-    group_fees = int(request.POST.get("group_fees", "null"))
+    group_fees = 0
+    try:
+        group_fees = int(request.POST.get("group_fees", "null"))
+    except:
+        raise PermissionDenied
+    if group_fees < 0:
+        raise PermissionDenied
 
     if group_fees != group.fees:
         transaction_now = Transaction.objects.filter(transaction_user_2=request.user, transaction_group=True, transaction_accepted=False)
