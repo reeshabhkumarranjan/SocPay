@@ -30,4 +30,5 @@ urlpatterns = [
     path('wallet/', include('wallet.urls')),
     path('privacy_settings/', include('privacy_settings.urls')),
     path('exception/', include('exception.urls')),
+    path(r'captcha/', include('captcha.urls')),
 ]
